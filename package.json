@@ -1,0 +1,20 @@
+{
+  "name": "nexcel-solutions-website",
+  "version": "1.0.0",
+  "description": "Nexcel Solutions — static business-card website (nexcel.kz)",
+  "private": true,
+  "scripts": {
+    "build:css": "tailwindcss -i ./src/input.css -o ./assets/styles.css --minify",
+    "build": "npm run build:css",
+    "dev": "python -m http.server 5500"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "lucide-static": "^1.38.0",
+    "sharp": "^0.35.4",
+    "tailwindcss": "^3.4.19"
+  }
+}
