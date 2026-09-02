@@ -580,7 +580,7 @@
                 <div class="text-2xl sm:text-3xl font-heading font-extrabold text-darkBg mt-1" id="calc-res-hours" aria-live="polite">
                   139 ч
                 </div>
-                <div class="text-[10px] text-emeraldAccent mt-1 font-semibold">Около 17 полных рабочих смен</div>
+                <div class="text-[10px] text-emeraldAccent mt-1 font-semibold" id="calc-res-shifts" aria-live="polite">Около 17 полных рабочих смен</div>
               </div>
 
               <div class="p-4 bg-emeraldLight border border-emerald-300 rounded">
@@ -1254,6 +1254,9 @@
 
       document.getElementById('calc-res-hours').textContent = Math.round(monthlyHours) + ' ч';
       document.getElementById('calc-res-money').textContent = formatTenge(monthlyMoney);
+
+      const shifts = Math.round(monthlyHours / 8);
+      document.getElementById('calc-res-shifts').textContent = 'Около ' + shifts + ' полных рабочих смен';
     }
 
     function sendRoiToWhatsApp() {
