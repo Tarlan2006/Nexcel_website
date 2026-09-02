@@ -1,0 +1,13 @@
+<svg width="512" height="512" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100" height="100" rx="18" fill="#141619"/>
+  <path d="M22 68V36C22 28 30 24 38 28C46 32 54 48 62 64C70 80 82 78 86 68C90 58 84 46 72 46C62 46 54 60 48 68"
+        stroke="url(#infinityGrad)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <circle cx="22" cy="68" r="4" fill="#1B6B44"/>
+  <defs>
+    <linearGradient id="infinityGrad" x1="20" y1="20" x2="88" y2="80" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1B6B44"/>
+      <stop offset="0.6" stop-color="#34D399"/>
+      <stop offset="1" stop-color="#FFFFFF"/>
+    </linearGradient>
+  </defs>
+</svg>

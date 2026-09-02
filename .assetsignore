@@ -1,0 +1,13 @@
+.git
+.gitignore
+.claude
+.gemini
+node_modules
+package.json
+package-lock.json
+wrangler.jsonc
+src
+scripts
+tailwind.config.js
+*.md
+
