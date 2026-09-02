@@ -22,7 +22,9 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
-        heading: ['Plus Jakarta Sans', 'sans-serif'],
+        // Single source of truth for every heading (h1–h6) on the site — change once here,
+        // not per element. Manrope: unified rounded Cyrillic/Latin, was previously H1-only.
+        heading: ['Manrope', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace']
       }
     }

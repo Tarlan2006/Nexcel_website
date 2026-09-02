@@ -25,10 +25,12 @@
   <meta name="twitter:description" content="B2B и B2G интегратор в Казахстане: оцифровка данных, Telegram-боты, ИИ и лицензии ПО. Оплата в тенге, ЭСФ/АВР." />
   <meta name="twitter:image" content="https://nexcel.kz/assets/og-preview.png" />
 
-  <!-- Typography: Plus Jakarta Sans (Headings), Inter (Body), JetBrains Mono (Code/Data) -->
+  <!-- Typography: Inter (Body), JetBrains Mono (Code/Data), Manrope (ALL headings h1–h6 — unified rounded Cyrillic/Latin).
+       font-display=swap is on by default via the Google Fonts css2 endpoint, so headings show in a
+       fallback sans-serif immediately and swap to Manrope once it loads — no invisible-text flash. -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
 
   <!-- Production Tailwind build (compiled ahead of time — see package.json "build:css").
        Replaces the old cdn.tailwindcss.com runtime-compiler script, which Tailwind's own
@@ -236,7 +238,7 @@
       </a>
 
       <!-- 4 Flagship Directions Navigation (desktop, ≥1280px) -->
-      <nav aria-label="Основная навигация" class="hidden xl:flex items-center gap-5 text-xs font-medium text-textMain/80 font-mono">
+      <nav aria-label="Основная навигация" class="hidden xl:flex items-center gap-5 2xl:gap-6 text-[11px] 2xl:text-xs font-medium text-textMain/80 font-mono whitespace-nowrap">
         <a href="#direction-tables" class="hover:text-emeraldAccent transition-colors">Анализ данных</a>
         <a href="#direction-bots" class="hover:text-emeraldAccent transition-colors">Telegram + ИИ</a>
         <a href="#direction-ai" class="hover:text-emeraldAccent transition-colors">Внедрение ИИ</a>
@@ -253,10 +255,10 @@
         </a>
 
         <button onclick="openWhatsApp('Здравствуйте! Я с вашего сайта nexcel.kz, хочу узнать подробнее про оцифровку и автоматизацию бизнеса.')"
-           aria-label="Написать в WhatsApp"
-           class="inline-flex items-center gap-1.5 sm:gap-2 bg-emeraldAccent hover:bg-emeraldHover text-white px-2.5 sm:px-4 py-2 rounded text-xs font-mono font-medium tracking-wide transition-all shadow-sm active:scale-95 shrink-0">
-          <svg aria-hidden="true" class="w-3.5 h-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z" /></svg>
-          <span>WhatsApp <span class="hidden sm:inline">+7 771 136-90-95</span></span>
+           aria-label="Написать в WhatsApp: +7 771 136-90-95"
+           title="WhatsApp: +7 771 136-90-95"
+           class="inline-flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 bg-emeraldAccent hover:bg-emeraldHover text-white rounded-[35%] transition-all shadow-sm active:scale-95 shrink-0">
+          <svg aria-hidden="true" class="w-4 h-4 sm:w-5 sm:h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" /></svg>
         </button>
 
         <!-- Mobile/tablet menu toggle (<1280px) -->
@@ -300,7 +302,7 @@
             </div>
 
             <!-- Main H1 -->
-            <h1 class="font-heading font-extrabold text-xl sm:text-4xl lg:text-5xl tracking-tight text-darkBg leading-[1.2] sm:leading-[1.14]">
+            <h1 class="font-heading font-extrabold text-xl sm:text-4xl lg:text-5xl tracking-tight text-darkBg leading-[1.22] sm:leading-[1.16]">
               Оцифровка данных, внедрение ИИ, Telegram-боты и лицензии ПО
             </h1>
 
@@ -515,7 +517,96 @@
     </section>
 
 
-    <!-- ==================== 3. 4 KEY BUSINESS DIRECTIONS (BENTO GRID) ==================== -->
+    <!-- ==================== 3. INTERACTIVE ROI & SAVINGS CALCULATOR ==================== -->
+    <section id="calculator" class="py-10 sm:py-14 lg:py-20 border-b border-gridBorder bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 items-center">
+
+          <div class="lg:col-span-5 space-y-4 sm:space-y-6">
+            <div class="font-mono text-xs text-emeraldAccent font-semibold uppercase tracking-wider">[ Калькулятор окупаемости ]</div>
+            <h2 class="font-heading font-extrabold text-2xl sm:text-4xl text-darkBg tracking-tight leading-tight">
+              Сколько денег и часов сбережет автоматизация?
+            </h2>
+            <p class="text-textMuted text-sm leading-relaxed">
+              Ручной ввод цифр, ошибки в формулах и сборка отчетов в конце месяца — это прямые убытки компании. Оцените эффект внедрения за 30 секунд.
+            </p>
+
+            <div class="p-4 rounded bg-paper border border-gridBorder space-y-2 font-mono text-xs">
+              <div class="text-emeraldAccent flex items-center gap-2 font-bold">
+                <svg aria-hidden="true" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="M12 16v-4" /> <path d="M12 8h.01" /></svg>
+                <span>Инженерная статистика:</span>
+              </div>
+              <p class="text-textMuted">
+                Настроенная система учета или бот окупаются в среднем за <strong>12-18 рабочих дней</strong> за счет высвобождения времени команды.
+              </p>
+            </div>
+          </div>
+
+          <div class="lg:col-span-7 bg-paper border border-gridBorder rounded-xl p-5 sm:p-8 space-y-5 sm:space-y-8 font-mono shadow-xs">
+
+            <div class="space-y-6">
+              <!-- Slider 1 -->
+              <div class="space-y-2">
+                <div class="flex justify-between text-xs">
+                  <span class="text-textMain font-medium">Сотрудников, работающих с таблицами/рутиной:</span>
+                  <span class="font-bold text-emeraldAccent text-sm" id="calc-employees-val">4 чел</span>
+                </div>
+                <input type="range" id="calc-employees" min="1" max="50" value="4" aria-label="Сотрудников, работающих с таблицами и рутиной" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emeraldAccent" />
+              </div>
+
+              <!-- Slider 2 -->
+              <div class="space-y-2">
+                <div class="flex justify-between text-xs">
+                  <span class="text-textMain font-medium">Часов рутины в неделю на одного сотрудника:</span>
+                  <span class="font-bold text-emeraldAccent text-sm" id="calc-hours-val">8 часов</span>
+                </div>
+                <input type="range" id="calc-hours" min="1" max="30" value="8" aria-label="Часов рутины в неделю на одного сотрудника" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emeraldAccent" />
+              </div>
+
+              <!-- Slider 3 -->
+              <div class="space-y-2">
+                <div class="flex justify-between text-xs">
+                  <span class="text-textMain font-medium">Средняя месячная ставка сотрудника:</span>
+                  <span class="font-bold text-emeraldAccent text-sm" id="calc-rate-val">400 000 ₸ / мес</span>
+                </div>
+                <input type="range" id="calc-rate" min="150000" max="1000000" step="10000" value="400000" aria-label="Средняя месячная ставка сотрудника, тенге" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emeraldAccent" />
+              </div>
+            </div>
+
+            <!-- Results Display -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6 border-t border-gridBorder">
+              <div class="p-4 bg-white border border-gridBorder rounded">
+                <div class="text-[11px] text-textMuted">Экономия времени в месяц:</div>
+                <div class="text-2xl sm:text-3xl font-heading font-extrabold text-darkBg mt-1" id="calc-res-hours" aria-live="polite">
+                  139 ч
+                </div>
+                <div class="text-[10px] text-emeraldAccent mt-1 font-semibold">Около 17 полных рабочих смен</div>
+              </div>
+
+              <div class="p-4 bg-emeraldLight border border-emerald-300 rounded">
+                <div class="text-[11px] text-emerald-900 font-semibold">Финансовая экономия в месяц:</div>
+                <div class="text-2xl sm:text-3xl font-heading font-extrabold text-emeraldAccent mt-1" id="calc-res-money" aria-live="polite">
+                  329 905 ₸
+                </div>
+                <div class="text-[10px] text-textMuted mt-1">Окупаемость проекта ~ 2 недели</div>
+              </div>
+            </div>
+
+            <div class="text-center pt-2">
+              <button onclick="sendRoiToWhatsApp()" class="inline-flex items-center gap-2 bg-emeraldAccent hover:bg-emeraldHover text-white px-6 py-3 rounded text-xs font-semibold tracking-wider transition-all w-full sm:w-auto justify-center shadow-sm">
+                <span>ЗАФИКСИРОВАТЬ ЭКОНОМИЮ И ОБСУДИТЬ В WHATSAPP</span>
+                <svg aria-hidden="true" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg>
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================== 4. 4 KEY BUSINESS DIRECTIONS (BENTO GRID) ==================== -->
     <section id="directions" class="py-10 sm:py-14 lg:py-20 border-b border-gridBorder bg-paper">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-10 lg:space-y-12">
 
@@ -536,12 +627,11 @@
           <!-- Direction 1 -->
           <div id="direction-tables" class="bg-white border border-gridBorder rounded-xl p-5 sm:p-8 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
             <div class="space-y-4">
-              <div class="flex items-center justify-between text-xs font-mono">
-                <span class="px-2.5 py-1 bg-emeraldLight text-emeraldAccent rounded font-semibold">НАПРАВЛЕНИЕ 01</span>
+              <div class="text-xs font-mono">
                 <span class="text-textMuted">Google Sheets / Excel / Looker</span>
               </div>
               <h3 class="font-heading font-extrabold text-xl text-darkBg">
-                1. Анализ данных и учетные системы
+                Анализ данных и учетные системы
               </h3>
               <p class="text-xs sm:text-sm text-textMuted leading-relaxed">
                 Построение прозрачного управленческого учета под ключ: бюджет движения денег (БДС / Cash Flow), отчет о прибылях и убытках (ОПиУ / P&L), складской партионный учет ТМЦ и интерактивные сквозные дашборды.
@@ -569,12 +659,11 @@
           <!-- Direction 2 -->
           <div id="direction-bots" class="bg-white border border-gridBorder rounded-xl p-5 sm:p-8 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
             <div class="space-y-4">
-              <div class="flex items-center justify-between text-xs font-mono">
-                <span class="px-2.5 py-1 bg-emeraldLight text-emeraldAccent rounded font-semibold">НАПРАВЛЕНИЕ 02</span>
+              <div class="text-xs font-mono">
                 <span class="text-textMuted">Telegram Bot API / Python / LLM</span>
               </div>
               <h3 class="font-heading font-extrabold text-xl text-darkBg">
-                2. Разработка Telegram-ботов с ИИ
+                Разработка Telegram-ботов с ИИ
               </h3>
               <p class="text-xs sm:text-sm text-textMuted leading-relaxed">
                 Кастомные боты для бизнеса: сбор заявок прямо в Google Таблицы, парсинг внешних площадок, авто-модерация чатов и каналов, консультация клиентов через подключенные языковые модели GPT/Claude.
@@ -602,12 +691,11 @@
           <!-- Direction 3 -->
           <div id="direction-ai" class="bg-white border border-gridBorder rounded-xl p-5 sm:p-8 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
             <div class="space-y-4">
-              <div class="flex items-center justify-between text-xs font-mono">
-                <span class="px-2.5 py-1 bg-emeraldLight text-emeraldAccent rounded font-semibold">НАПРАВЛЕНИЕ 03</span>
+              <div class="text-xs font-mono">
                 <span class="text-textMuted">Computer Vision / OCR / Whisper</span>
               </div>
               <h3 class="font-heading font-extrabold text-xl text-darkBg">
-                3. Внедрение технологий ИИ в бизнес
+                Внедрение технологий ИИ в бизнес
               </h3>
               <p class="text-xs sm:text-sm text-textMuted leading-relaxed">
                 Автоматизация рутинных процессов с помощью нейросетей: оптическое распознавание первичной документации (чеки, накладные, акты), транскрибация звонков и совещаний, интеллектуальные корпоративные базы знаний.
@@ -636,11 +724,11 @@
           <div id="direction-licensing" class="bg-white border-2 border-emeraldAccent rounded-xl p-5 sm:p-8 space-y-4 sm:space-y-6 flex flex-col justify-between hover:shadow-lg transition-all shadow-sm">
             <div class="space-y-4">
               <div class="flex items-center justify-between text-xs font-mono">
-                <span class="px-2.5 py-1 bg-emeraldAccent text-white rounded font-bold">НАПРАВЛЕНИЕ 04 • B2B / B2G</span>
+                <span class="px-2.5 py-1 bg-emeraldAccent text-white rounded font-bold">B2B / B2G</span>
                 <span class="text-emeraldAccent font-semibold">Оплата в ₸ • ЭСФ/АВР</span>
               </div>
               <h3 class="font-heading font-extrabold text-xl text-darkBg">
-                4. Лицензионное ПО, Подписки на ИИ и SaaS
+                Лицензионное ПО, Подписки на ИИ и SaaS
               </h3>
               <p class="text-xs sm:text-sm text-textMuted leading-relaxed">
                 Официальная поставка корпоративных лицензий зарубежного ПО, подписок на нейросети (OpenAI, Anthropic Claude, Midjourney) и Cloud SaaS для бизнеса и государственных учреждений Казахстана.
@@ -670,7 +758,7 @@
     </section>
 
 
-    <!-- ==================== 4. CASE STUDIES ==================== -->
+    <!-- ==================== 5. CASE STUDIES ==================== -->
     <section id="cases" class="py-10 sm:py-14 lg:py-20 border-b border-gridBorder bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-10 lg:space-y-12">
 
@@ -691,8 +779,7 @@
           <!-- Case 1 -->
           <div class="bg-paper border border-gridBorder rounded-xl p-5 sm:p-6 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
             <div class="space-y-4">
-              <div class="flex items-center justify-between text-xs font-mono">
-                <span class="px-2.5 py-1 bg-white border border-gridBorder rounded font-semibold text-emeraldAccent">КЕЙС 01</span>
+              <div class="text-xs font-mono">
                 <span class="text-textMuted">Оптовая дистрибуция</span>
               </div>
               <h3 class="font-heading font-bold text-lg text-darkBg">
@@ -713,8 +800,7 @@
           <!-- Case 2 -->
           <div class="bg-paper border border-gridBorder rounded-xl p-5 sm:p-6 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
             <div class="space-y-4">
-              <div class="flex items-center justify-between text-xs font-mono">
-                <span class="px-2.5 py-1 bg-white border border-gridBorder rounded font-semibold text-emeraldAccent">КЕЙС 02</span>
+              <div class="text-xs font-mono">
                 <span class="text-textMuted">Метрология и лаборатория</span>
               </div>
               <h3 class="font-heading font-bold text-lg text-darkBg">
@@ -735,8 +821,7 @@
           <!-- Case 3 -->
           <div class="bg-paper border border-gridBorder rounded-xl p-5 sm:p-6 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
             <div class="space-y-4">
-              <div class="flex items-center justify-between text-xs font-mono">
-                <span class="px-2.5 py-1 bg-white border border-gridBorder rounded font-semibold text-emeraldAccent">КЕЙС 03</span>
+              <div class="text-xs font-mono">
                 <span class="text-textMuted">Медиа & Спортивное комьюнити</span>
               </div>
               <h3 class="font-heading font-bold text-lg text-darkBg">
@@ -759,7 +844,7 @@
     </section>
 
 
-    <!-- ==================== 5. DEDICATED B2B/B2G LICENSING & SAAS SECTION ==================== -->
+    <!-- ==================== 6. DEDICATED B2B/B2G LICENSING & SAAS SECTION ==================== -->
     <section id="licensing" class="py-10 sm:py-14 lg:py-20 border-b border-gridBorder dark-ledger-grid bg-darkBg text-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-10 lg:space-y-12">
 
@@ -820,7 +905,7 @@
     </section>
 
 
-    <!-- ==================== 6. FREE TEMPLATES HUB (LEAD MAGNET) ==================== -->
+    <!-- ==================== 7. FREE TEMPLATES HUB (LEAD MAGNET) ==================== -->
     <section id="templates" class="py-10 sm:py-14 lg:py-20 border-b border-gridBorder bg-paper">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-10 lg:space-y-12">
 
@@ -893,95 +978,6 @@
               <svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3" /> <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <path d="m7 10 5 5 5-5" /></svg>
               <span>ПОЛУЧИТЬ ШАБЛОН</span>
             </button>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-
-    <!-- ==================== 7. INTERACTIVE ROI & SAVINGS CALCULATOR ==================== -->
-    <section id="calculator" class="py-10 sm:py-14 lg:py-20 border-b border-gridBorder bg-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 items-center">
-
-          <div class="lg:col-span-5 space-y-4 sm:space-y-6">
-            <div class="font-mono text-xs text-emeraldAccent font-semibold uppercase tracking-wider">[ Калькулятор окупаемости ]</div>
-            <h2 class="font-heading font-extrabold text-2xl sm:text-4xl text-darkBg tracking-tight leading-tight">
-              Сколько денег и часов сбережет автоматизация?
-            </h2>
-            <p class="text-textMuted text-sm leading-relaxed">
-              Ручной ввод цифр, ошибки в формулах и сборка отчетов в конце месяца — это прямые убытки компании. Оцените эффект внедрения за 30 секунд.
-            </p>
-
-            <div class="p-4 rounded bg-paper border border-gridBorder space-y-2 font-mono text-xs">
-              <div class="text-emeraldAccent flex items-center gap-2 font-bold">
-                <svg aria-hidden="true" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="M12 16v-4" /> <path d="M12 8h.01" /></svg>
-                <span>Инженерная статистика:</span>
-              </div>
-              <p class="text-textMuted">
-                Настроенная система учета или бот окупаются в среднем за <strong>12-18 рабочих дней</strong> за счет высвобождения времени команды.
-              </p>
-            </div>
-          </div>
-
-          <div class="lg:col-span-7 bg-paper border border-gridBorder rounded-xl p-5 sm:p-8 space-y-5 sm:space-y-8 font-mono shadow-xs">
-
-            <div class="space-y-6">
-              <!-- Slider 1 -->
-              <div class="space-y-2">
-                <div class="flex justify-between text-xs">
-                  <span class="text-textMain font-medium">Сотрудников, работающих с таблицами/рутиной:</span>
-                  <span class="font-bold text-emeraldAccent text-sm" id="calc-employees-val">4 чел</span>
-                </div>
-                <input type="range" id="calc-employees" min="1" max="50" value="4" aria-label="Сотрудников, работающих с таблицами и рутиной" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emeraldAccent" />
-              </div>
-
-              <!-- Slider 2 -->
-              <div class="space-y-2">
-                <div class="flex justify-between text-xs">
-                  <span class="text-textMain font-medium">Часов рутины в неделю на одного сотрудника:</span>
-                  <span class="font-bold text-emeraldAccent text-sm" id="calc-hours-val">8 часов</span>
-                </div>
-                <input type="range" id="calc-hours" min="1" max="30" value="8" aria-label="Часов рутины в неделю на одного сотрудника" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emeraldAccent" />
-              </div>
-
-              <!-- Slider 3 -->
-              <div class="space-y-2">
-                <div class="flex justify-between text-xs">
-                  <span class="text-textMain font-medium">Средняя почасовая ставка сотрудника:</span>
-                  <span class="font-bold text-emeraldAccent text-sm" id="calc-rate-val">2 500 ₸ / час</span>
-                </div>
-                <input type="range" id="calc-rate" min="1000" max="15000" step="500" value="2500" aria-label="Средняя почасовая ставка сотрудника, тенге" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emeraldAccent" />
-              </div>
-            </div>
-
-            <!-- Results Display -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6 border-t border-gridBorder">
-              <div class="p-4 bg-white border border-gridBorder rounded">
-                <div class="text-[11px] text-textMuted">Экономия времени в месяц:</div>
-                <div class="text-2xl sm:text-3xl font-heading font-extrabold text-darkBg mt-1" id="calc-res-hours" aria-live="polite">
-                  104 ч
-                </div>
-                <div class="text-[10px] text-emeraldAccent mt-1 font-semibold">Около 13 полных рабочих смен</div>
-              </div>
-
-              <div class="p-4 bg-emeraldLight border border-emerald-300 rounded">
-                <div class="text-[11px] text-emerald-900 font-semibold">Финансовая экономия в месяц:</div>
-                <div class="text-2xl sm:text-3xl font-heading font-extrabold text-emeraldAccent mt-1" id="calc-res-money" aria-live="polite">
-                  260 000 ₸
-                </div>
-                <div class="text-[10px] text-textMuted mt-1">Окупаемость проекта ~ 2 недели</div>
-              </div>
-            </div>
-
-            <div class="text-center pt-2">
-              <button onclick="sendRoiToWhatsApp()" class="inline-flex items-center gap-2 bg-emeraldAccent hover:bg-emeraldHover text-white px-6 py-3 rounded text-xs font-semibold tracking-wider transition-all w-full sm:w-auto justify-center shadow-sm">
-                <span>ЗАФИКСИРОВАТЬ ЭКОНОМИЮ И ОБСУДИТЬ В WHATSAPP</span>
-                <svg aria-hidden="true" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg>
-              </button>
-            </div>
-
           </div>
 
         </div>
@@ -1236,6 +1232,8 @@
     }
 
     // ---------- ROI calculator ----------
+    const WORK_HOURS_PER_MONTH = 168; // 8ч × 21 рабочий день — норма для приведения месячной ставки к часовой
+
     function updateRoiCalc() {
       const employeesEl = document.getElementById('calc-employees');
       const hoursEl = document.getElementById('calc-hours');
@@ -1244,14 +1242,15 @@
 
       const employees = parseFloat(employeesEl.value) || 0;
       const hours = parseFloat(hoursEl.value) || 0;
-      const rate = parseFloat(rateEl.value) || 0;
+      const monthlyRate = parseFloat(rateEl.value) || 0;
+      const hourlyRate = monthlyRate / WORK_HOURS_PER_MONTH;
 
       document.getElementById('calc-employees-val').textContent = employees + ' чел';
       document.getElementById('calc-hours-val').textContent = hours + ' часов';
-      document.getElementById('calc-rate-val').textContent = rate.toLocaleString('ru-RU') + ' ₸ / час';
+      document.getElementById('calc-rate-val').textContent = monthlyRate.toLocaleString('ru-RU') + ' ₸ / мес';
 
       const monthlyHours = employees * hours * 4.33;
-      const monthlyMoney = monthlyHours * rate;
+      const monthlyMoney = monthlyHours * hourlyRate;
 
       document.getElementById('calc-res-hours').textContent = Math.round(monthlyHours) + ' ч';
       document.getElementById('calc-res-money').textContent = formatTenge(monthlyMoney);
