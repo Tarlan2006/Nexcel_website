@@ -1,13 +1,13 @@
-.git
-.gitignore
-.claude
-.gemini
-node_modules
-package.json
-package-lock.json
-wrangler.jsonc
-src
-scripts
-tailwind.config.js
-*.md
+# Publish only the site's public files. New root files stay private by default.
+/*
+!/index.html
+!/licensing.html
+!/templates.html
+!/favicon.ico
+!/robots.txt
+!/sitemap.xml
+!/llms.txt
+!/assets/
+!/partials/
+# Wrangler reads _headers as configuration; do not serve it as a public file.
 

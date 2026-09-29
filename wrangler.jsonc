@@ -2,7 +2,8 @@
   "name": "nexcel-website",
   "compatibility_date": "2026-09-01",
   "assets": {
-    "directory": "./",
+    "directory": "./dist",
+    "html_handling": "auto-trailing-slash",
     "not_found_handling": "404-page"
   }
 }

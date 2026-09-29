@@ -41,48 +41,6 @@
        console warning flags as unsuitable for production. -->
   <link rel="stylesheet" href="assets/styles.css" />
 
-  <style>
-    body {
-      background-color: #FBFBFA;
-      color: #181A1E;
-      font-family: 'Inter', sans-serif;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    .ledger-grid {
-      background-size: 32px 32px;
-      background-image:
-        linear-gradient(to right, rgba(229, 231, 235, 0.55) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(229, 231, 235, 0.55) 1px, transparent 1px);
-    }
-
-    .dark-ledger-grid {
-      background-size: 32px 32px;
-      background-image:
-        linear-gradient(to right, rgba(42, 46, 53, 0.65) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(42, 46, 53, 0.65) 1px, transparent 1px);
-    }
-
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #FBFBFA;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #CBD5E1;
-      border-radius: 3px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #94A3B8;
-    }
-
-    ::selection {
-      background-color: #1B6B44;
-      color: #FFFFFF;
-    }
-  </style>
 
   <!-- Schema.org JSON-LD Structured Data -->
   <script type="application/ld+json">
@@ -205,87 +163,16 @@
     ]
   }
   </script>
+  <script src="assets/card-reveal.js" defer></script>
 </head>
 <body class="bg-paper text-textMain flex flex-col min-h-screen">
 
-  <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-emeraldAccent focus:text-white focus:px-4 focus:py-2 focus:rounded focus:text-xs focus:font-mono focus:font-semibold">
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-emeraldAccent focus:text-white focus:px-4 focus:py-2 focus:rounded focus:text-xs focus:font-sans focus:font-semibold">
     Перейти к основному содержанию
   </a>
 
   <!-- ==================== HEADER ==================== -->
-  <header class="fixed top-0 left-0 right-0 z-50 bg-paper/90 backdrop-blur-md border-b border-gridBorder">
-    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2 sm:gap-4">
-
-      <!-- Brand & Infinity Logo -->
-      <a href="#" class="flex items-center gap-2 sm:gap-3 shrink-0 group min-w-0">
-        <div class="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded bg-darkBg text-white transition-transform group-hover:scale-105 shadow-sm shrink-0">
-          <!-- Infinity N Monogram SVG -->
-          <svg class="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M22 68V36C22 28 30 24 38 28C46 32 54 48 62 64C70 80 82 78 86 68C90 58 84 46 72 46C62 46 54 60 48 68"
-                  stroke="url(#infinityGrad)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
-            <circle cx="22" cy="68" r="4" fill="#1B6B44"/>
-            <defs>
-              <linearGradient id="infinityGrad" x1="20" y1="20" x2="88" y2="80" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#1B6B44"/>
-                <stop offset="0.6" stop-color="#34D399"/>
-                <stop offset="1" stop-color="#FFFFFF"/>
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-        <div class="flex flex-col min-w-0">
-          <span class="font-heading font-extrabold text-sm sm:text-base tracking-tight leading-none text-darkBg whitespace-nowrap">
-            NEXCEL <span class="text-emeraldAccent">SOLUTIONS</span>
-          </span>
-          <span class="hidden sm:block font-mono text-[10px] text-textMuted tracking-wider uppercase mt-0.5 whitespace-nowrap">Engineering & Solutions</span>
-        </div>
-      </a>
-
-      <!-- 4 Flagship Directions Navigation (desktop, ≥1280px) -->
-      <nav aria-label="Основная навигация" class="hidden xl:flex items-center gap-5 2xl:gap-6 text-[11px] 2xl:text-xs font-medium text-textMain/80 font-mono whitespace-nowrap">
-        <a href="#direction-tables" class="hover:text-emeraldAccent transition-colors">Анализ данных</a>
-        <a href="#direction-bots" class="hover:text-emeraldAccent transition-colors">Telegram + ИИ</a>
-        <a href="#direction-ai" class="hover:text-emeraldAccent transition-colors">Внедрение ИИ</a>
-        <a href="#licensing" class="hover:text-emeraldAccent transition-colors text-emeraldAccent font-semibold">Лицензии ПО & SaaS</a>
-        <a href="#cases" class="hover:text-emeraldAccent transition-colors text-textMuted">Кейсы</a>
-        <a href="#templates" class="hover:text-emeraldAccent transition-colors text-textMuted">Шаблоны</a>
-      </nav>
-
-      <!-- Fast Contact Actions -->
-      <div class="flex items-center gap-1.5 sm:gap-3 shrink-0">
-        <a href="mailto:info@nexcel.kz" class="hidden md:inline-flex items-center gap-1.5 text-xs font-mono text-textMuted hover:text-darkBg transition-colors border border-gridBorder px-2.5 py-1.5 rounded bg-white">
-          <svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" /> <rect x="2" y="4" width="20" height="16" rx="2" /></svg>
-          <span>info@nexcel.kz</span>
-        </a>
-
-        <button onclick="openWhatsApp('Здравствуйте! Я с вашего сайта nexcel.kz, хочу узнать подробнее про оцифровку и автоматизацию бизнеса.')"
-           aria-label="Написать в WhatsApp: +7 771 136-90-95"
-           title="WhatsApp: +7 771 136-90-95"
-           class="inline-flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 bg-emeraldAccent hover:bg-emeraldHover text-white rounded-[35%] transition-all shadow-sm active:scale-95 shrink-0">
-          <svg aria-hidden="true" class="w-4 h-4 sm:w-5 sm:h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" /></svg>
-        </button>
-
-        <!-- Mobile/tablet menu toggle (<1280px) -->
-        <button type="button" id="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-expanded="false" aria-controls="mobile-menu" aria-label="Открыть меню разделов"
-           class="xl:hidden inline-flex items-center justify-center w-11 h-11 rounded border border-gridBorder bg-white text-darkBg shrink-0">
-          <svg aria-hidden="true" id="mobile-menu-icon-open" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16" /> <path d="M4 6h16" /> <path d="M4 18h16" /></svg>
-          <svg aria-hidden="true" id="mobile-menu-icon-close" class="hidden w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18" /> <path d="m6 6 12 12" /></svg>
-        </button>
-      </div>
-    </div>
-
-    <!-- Mobile/tablet navigation panel (<1280px) -->
-    <nav id="mobile-menu" aria-label="Меню разделов" class="hidden xl:hidden border-t border-gridBorder bg-paper">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col gap-1 text-sm font-mono">
-        <a href="#direction-tables" onclick="closeMobileMenu()" class="py-2.5 px-2 rounded hover:bg-white hover:text-emeraldAccent transition-colors">Анализ данных</a>
-        <a href="#direction-bots" onclick="closeMobileMenu()" class="py-2.5 px-2 rounded hover:bg-white hover:text-emeraldAccent transition-colors">Telegram + ИИ</a>
-        <a href="#direction-ai" onclick="closeMobileMenu()" class="py-2.5 px-2 rounded hover:bg-white hover:text-emeraldAccent transition-colors">Внедрение ИИ</a>
-        <a href="#licensing" onclick="closeMobileMenu()" class="py-2.5 px-2 rounded hover:bg-white text-emeraldAccent font-semibold transition-colors">Лицензии ПО & SaaS</a>
-        <a href="#cases" onclick="closeMobileMenu()" class="py-2.5 px-2 rounded hover:bg-white hover:text-emeraldAccent transition-colors text-textMuted">Кейсы</a>
-        <a href="#templates" onclick="closeMobileMenu()" class="py-2.5 px-2 rounded hover:bg-white hover:text-emeraldAccent transition-colors text-textMuted">Шаблоны</a>
-      </div>
-    </nav>
-  </header>
+  <div id="site-header"></div>
 
   <main id="main-content" class="flex-grow pt-16">
 
@@ -298,7 +185,7 @@
           <div class="lg:col-span-7 space-y-2 sm:space-y-5 lg:space-y-6">
 
             <!-- Trust Badge -->
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-white border border-gridBorder shadow-sm font-mono text-[11px] text-textMain">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-white border border-gridBorder shadow-sm font-sans text-[11px] text-textMain">
               <span class="w-2 h-2 rounded-full bg-emeraldAccent animate-pulse"></span>
               <span class="font-semibold text-emeraldAccent">B2B & B2G Интегратор</span>
               <span class="text-textMuted">•</span>
@@ -306,7 +193,7 @@
             </div>
 
             <!-- Main H1 -->
-            <h1 class="font-heading font-extrabold text-xl sm:text-4xl lg:text-5xl tracking-tight text-darkBg leading-[1.22] sm:leading-[1.16]">
+            <h1 class="font-heading font-extrabold text-3xl sm:text-4xl lg:text-5xl tracking-tight text-darkBg leading-[1.22] sm:leading-[1.16]">
               Оцифровка данных, внедрение ИИ, Telegram-боты и лицензии ПО
             </h1>
 
@@ -317,11 +204,11 @@
 
             <!-- 4 Direction Fast Pills (Interactive Switchers for Hero Demo) -->
             <div class="space-y-2 pt-0.5 sm:pt-1">
-              <div class="text-[11px] font-mono text-textMuted uppercase tracking-wider flex items-center gap-1.5">
+              <div class="text-[11px] font-sans text-textMuted uppercase tracking-wider flex items-center gap-1.5">
                 <svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z" /> <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12" /> <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17" /></svg>
                 <span>Интерактивный инспектор направлений:</span>
               </div>
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2 font-mono text-xs">
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2 font-sans text-xs">
                 <button onclick="setHeroInspector('tables')" id="pill-tables" class="hero-pill p-1.5 sm:p-2 rounded border text-left transition-all bg-darkBg text-white border-darkBg font-medium shadow-xs">
                   Анализ данных
                 </button>
@@ -340,13 +227,13 @@
             <!-- CTA Buttons -->
             <div class="flex flex-wrap items-center gap-2 sm:gap-4 pt-1 sm:pt-3">
               <button onclick="openWhatsAppWithCurrentTopic()"
-                 class="inline-flex items-center justify-center gap-2 bg-emeraldAccent hover:bg-emeraldHover text-white px-5 sm:px-6 py-3.5 rounded font-mono text-xs font-semibold tracking-wider transition-all shadow-md active:scale-95">
+                 class="motion-button inline-flex items-center justify-center gap-2 bg-emeraldAccent hover:bg-emeraldHover text-white px-5 sm:px-6 py-3.5 rounded font-sans text-xs font-semibold tracking-wider transition-all shadow-md active:scale-95">
                 <svg aria-hidden="true" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" /> <path d="m21.854 2.147-10.94 10.939" /></svg>
                 <span>ОБСУДИТЬ ПРОЕКТ В WHATSAPP</span>
               </button>
 
-              <a href="#templates"
-                 class="inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-darkBg border border-gridBorder px-5 sm:px-6 py-3.5 rounded font-mono text-xs font-semibold tracking-wider transition-all shadow-sm">
+              <a href="/templates"
+                 class="motion-button inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-darkBg border border-gridBorder px-5 sm:px-6 py-3.5 rounded font-sans text-xs font-semibold tracking-wider transition-all shadow-sm">
                 <svg aria-hidden="true" class="w-4 h-4 text-emeraldAccent" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3" /> <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <path d="m7 10 5 5 5-5" /></svg>
                 <span>БЕСПЛАТНЫЕ ШАБЛОНЫ</span>
               </a>
@@ -368,11 +255,12 @@
                 <span class="text-[10px] text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/60 font-mono uppercase" id="hero-window-tag">LIVE SIMULATOR</span>
               </div>
 
+              <div id="hero-panels" class="hero-panels">
               <!-- Content Panel 1: Spreadsheet Sandbox -->
               <div id="inspector-tables" class="inspector-panel p-2.5 sm:p-4 space-y-1.5 sm:space-y-3">
-                <div class="p-1.5 sm:p-2 bg-slate-50 border border-gridBorder rounded flex items-center gap-2 text-[11px]">
-                  <span class="font-bold text-darkBg px-1.5 py-0.5 bg-white border border-gridBorder rounded">fx</span>
-                  <span class="text-blue-600 font-bold">=ARRAYFORMULA</span>(<span class="text-emeraldAccent font-semibold">QUERY</span>(A2:D, <span class="text-amber-700">"SELECT SUM(D) WHERE B='Оплачено'"</span>))
+                <div class="p-1.5 sm:p-2 bg-slate-50 border border-gridBorder rounded flex items-start gap-2 text-[11px]">
+                  <span class="shrink-0 font-bold text-darkBg px-1.5 py-0.5 bg-white border border-gridBorder rounded">fx</span>
+                  <code class="min-w-0 break-words font-mono"><span class="text-blue-600 font-bold">=ARRAYFORMULA</span>(<span class="text-emeraldAccent font-semibold">QUERY</span>(A2:D, <span class="text-amber-700">"SELECT SUM(D) WHERE B='Оплачено'"</span>))</code>
                 </div>
 
                 <div class="border border-gridBorder rounded overflow-hidden">
@@ -474,6 +362,8 @@
                 </div>
               </div>
 
+              </div>
+
               <!-- Card Footer -->
               <div class="px-3 sm:px-4 py-2 sm:py-2.5 bg-slate-100 border-t border-gridBorder text-[10px] text-textMuted flex items-center justify-between">
                 <span>Казахстан • Астана • Nexcel Solutions</span>
@@ -494,25 +384,25 @@
 
           <div class="border-l-2 border-emeraldAccent pl-3.5 space-y-0.5">
             <div class="font-heading font-extrabold text-2xl sm:text-3xl text-darkBg">100+</div>
-            <div class="text-xs font-mono uppercase text-textMuted font-medium">Проектов в РК и СНГ</div>
+            <div class="text-xs font-sans uppercase text-textMuted font-medium">Проектов в РК и СНГ</div>
             <p class="text-[11px] text-slate-600">Малый, средний бизнес и квазигоссектор</p>
           </div>
 
           <div class="border-l-2 border-emeraldAccent pl-3.5 space-y-0.5">
             <div class="font-heading font-extrabold text-2xl sm:text-3xl text-darkBg">ЭСФ / АВР</div>
-            <div class="text-xs font-mono uppercase text-textMuted font-medium">Белая бухгалтерия</div>
+            <div class="text-xs font-sans uppercase text-textMuted font-medium">Белая бухгалтерия</div>
             <p class="text-[11px] text-slate-600">Официальные договоры, акты и счета-фактуры</p>
           </div>
 
           <div class="border-l-2 border-emeraldAccent pl-3.5 space-y-0.5">
             <div class="font-heading font-extrabold text-2xl sm:text-3xl text-darkBg">Оплата в ₸</div>
-            <div class="text-xs font-mono uppercase text-textMuted font-medium">Безналичный расчет</div>
+            <div class="text-xs font-sans uppercase text-textMuted font-medium">Безналичный расчет</div>
             <p class="text-[11px] text-slate-600">Без валютных рисков и блокировок карт</p>
           </div>
 
           <div class="border-l-2 border-emeraldAccent pl-3.5 space-y-0.5">
             <div class="font-heading font-extrabold text-2xl sm:text-3xl text-darkBg">0 ₸</div>
-            <div class="text-xs font-mono uppercase text-textMuted font-medium">Абонентских плат</div>
+            <div class="text-xs font-sans uppercase text-textMuted font-medium">Абонентских плат</div>
             <p class="text-[11px] text-slate-600">Разработанные таблицы переходят в вашу собственность</p>
           </div>
 
@@ -521,7 +411,194 @@
     </section>
 
 
-    <!-- ==================== 3. INTERACTIVE ROI & SAVINGS CALCULATOR ==================== -->
+    <!-- ==================== 3. HOW WE WORK ==================== -->
+    <section id="process" class="py-10 sm:py-14 border-b border-gridBorder bg-paper">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
+        <h2 class="font-heading font-extrabold text-2xl sm:text-3xl text-darkBg">
+          Как мы работаем
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+          <article data-card-reveal class="border-t-2 border-emeraldAccent pt-4 space-y-2">
+            <div class="font-mono text-xs text-emeraldAccent font-semibold">ШАГ 01</div>
+            <h3 class="font-heading font-bold text-base text-darkBg">Обсуждаем задачу</h3>
+            <p class="text-sm text-textMuted leading-relaxed">
+              Вы рассказываете, где возникает рутина. Мы уточняем требования и желаемый результат.
+            </p>
+          </article>
+
+          <article data-card-reveal class="border-t-2 border-emeraldAccent pt-4 space-y-2">
+            <div class="font-mono text-xs text-emeraldAccent font-semibold">ШАГ 02</div>
+            <h3 class="font-heading font-bold text-base text-darkBg">Согласуем план</h3>
+            <p class="text-sm text-textMuted leading-relaxed">
+              Подбираем формат решения и обсуждаем объем работ и сроки до начала проекта.
+            </p>
+          </article>
+
+          <article data-card-reveal class="border-t-2 border-emeraldAccent pt-4 space-y-2">
+            <div class="font-mono text-xs text-emeraldAccent font-semibold">ШАГ 03</div>
+            <h3 class="font-heading font-bold text-base text-darkBg">Внедряем и передаем</h3>
+            <p class="text-sm text-textMuted leading-relaxed">
+              Настраиваем согласованное решение, проверяем его работу и передаем вашей команде.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================== 4. 4 KEY BUSINESS DIRECTIONS (BENTO GRID) ==================== -->
+    <section id="directions" class="py-10 sm:py-14 lg:py-20 border-b border-gridBorder bg-paper">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-10 lg:space-y-12">
+
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gridBorder pb-6">
+          <div class="space-y-2">
+            <h2 class="font-heading font-extrabold text-2xl sm:text-3xl text-darkBg">
+              4 флагманских направления Nexcel Solutions
+            </h2>
+          </div>
+          <p class="text-xs font-sans text-textMuted max-w-md">
+            Единый подрядчик для оцифровки учета, разработки ботов, интеграции ИИ и поставки ПО в Казахстане.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
+
+          <!-- Direction 1 -->
+          <div id="direction-tables" data-card-reveal class="motion-card bg-white border border-gridBorder rounded-xl p-5 sm:p-8 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
+            <div class="space-y-4">
+              <div class="text-xs font-mono">
+                <span class="text-textMuted">Google Sheets / Excel / Looker</span>
+              </div>
+              <h3 class="font-heading font-extrabold text-xl text-darkBg">
+                Анализ данных и учетные системы
+              </h3>
+              <p class="text-xs sm:text-sm text-textMuted leading-relaxed">
+                Построение прозрачного управленческого учета под ключ: бюджет движения денег (БДС / Cash Flow), отчет о прибылях и убытках (ОПиУ / P&L), складской партионный учет ТМЦ и интерактивные сквозные дашборды.
+              </p>
+
+              <div class="space-y-2 pt-2 border-t border-gridBorder text-xs font-sans">
+                <div class="text-textMain font-semibold">Решаемые задачи:</div>
+                <ul class="space-y-1.5 text-textMuted">
+                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Разработка mini-ERP систем для синхронизации отделов</li>
+                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Сложные формулы (LAMBDA, MAP, QUERY, XLOOKUP, REGEX)</li>
+                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Автоматизация через Google Apps Script и VBA макросы</li>
+                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Калькуляторы себестоимости и динамического прайсинга</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-gridBorder flex items-center justify-between text-xs font-sans">
+              <span class="text-textMuted font-mono">Сроки: от 1 до 5 дней</span>
+              <button onclick="openWhatsApp('Здравствуйте! Я с вашего сайта, хочу обсудить настройку учета и таблиц для нашей компании.')" class="text-emeraldAccent font-semibold hover:underline flex items-center gap-1 py-4 -my-4">
+                Обсудить учет <svg aria-hidden="true" class="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10" /> <path d="M7 17 17 7" /></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Direction 2 -->
+          <div id="direction-bots" data-card-reveal class="motion-card bg-white border border-gridBorder rounded-xl p-5 sm:p-8 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
+            <div class="space-y-4">
+              <div class="text-xs font-mono">
+                <span class="text-textMuted">Telegram Bot API / Python / LLM</span>
+              </div>
+              <h3 class="font-heading font-extrabold text-xl text-darkBg">
+                Разработка Telegram-ботов с ИИ
+              </h3>
+              <p class="text-xs sm:text-sm text-textMuted leading-relaxed">
+                Кастомные боты для бизнеса: сбор заявок прямо в Google Таблицы, парсинг внешних площадок, авто-модерация чатов и каналов, консультация клиентов через подключенные языковые модели GPT/Claude.
+              </p>
+
+              <div class="space-y-2 pt-2 border-t border-gridBorder text-xs font-sans">
+                <div class="text-textMain font-semibold">Решаемые задачи:</div>
+                <ul class="space-y-1.5 text-textMuted">
+                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Боты приема заказов с записью в базу и уведомлением команды</li>
+                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Автоматический мониторинг цен конкурентов и тендеров</li>
+                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Фильтрация и суммаризация новостного контента для медиа</li>
+                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Двусторонняя синхронизация с CRM и Google Sheets</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-gridBorder flex items-center justify-between text-xs font-sans">
+              <span class="text-textMuted font-mono">Сроки: от 3 до 7 дней</span>
+              <button onclick="openWhatsApp('Здравствуйте! Я с вашего сайта, хочу заказать Telegram-бота с ИИ для бизнеса.')" class="text-emeraldAccent font-semibold hover:underline flex items-center gap-1 py-4 -my-4">
+                Заказать бота <svg aria-hidden="true" class="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10" /> <path d="M7 17 17 7" /></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Direction 3 -->
+          <div id="direction-ai" data-card-reveal class="motion-card bg-white border border-gridBorder rounded-xl p-5 sm:p-8 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
+            <div class="space-y-4">
+              <div class="text-xs font-mono">
+                <span class="text-textMuted">Computer Vision / OCR / Whisper</span>
+              </div>
+              <h3 class="font-heading font-extrabold text-xl text-darkBg">
+                Внедрение технологий ИИ в бизнес
+              </h3>
+              <p class="text-xs sm:text-sm text-textMuted leading-relaxed">
+                Автоматизация рутинных процессов с помощью нейросетей: оптическое распознавание первичной документации (чеки, накладные, акты), транскрибация звонков и совещаний, интеллектуальные корпоративные базы знаний.
+              </p>
+
+              <div class="space-y-2 pt-2 border-t border-gridBorder text-xs font-sans">
+                <div class="text-textMain font-semibold">Решаемые задачи:</div>
+                <ul class="space-y-1.5 text-textMuted">
+                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Распознавание фото накладных и моментальный импорт в таблицу</li>
+                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Расшифровка звонков отдела продаж и анализ качества сервиса</li>
+                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Умные ассистенты для сотрудников по внутренним регламентам</li>
+                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Сокращение ручного ввода данных на 90%</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-gridBorder flex items-center justify-between text-xs font-sans">
+              <span class="text-textMuted font-mono">Сроки: от 3 до 8 дней</span>
+              <button onclick="openWhatsApp('Здравствуйте! Я с вашего сайта, интересует внедрение ИИ и распознавание документов (OCR) в нашей компании.')" class="text-emeraldAccent font-semibold hover:underline flex items-center gap-1 py-4 -my-4">
+                Интегрировать ИИ <svg aria-hidden="true" class="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10" /> <path d="M7 17 17 7" /></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Direction 4 -->
+          <div id="direction-licensing" data-card-reveal class="motion-card bg-white border-2 border-emeraldAccent rounded-xl p-5 sm:p-8 space-y-4 sm:space-y-6 flex flex-col justify-between hover:shadow-lg transition-all shadow-sm">
+            <div class="space-y-4">
+              <div class="flex items-center justify-between text-xs font-sans">
+                <span class="px-2.5 py-1 bg-emeraldAccent text-white rounded font-bold">B2B / B2G</span>
+                <span class="text-emeraldAccent font-semibold">Лицензии ПО и SaaS</span>
+              </div>
+              <h3 class="font-heading font-extrabold text-xl text-darkBg">
+                Лицензионное ПО, Подписки на ИИ и SaaS
+              </h3>
+              <p class="text-xs sm:text-sm text-textMuted leading-relaxed">
+                Подбираем и поставляем корпоративное ПО, подписки на ИИ и облачные сервисы для бизнеса и госсектора.
+              </p>
+
+              <div class="space-y-2 pt-2 border-t border-gridBorder text-xs font-sans">
+                <div class="text-textMain font-semibold">Решаемые задачи:</div>
+                <ul class="space-y-1.5 text-textMuted">
+                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Подбор числа лицензий под состав и роли команды</li>
+                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Сравнение тарифов по функциям и лимитам использования</li>
+                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Контроль дат продления и заблаговременное обновление подписок</li>
+                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Расширение пакета лицензий при подключении новых сотрудников</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-gridBorder flex items-center justify-between text-xs font-sans">
+              <span class="text-emeraldAccent font-semibold font-mono">Подключение: от 24 часов</span>
+              <a href="/licensing" class="text-emeraldAccent font-bold hover:underline flex items-center gap-1">
+                Подробнее о лицензиях <svg aria-hidden="true" class="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14" /> <path d="m19 12-7 7-7-7" /></svg>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================== 5. INTERACTIVE ROI & SAVINGS CALCULATOR ==================== -->
     <section id="calculator" class="py-10 sm:py-14 lg:py-20 border-b border-gridBorder bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 items-center">
@@ -535,7 +612,7 @@
               Ручной ввод цифр, ошибки в формулах и сборка отчетов в конце месяца — это прямые убытки компании. Оцените эффект внедрения за 30 секунд.
             </p>
 
-            <div class="p-4 rounded bg-paper border border-gridBorder space-y-2 font-mono text-xs">
+            <div class="p-4 rounded bg-paper border border-gridBorder space-y-2 font-sans text-xs">
               <div class="text-emeraldAccent flex items-center gap-2 font-bold">
                 <svg aria-hidden="true" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="M12 16v-4" /> <path d="M12 8h.01" /></svg>
                 <span>Инженерная статистика:</span>
@@ -546,14 +623,14 @@
             </div>
           </div>
 
-          <div class="lg:col-span-7 bg-paper border border-gridBorder rounded-xl p-5 sm:p-8 space-y-5 sm:space-y-8 font-mono shadow-xs">
+          <div class="lg:col-span-7 bg-paper border border-gridBorder rounded-xl p-5 sm:p-8 space-y-5 sm:space-y-8 font-sans shadow-xs">
 
             <div class="space-y-6">
               <!-- Slider 1 -->
               <div class="space-y-2">
                 <div class="flex justify-between text-xs">
                   <span class="text-textMain font-medium">Сотрудников, работающих с таблицами/рутиной:</span>
-                  <span class="font-bold text-emeraldAccent text-sm" id="calc-employees-val">4 чел</span>
+                  <span class="font-bold font-mono text-emeraldAccent text-sm" id="calc-employees-val">4 чел</span>
                 </div>
                 <input type="range" id="calc-employees" min="1" max="50" value="4" aria-label="Сотрудников, работающих с таблицами и рутиной" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emeraldAccent" />
               </div>
@@ -562,7 +639,7 @@
               <div class="space-y-2">
                 <div class="flex justify-between text-xs">
                   <span class="text-textMain font-medium">Часов рутины в неделю на одного сотрудника:</span>
-                  <span class="font-bold text-emeraldAccent text-sm" id="calc-hours-val">8 часов</span>
+                  <span class="font-bold font-mono text-emeraldAccent text-sm" id="calc-hours-val">8 часов</span>
                 </div>
                 <input type="range" id="calc-hours" min="1" max="30" value="8" aria-label="Часов рутины в неделю на одного сотрудника" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emeraldAccent" />
               </div>
@@ -571,7 +648,7 @@
               <div class="space-y-2">
                 <div class="flex justify-between text-xs">
                   <span class="text-textMain font-medium">Средняя месячная ставка сотрудника:</span>
-                  <span class="font-bold text-emeraldAccent text-sm" id="calc-rate-val">400 000 ₸ / мес</span>
+                  <span class="font-bold font-mono text-emeraldAccent text-sm" id="calc-rate-val">400 000 ₸ / мес</span>
                 </div>
                 <input type="range" id="calc-rate" min="150000" max="1000000" step="10000" value="400000" aria-label="Средняя месячная ставка сотрудника, тенге" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emeraldAccent" />
               </div>
@@ -581,15 +658,15 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6 border-t border-gridBorder">
               <div class="p-4 bg-white border border-gridBorder rounded">
                 <div class="text-[11px] text-textMuted">Экономия времени в месяц:</div>
-                <div class="text-2xl sm:text-3xl font-heading font-extrabold text-darkBg mt-1" id="calc-res-hours" aria-live="polite">
+                <div class="text-2xl sm:text-3xl font-extrabold font-mono text-darkBg mt-1" id="calc-res-hours">
                   139 ч
                 </div>
-                <div class="text-[10px] text-emeraldAccent mt-1 font-semibold" id="calc-res-shifts" aria-live="polite">Около 17 полных рабочих смен</div>
+                <div class="text-[10px] text-emeraldAccent mt-1 font-mono font-semibold" id="calc-res-shifts">Около 17 полных рабочих смен</div>
               </div>
 
               <div class="p-4 bg-emeraldLight border border-emerald-300 rounded">
                 <div class="text-[11px] text-emerald-900 font-semibold">Финансовая экономия в месяц:</div>
-                <div class="text-2xl sm:text-3xl font-heading font-extrabold text-emeraldAccent mt-1" id="calc-res-money" aria-live="polite">
+                <div class="text-2xl sm:text-3xl font-extrabold font-mono text-emeraldAccent mt-1" id="calc-res-money">
                   329 905 ₸
                 </div>
                 <div class="text-[10px] text-textMuted mt-1">Окупаемость проекта ~ 2 недели</div>
@@ -597,7 +674,8 @@
             </div>
 
             <div class="text-center pt-2">
-              <button onclick="sendRoiToWhatsApp()" class="inline-flex items-center gap-2 bg-emeraldAccent hover:bg-emeraldHover text-white px-6 py-3 rounded text-xs font-semibold tracking-wider transition-all w-full sm:w-auto justify-center shadow-sm">
+              <p id="calc-announcement" class="sr-only" role="status" aria-atomic="true"></p>
+              <button onclick="sendRoiToWhatsApp()" class="motion-button inline-flex items-center gap-2 bg-emeraldAccent hover:bg-emeraldHover text-white px-6 py-3 rounded text-xs font-semibold tracking-wider transition-all w-full sm:w-auto justify-center shadow-sm">
                 <span>ЗАФИКСИРОВАТЬ ЭКОНОМИЮ И ОБСУДИТЬ В WHATSAPP</span>
                 <svg aria-hidden="true" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg>
               </button>
@@ -610,159 +688,7 @@
     </section>
 
 
-    <!-- ==================== 4. 4 KEY BUSINESS DIRECTIONS (BENTO GRID) ==================== -->
-    <section id="directions" class="py-10 sm:py-14 lg:py-20 border-b border-gridBorder bg-paper">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-10 lg:space-y-12">
-
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gridBorder pb-6">
-          <div class="space-y-2">
-            <div class="font-mono text-xs text-emeraldAccent font-semibold tracking-wider uppercase">[ Архитектура услуг ]</div>
-            <h2 class="font-heading font-extrabold text-2xl sm:text-3xl text-darkBg">
-              4 флагманских направления Nexcel Solutions
-            </h2>
-          </div>
-          <p class="text-xs font-mono text-textMuted max-w-md">
-            Единый подрядчик для оцифровки учета, разработки ботов, интеграции ИИ и поставки ПО в Казахстане.
-          </p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
-
-          <!-- Direction 1 -->
-          <div id="direction-tables" class="bg-white border border-gridBorder rounded-xl p-5 sm:p-8 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
-            <div class="space-y-4">
-              <div class="text-xs font-mono">
-                <span class="text-textMuted">Google Sheets / Excel / Looker</span>
-              </div>
-              <h3 class="font-heading font-extrabold text-xl text-darkBg">
-                Анализ данных и учетные системы
-              </h3>
-              <p class="text-xs sm:text-sm text-textMuted leading-relaxed">
-                Построение прозрачного управленческого учета под ключ: бюджет движения денег (БДС / Cash Flow), отчет о прибылях и убытках (ОПиУ / P&L), складской партионный учет ТМЦ и интерактивные сквозные дашборды.
-              </p>
-
-              <div class="space-y-2 pt-2 border-t border-gridBorder text-xs font-mono">
-                <div class="text-textMain font-semibold">Решаемые задачи:</div>
-                <ul class="space-y-1.5 text-textMuted">
-                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Разработка mini-ERP систем для синхронизации отделов</li>
-                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Сложные формулы (LAMBDA, MAP, QUERY, XLOOKUP, REGEX)</li>
-                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Автоматизация через Google Apps Script и VBA макросы</li>
-                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Калькуляторы себестоимости и динамического прайсинга</li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="pt-4 border-t border-gridBorder flex items-center justify-between text-xs font-mono">
-              <span class="text-textMuted">Сроки: от 1 до 5 дней</span>
-              <button onclick="openWhatsApp('Здравствуйте! Я с вашего сайта, хочу обсудить настройку учета и таблиц для нашей компании.')" class="text-emeraldAccent font-semibold hover:underline flex items-center gap-1 py-4 -my-4">
-                Обсудить учет <svg aria-hidden="true" class="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10" /> <path d="M7 17 17 7" /></svg>
-              </button>
-            </div>
-          </div>
-
-          <!-- Direction 2 -->
-          <div id="direction-bots" class="bg-white border border-gridBorder rounded-xl p-5 sm:p-8 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
-            <div class="space-y-4">
-              <div class="text-xs font-mono">
-                <span class="text-textMuted">Telegram Bot API / Python / LLM</span>
-              </div>
-              <h3 class="font-heading font-extrabold text-xl text-darkBg">
-                Разработка Telegram-ботов с ИИ
-              </h3>
-              <p class="text-xs sm:text-sm text-textMuted leading-relaxed">
-                Кастомные боты для бизнеса: сбор заявок прямо в Google Таблицы, парсинг внешних площадок, авто-модерация чатов и каналов, консультация клиентов через подключенные языковые модели GPT/Claude.
-              </p>
-
-              <div class="space-y-2 pt-2 border-t border-gridBorder text-xs font-mono">
-                <div class="text-textMain font-semibold">Решаемые задачи:</div>
-                <ul class="space-y-1.5 text-textMuted">
-                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Боты приема заказов с записью в базу и уведомлением команды</li>
-                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Автоматический мониторинг цен конкурентов и тендеров</li>
-                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Фильтрация и суммаризация новостного контента для медиа</li>
-                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Двусторонняя синхронизация с CRM и Google Sheets</li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="pt-4 border-t border-gridBorder flex items-center justify-between text-xs font-mono">
-              <span class="text-textMuted">Сроки: от 3 до 7 дней</span>
-              <button onclick="openWhatsApp('Здравствуйте! Я с вашего сайта, хочу заказать Telegram-бота с ИИ для бизнеса.')" class="text-emeraldAccent font-semibold hover:underline flex items-center gap-1 py-4 -my-4">
-                Заказать бота <svg aria-hidden="true" class="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10" /> <path d="M7 17 17 7" /></svg>
-              </button>
-            </div>
-          </div>
-
-          <!-- Direction 3 -->
-          <div id="direction-ai" class="bg-white border border-gridBorder rounded-xl p-5 sm:p-8 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
-            <div class="space-y-4">
-              <div class="text-xs font-mono">
-                <span class="text-textMuted">Computer Vision / OCR / Whisper</span>
-              </div>
-              <h3 class="font-heading font-extrabold text-xl text-darkBg">
-                Внедрение технологий ИИ в бизнес
-              </h3>
-              <p class="text-xs sm:text-sm text-textMuted leading-relaxed">
-                Автоматизация рутинных процессов с помощью нейросетей: оптическое распознавание первичной документации (чеки, накладные, акты), транскрибация звонков и совещаний, интеллектуальные корпоративные базы знаний.
-              </p>
-
-              <div class="space-y-2 pt-2 border-t border-gridBorder text-xs font-mono">
-                <div class="text-textMain font-semibold">Решаемые задачи:</div>
-                <ul class="space-y-1.5 text-textMuted">
-                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Распознавание фото накладных и моментальный импорт в таблицу</li>
-                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Расшифровка звонков отдела продаж и анализ качества сервиса</li>
-                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Умные ассистенты для сотрудников по внутренним регламентам</li>
-                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Сокращение ручного ввода данных на 90%</li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="pt-4 border-t border-gridBorder flex items-center justify-between text-xs font-mono">
-              <span class="text-textMuted">Сроки: от 3 до 8 дней</span>
-              <button onclick="openWhatsApp('Здравствуйте! Я с вашего сайта, интересует внедрение ИИ и распознавание документов (OCR) в нашей компании.')" class="text-emeraldAccent font-semibold hover:underline flex items-center gap-1 py-4 -my-4">
-                Интегрировать ИИ <svg aria-hidden="true" class="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10" /> <path d="M7 17 17 7" /></svg>
-              </button>
-            </div>
-          </div>
-
-          <!-- Direction 4 -->
-          <div id="direction-licensing" class="bg-white border-2 border-emeraldAccent rounded-xl p-5 sm:p-8 space-y-4 sm:space-y-6 flex flex-col justify-between hover:shadow-lg transition-all shadow-sm">
-            <div class="space-y-4">
-              <div class="flex items-center justify-between text-xs font-mono">
-                <span class="px-2.5 py-1 bg-emeraldAccent text-white rounded font-bold">B2B / B2G</span>
-                <span class="text-emeraldAccent font-semibold">Оплата в ₸ • ЭСФ/АВР</span>
-              </div>
-              <h3 class="font-heading font-extrabold text-xl text-darkBg">
-                Лицензионное ПО, Подписки на ИИ и SaaS
-              </h3>
-              <p class="text-xs sm:text-sm text-textMuted leading-relaxed">
-                Официальная поставка корпоративных лицензий зарубежного ПО, подписок на нейросети (OpenAI, Anthropic Claude, Midjourney) и Cloud SaaS для бизнеса и государственных учреждений Казахстана.
-              </p>
-
-              <div class="space-y-2 pt-2 border-t border-gridBorder text-xs font-mono">
-                <div class="text-darkBg font-bold">Преимущества для финдиректора и бухгалтерии:</div>
-                <ul class="space-y-1.5 text-textMuted">
-                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> <path d="m9 12 2 2 4-4" /></svg> Оплата по безналичному расчету в тенге (KZT) по договору</li>
-                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> <path d="m9 12 2 2 4-4" /></svg> Предоставление полного пакета: ЭСФ и АВР через ИС ЭСФ</li>
-                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> <path d="m9 12 2 2 4-4" /></svg> Работа с государственными предприятиями и квазигоссектором</li>
-                  <li class="flex items-start gap-2"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> <path d="m9 12 2 2 4-4" /></svg> Отсутствие проблем с блокировками личных карт сотрудников</li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="pt-4 border-t border-gridBorder flex items-center justify-between text-xs font-mono">
-              <span class="text-emeraldAccent font-semibold">Подключение: от 24 часов</span>
-              <a href="#licensing" class="text-emeraldAccent font-bold hover:underline flex items-center gap-1">
-                Подробнее о лицензиях <svg aria-hidden="true" class="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14" /> <path d="m19 12-7 7-7-7" /></svg>
-              </a>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-
-    <!-- ==================== 5. CASE STUDIES ==================== -->
+    <!-- ==================== 6. CASE STUDIES ==================== -->
     <section id="cases" class="py-10 sm:py-14 lg:py-20 border-b border-gridBorder bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-10 lg:space-y-12">
 
@@ -773,7 +699,7 @@
               Реализованные кейсы и фактические результаты
             </h2>
           </div>
-          <div class="text-xs font-mono text-textMuted">
+          <div class="text-xs font-sans text-textMuted">
             Оцифрованные показатели внедрений в Казахстане.
           </div>
         </div>
@@ -781,64 +707,64 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
 
           <!-- Case 1 -->
-          <div class="bg-paper border border-gridBorder rounded-xl p-5 sm:p-6 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
+          <div data-card-reveal class="motion-card bg-paper border border-gridBorder rounded-xl p-5 sm:p-6 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
             <div class="space-y-4">
-              <div class="text-xs font-mono">
+              <div class="text-xs font-sans">
                 <span class="text-textMuted">Оптовая дистрибуция</span>
               </div>
               <h3 class="font-heading font-bold text-lg text-darkBg">
                 mini-ERP в Google Sheets для команды из 10 менеджеров
               </h3>
               <div class="space-y-2 text-xs text-textMuted leading-relaxed">
-                <p><strong class="text-darkBg font-mono">Задача:</strong> Несогласованные скидки, путаница в остатках склада и утеря оплат без дорогостоящей CRM.</p>
-                <p><strong class="text-darkBg font-mono">Решение:</strong> Единая учетная среда на Google Sheets с разграничением прав, авто-расчетом статусов сделок и дебиторки.</p>
+                <p><strong class="text-darkBg">Задача:</strong> Несогласованные скидки, путаница в остатках склада и утеря оплат без дорогостоящей CRM.</p>
+                <p><strong class="text-darkBg">Решение:</strong> Единая учетная среда на Google Sheets с разграничением прав, авто-расчетом статусов сделок и дебиторки.</p>
               </div>
             </div>
-            <div class="p-4 bg-white border border-gridBorder rounded space-y-2 font-mono">
+            <div class="p-4 bg-white border border-gridBorder rounded space-y-2 font-sans">
               <div class="text-[11px] text-textMuted">Фактический результат:</div>
-              <div class="text-xl font-bold text-emeraldAccent font-heading">-80% времени поиска данных</div>
+              <div class="text-xl font-bold text-emeraldAccent font-heading"><span class="case-counter" data-count-to="80"><span class="case-counter-final">-80%</span><span class="case-counter-value" aria-hidden="true">-80%</span></span> времени поиска данных</div>
               <div class="text-[11px] text-darkBg">Сквозной контроль 100% платежей в едином окне</div>
             </div>
           </div>
 
           <!-- Case 2 -->
-          <div class="bg-paper border border-gridBorder rounded-xl p-5 sm:p-6 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
+          <div data-card-reveal class="motion-card bg-paper border border-gridBorder rounded-xl p-5 sm:p-6 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
             <div class="space-y-4">
-              <div class="text-xs font-mono">
+              <div class="text-xs font-sans">
                 <span class="text-textMuted">Метрология и лаборатория</span>
               </div>
               <h3 class="font-heading font-bold text-lg text-darkBg">
                 Автоматизация протоколов поверочной лаборатории
               </h3>
               <div class="space-y-2 text-xs text-textMuted leading-relaxed">
-                <p><strong class="text-darkBg font-mono">Задача:</strong> Ручное оформление сотен однотипных протоколов измерений приборов учета отнимало дни работы инженеров.</p>
-                <p><strong class="text-darkBg font-mono">Решение:</strong> Архитектура Google Sheets + Apps Script для автогенерации печатных бланков и реестра замеров.</p>
+                <p><strong class="text-darkBg">Задача:</strong> Ручное оформление сотен однотипных протоколов измерений приборов учета отнимало дни работы инженеров.</p>
+                <p><strong class="text-darkBg">Решение:</strong> Архитектура Google Sheets + Apps Script для автогенерации печатных бланков и реестра замеров.</p>
               </div>
             </div>
-            <div class="p-4 bg-white border border-gridBorder rounded space-y-2 font-mono">
+            <div class="p-4 bg-white border border-gridBorder rounded space-y-2 font-sans">
               <div class="text-[11px] text-textMuted">Фактический результат:</div>
-              <div class="text-xl font-bold text-emeraldAccent font-heading">1 000+ протоколов/мес</div>
+              <div class="text-xl font-bold text-emeraldAccent font-heading"><span class="case-counter" data-count-to="1000"><span class="case-counter-final">1 000+</span><span class="case-counter-value" aria-hidden="true">1 000+</span></span> протоколов/мес</div>
               <div class="text-[11px] text-darkBg">Исключение человеческого фактора и расчетных ошибок</div>
             </div>
           </div>
 
           <!-- Case 3 -->
-          <div class="bg-paper border border-gridBorder rounded-xl p-5 sm:p-6 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
+          <div data-card-reveal class="motion-card bg-paper border border-gridBorder rounded-xl p-5 sm:p-6 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
             <div class="space-y-4">
-              <div class="text-xs font-mono">
+              <div class="text-xs font-sans">
                 <span class="text-textMuted">Медиа & Спортивное комьюнити</span>
               </div>
               <h3 class="font-heading font-bold text-lg text-darkBg">
                 Telegram-бот + Claude AI для контент-канала марафонов
               </h3>
               <div class="space-y-2 text-xs text-textMuted leading-relaxed">
-                <p><strong class="text-darkBg font-mono">Задача:</strong> Ручной мониторинг зарубежных сайтов, отбор новостей и адаптация для бегунов занимали по 3 часа в день.</p>
-                <p><strong class="text-darkBg font-mono">Решение:</strong> Бот автоматически парсит источники, фильтрует через ИИ, форматирует пост и отсылает на аппрув модератору.</p>
+                <p><strong class="text-darkBg">Задача:</strong> Ручной мониторинг зарубежных сайтов, отбор новостей и адаптация для бегунов занимали по 3 часа в день.</p>
+                <p><strong class="text-darkBg">Решение:</strong> Бот автоматически парсит источники, фильтрует через ИИ, форматирует пост и отсылает на аппрув модератору.</p>
               </div>
             </div>
-            <div class="p-4 bg-white border border-gridBorder rounded space-y-2 font-mono">
+            <div class="p-4 bg-white border border-gridBorder rounded space-y-2 font-sans">
               <div class="text-[11px] text-textMuted">Фактический результат:</div>
-              <div class="text-xl font-bold text-emeraldAccent font-heading">0 часов рутины</div>
+              <div data-case-zero class="text-xl font-bold text-emeraldAccent font-heading">0 часов рутины</div>
               <div class="text-[11px] text-darkBg">Публикация в 1 клик и рост регулярности постов на 300%</div>
             </div>
           </div>
@@ -848,137 +774,80 @@
     </section>
 
 
-    <!-- ==================== 6. DEDICATED B2B/B2G LICENSING & SAAS SECTION ==================== -->
-    <section id="licensing" class="py-10 sm:py-14 lg:py-20 border-b border-gridBorder dark-ledger-grid bg-darkBg text-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-10 lg:space-y-12">
-
-        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b border-slate-800 pb-8">
-          <div class="space-y-2 max-w-2xl">
-            <div class="font-mono text-xs text-emerald-400 font-semibold uppercase tracking-wider">[ Направление 4 • Лицензирование ]</div>
-            <h2 class="font-heading font-extrabold text-2xl sm:text-4xl text-white tracking-tight leading-tight">
-              Официальные лицензии ПО, нейросетей и SaaS для B2B и Госсектора
-            </h2>
-            <p class="text-slate-400 text-sm leading-relaxed pt-2">
-              Решаем проблему блокировок зарубежных платежей и покупки подписок для казахстанских компаний. Оплачивайте безналичным расчетом в тенге со всеми закрывающими документами.
-            </p>
-          </div>
-          <div class="shrink-0">
-            <button onclick="openWhatsApp('Здравствуйте! Я с вашего сайта, хочу оформить лицензии ПО и подписки на ИИ для юрлица. Пришлите, пожалуйста, коммерческое предложение и договор.')"
-               class="inline-flex items-center gap-2 bg-emeraldAccent hover:bg-emeraldHover text-white px-5 py-3 rounded font-mono text-xs font-semibold tracking-wider transition-all shadow-md">
-              <svg aria-hidden="true" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" /> <path d="M14 2v5a1 1 0 0 0 1 1h5" /> <path d="M10 9H8" /> <path d="M16 13H8" /> <path d="M16 17H8" /></svg>
-              <span>ЗАПРОСИТЬ КП И ДОГОВОР</span>
-            </button>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 font-mono text-xs">
-
-          <div class="p-6 bg-slate-900 border border-slate-800 rounded-xl space-y-4">
-            <div class="w-10 h-10 rounded bg-emerald-950 text-emerald-400 flex items-center justify-center">
-              <svg aria-hidden="true" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="12" x="2" y="6" rx="2" /> <circle cx="12" cy="12" r="2" /> <path d="M6 12h.01M18 12h.01" /></svg>
-            </div>
-            <h3 class="font-heading font-bold text-base text-white">Оплата в тенге (KZT)</h3>
-            <p class="text-slate-400 leading-relaxed font-sans text-xs">
-              Безналичный перевод с вашего расчетного счета в любом банке Казахстана (Kaspi, Halyk, Jusan, Forte, БЦК). Никаких комиссий за валютную конвертацию.
-            </p>
-          </div>
-
-          <div class="p-6 bg-slate-900 border border-slate-800 rounded-xl space-y-4">
-            <div class="w-10 h-10 rounded bg-emerald-950 text-emerald-400 flex items-center justify-center">
-              <svg aria-hidden="true" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 22H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.706.706l3.588 3.588A2.4 2.4 0 0 1 20 8v6" /> <path d="M14 2v5a1 1 0 0 0 1 1h5" /> <path d="m14 20 2 2 4-4" /></svg>
-            </div>
-            <h3 class="font-heading font-bold text-base text-white">ЭСФ и АВР через ИС ЭСФ</h3>
-            <p class="text-slate-400 leading-relaxed font-sans text-xs">
-              Предоставляем полный комплект закрывающих документов, принимаемых налоговыми органами РК. Своевременное выставление актов и счетов-фактур.
-            </p>
-          </div>
-
-          <div class="p-6 bg-slate-900 border border-slate-800 rounded-xl space-y-4">
-            <div class="w-10 h-10 rounded bg-emerald-950 text-emerald-400 flex items-center justify-center">
-              <svg aria-hidden="true" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 12h4" /> <path d="M10 8h4" /> <path d="M14 21v-3a2 2 0 0 0-4 0v3" /> <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2" /> <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16" /></svg>
-            </div>
-            <h3 class="font-heading font-bold text-base text-white">B2B и Госсектор (B2G)</h3>
-            <p class="text-slate-400 leading-relaxed font-sans text-xs">
-              Работаем с коммерческими предприятиями, национальными компаниями, квазигоссектором и государственными учреждениями РК.
-            </p>
-          </div>
-
-        </div>
-
-      </div>
-    </section>
-
-
-    <!-- ==================== 7. FREE TEMPLATES HUB (LEAD MAGNET) ==================== -->
-    <section id="templates" class="py-10 sm:py-14 lg:py-20 border-b border-gridBorder bg-paper">
+    <!-- ==================== 7. FREE TEMPLATES TEASER ==================== -->
+    <section id="template-teaser" class="py-10 sm:py-14 lg:py-20 border-b border-gridBorder bg-paper">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-10 lg:space-y-12">
 
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gridBorder pb-6">
           <div class="space-y-2">
-            <div class="font-mono text-xs text-emeraldAccent font-semibold tracking-wider uppercase">[ Бесплатный Lead Magnet ]</div>
             <h2 class="font-heading font-extrabold text-2xl sm:text-3xl text-darkBg">
               Хаб бесплатных инженерных шаблонов Nexcel
             </h2>
           </div>
-          <p class="text-xs font-mono text-textMuted max-w-md">
-            Скачивайте проверенные учетные шаблоны для Google Sheets прямо на ваш Google Диск.
-          </p>
+          <div class="max-w-md space-y-3">
+            <p class="text-xs font-sans text-textMuted">
+              Бесплатные инструменты для финансового, складского и кадрового учета.
+            </p>
+            <a href="/templates" class="inline-flex items-center gap-1 text-sm font-semibold text-emeraldAccent hover:underline">
+              Смотреть все шаблоны <span aria-hidden="true">→</span>
+            </a>
+          </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
 
           <!-- Template 1 -->
-          <div class="bg-white border border-gridBorder rounded-lg p-5 sm:p-6 space-y-3 sm:space-y-5 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
+          <div data-card-reveal class="motion-card bg-white border border-gridBorder rounded-lg p-5 sm:p-6 space-y-3 sm:space-y-5 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
             <div class="space-y-3">
-              <div class="w-10 h-10 rounded bg-emeraldLight text-emeraldAccent flex items-center justify-center font-mono">
+              <div class="w-10 h-10 rounded bg-emeraldLight text-emeraldAccent flex items-center justify-center">
                 <svg aria-hidden="true" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18" /></svg>
               </div>
               <h3 class="font-heading font-bold text-base text-darkBg">
                 Учет ДДС для малого бизнеса (Cash Flow)
               </h3>
               <p class="text-xs text-textMuted leading-relaxed">
-                Готовая таблица с авто-сводкой остатков по счетам Kaspi / Halyk / Наличные, статьями расходов и годовой диаграммой.
+                Учитывайте доходы, расходы и остатки по счетам в одной таблице.
               </p>
             </div>
-            <button onclick="openLeadModal('Учет ДДС для малого бизнеса', 'data_analytics')" class="w-full inline-flex items-center justify-center gap-2 bg-paper hover:bg-slate-100 text-darkBg border border-gridBorder py-2.5 rounded font-mono text-xs font-semibold tracking-wide transition-all">
+            <button onclick="openLeadModal('Учет ДДС для малого бизнеса', 'data_analytics')" class="motion-button w-full inline-flex items-center justify-center gap-2 bg-paper hover:bg-slate-100 text-darkBg border border-gridBorder py-2.5 rounded font-sans text-xs font-semibold tracking-wide transition-all">
               <svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3" /> <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <path d="m7 10 5 5 5-5" /></svg>
               <span>ПОЛУЧИТЬ ШАБЛОН</span>
             </button>
           </div>
 
           <!-- Template 2 -->
-          <div class="bg-white border border-gridBorder rounded-lg p-5 sm:p-6 space-y-3 sm:space-y-5 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
+          <div data-card-reveal class="motion-card bg-white border border-gridBorder rounded-lg p-5 sm:p-6 space-y-3 sm:space-y-5 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
             <div class="space-y-3">
-              <div class="w-10 h-10 rounded bg-emeraldLight text-emeraldAccent flex items-center justify-center font-mono">
+              <div class="w-10 h-10 rounded bg-emeraldLight text-emeraldAccent flex items-center justify-center">
                 <svg aria-hidden="true" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42Z" /> <path d="m7 16.5-4.74-2.85" /> <path d="m7 16.5 5-3" /> <path d="M7 16.5v5.17" /> <path d="M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3Z" /> <path d="m17 16.5-5-3" /> <path d="m17 16.5 4.74-2.85" /> <path d="M17 16.5v5.17" /> <path d="M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0l-3 1.8Z" /> <path d="M12 8 7.26 5.15" /> <path d="m12 8 4.74-2.85" /> <path d="M12 13.5V8" /></svg>
               </div>
               <h3 class="font-heading font-bold text-base text-darkBg">
                 Складской учет ТМЦ и остатков
               </h3>
               <p class="text-xs text-textMuted leading-relaxed">
-                Журнал прихода/расхода, авто-расчет текущих остатков и автоматическая сигнализация о нехватке минимального запаса.
+                Контролируйте движение товаров и актуальные складские остатки.
               </p>
             </div>
-            <button onclick="openLeadModal('Складской учет ТМЦ и остатков', 'data_analytics')" class="w-full inline-flex items-center justify-center gap-2 bg-paper hover:bg-slate-100 text-darkBg border border-gridBorder py-2.5 rounded font-mono text-xs font-semibold tracking-wide transition-all">
+            <button onclick="openLeadModal('Складской учет ТМЦ и остатков', 'data_analytics')" class="motion-button w-full inline-flex items-center justify-center gap-2 bg-paper hover:bg-slate-100 text-darkBg border border-gridBorder py-2.5 rounded font-sans text-xs font-semibold tracking-wide transition-all">
               <svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3" /> <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <path d="m7 10 5 5 5-5" /></svg>
               <span>ПОЛУЧИТЬ ШАБЛОН</span>
             </button>
           </div>
 
           <!-- Template 3 -->
-          <div class="bg-white border border-gridBorder rounded-lg p-5 sm:p-6 space-y-3 sm:space-y-5 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
+          <div data-card-reveal class="motion-card bg-white border border-gridBorder rounded-lg p-5 sm:p-6 space-y-3 sm:space-y-5 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
             <div class="space-y-3">
-              <div class="w-10 h-10 rounded bg-emeraldLight text-emeraldAccent flex items-center justify-center font-mono">
+              <div class="w-10 h-10 rounded bg-emeraldLight text-emeraldAccent flex items-center justify-center">
                 <svg aria-hidden="true" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 14v2.2l1.6 1" /> <path d="M16 2v3" /> <path d="M21 7.338V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h2.338" /> <path d="M3 9h5.859" /> <path d="M8 2v3" /> <circle cx="16" cy="16" r="6" /></svg>
               </div>
               <h3 class="font-heading font-bold text-base text-darkBg">
                 Калькулятор отпусков и компенсаций
               </h3>
               <p class="text-xs text-textMuted leading-relaxed">
-                Табель учета с авто-подсчетом накопленных дней отпуска и компенсаций согласно трудовому законодательству РК.
+                Рассчитывайте остаток отпуска и компенсации по правилам РК.
               </p>
             </div>
-            <button onclick="openLeadModal('Калькулятор отпусков и компенсаций РК', 'data_analytics')" class="w-full inline-flex items-center justify-center gap-2 bg-paper hover:bg-slate-100 text-darkBg border border-gridBorder py-2.5 rounded font-mono text-xs font-semibold tracking-wide transition-all">
+            <button onclick="openLeadModal('Калькулятор отпусков и компенсаций РК', 'data_analytics')" class="motion-button w-full inline-flex items-center justify-center gap-2 bg-paper hover:bg-slate-100 text-darkBg border border-gridBorder py-2.5 rounded font-sans text-xs font-semibold tracking-wide transition-all">
               <svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3" /> <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <path d="m7 10 5 5 5-5" /></svg>
               <span>ПОЛУЧИТЬ ШАБЛОН</span>
             </button>
@@ -998,7 +867,7 @@
           <h2 class="font-heading font-extrabold text-2xl sm:text-3xl text-darkBg">
             Часто задаваемые вопросы
           </h2>
-          <p class="text-xs font-mono text-textMuted">
+          <p class="text-xs font-sans text-textMuted">
             Ответы на ключевые вопросы по закрывающим документам, срокам и безопасности данных.
           </p>
         </div>
@@ -1011,8 +880,10 @@
               <span>1. Как происходит покупка зарубежного ПО и подписок на ИИ для юрлиц в Казахстане?</span>
               <svg aria-hidden="true" id="faq-icon-1" class="w-4 h-4 text-textMuted transition-transform shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
             </button>
-            <div id="faq-ans-1" class="hidden px-4 pb-4 text-xs sm:text-sm text-textMuted leading-relaxed border-t border-gridBorder/60 pt-3">
+            <div id="faq-ans-1" class="faq-answer hidden" aria-hidden="true" inert>
+              <div><div class="px-4 pb-4 text-xs sm:text-sm text-textMuted leading-relaxed border-t border-gridBorder/60 pt-3">
               Nexcel Solutions заключает официальный договор, выставляет счет на оплату в тенге (KZT) и после подключения предоставляет полный пакет бухгалтерских документов: электронный акт выполненных работ (АВР) и электронную счет-фактуру (ЭСФ) через государственную систему ИС ЭСФ.
+            </div></div>
             </div>
           </div>
 
@@ -1022,8 +893,10 @@
               <span>2. Работаете ли вы с государственными предприятиями и квазигоссектором?</span>
               <svg aria-hidden="true" id="faq-icon-2" class="w-4 h-4 text-textMuted transition-transform shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
             </button>
-            <div id="faq-ans-2" class="hidden px-4 pb-4 text-xs sm:text-sm text-textMuted leading-relaxed border-t border-gridBorder/60 pt-3">
+            <div id="faq-ans-2" class="faq-answer hidden" aria-hidden="true" inert>
+              <div><div class="px-4 pb-4 text-xs sm:text-sm text-textMuted leading-relaxed border-t border-gridBorder/60 pt-3">
               Да, мы осуществляем поставку решений, заказной разработки и лицензий для государственных предприятий и квазигоссектора в строгом соответствии с нормами законодательства РК и процедурами закупок.
+            </div></div>
             </div>
           </div>
 
@@ -1033,8 +906,10 @@
               <span>3. Есть ли регулярная абонентская плата за разработанные таблицы и ботов?</span>
               <svg aria-hidden="true" id="faq-icon-3" class="w-4 h-4 text-textMuted transition-transform shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
             </button>
-            <div id="faq-ans-3" class="hidden px-4 pb-4 text-xs sm:text-sm text-textMuted leading-relaxed border-t border-gridBorder/60 pt-3">
+            <div id="faq-ans-3" class="faq-answer hidden" aria-hidden="true" inert>
+              <div><div class="px-4 pb-4 text-xs sm:text-sm text-textMuted leading-relaxed border-t border-gridBorder/60 pt-3">
               Нет. Вы платите только один раз за разработку и внедрение под ключ. Все разработанные файлы передаются на ваш корпоративный Google Диск или локальный сервер в вашу 100% собственность.
+            </div></div>
             </div>
           </div>
 
@@ -1044,8 +919,10 @@
               <span>4. Как обеспечивается конфиденциальность коммерческих данных?</span>
               <svg aria-hidden="true" id="faq-icon-4" class="w-4 h-4 text-textMuted transition-transform shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
             </button>
-            <div id="faq-ans-4" class="hidden px-4 pb-4 text-xs sm:text-sm text-textMuted leading-relaxed border-t border-gridBorder/60 pt-3">
+            <div id="faq-ans-4" class="faq-answer hidden" aria-hidden="true" inert>
+              <div><div class="px-4 pb-4 text-xs sm:text-sm text-textMuted leading-relaxed border-t border-gridBorder/60 pt-3">
               Перед началом любого проекта мы подписываем официальное соглашение о неразглашении (NDA). Все вычисления, базы данных и скрипты разворачиваются строго внутри вашего контура безопасности.
+            </div></div>
             </div>
           </div>
 
@@ -1055,8 +932,10 @@
               <span>5. Каковы стандартные сроки реализации проектов?</span>
               <svg aria-hidden="true" id="faq-icon-5" class="w-4 h-4 text-textMuted transition-transform shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
             </button>
-            <div id="faq-ans-5" class="hidden px-4 pb-4 text-xs sm:text-sm text-textMuted leading-relaxed border-t border-gridBorder/60 pt-3">
+            <div id="faq-ans-5" class="faq-answer hidden" aria-hidden="true" inert>
+              <div><div class="px-4 pb-4 text-xs sm:text-sm text-textMuted leading-relaxed border-t border-gridBorder/60 pt-3">
               Аудит и сложные формулы: от 2 до 24 часов. Управленческий учет (ДДС, P&L, склад): от 2 до 4 рабочих дней. Telegram-боты и ИИ-распознавание: от 3 до 7 рабочих дней. Подключение корпоративных лицензий: от 24 часов.
+            </div></div>
             </div>
           </div>
 
@@ -1067,99 +946,11 @@
 
 
   <!-- ==================== 9. FOOTER ==================== -->
-  <footer class="bg-darkBg text-slate-400 font-mono text-xs border-t border-slate-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12 space-y-6 sm:space-y-8">
-
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-6 sm:gap-8">
-
-        <!-- Brand Info -->
-        <div class="space-y-3 col-span-2">
-          <div class="flex items-center gap-2">
-            <span class="font-heading font-extrabold text-white text-lg tracking-tight">NEXCEL<span class="text-emeraldAccent">.KZ</span></span>
-            <span class="text-[10px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded border border-emerald-800/50">SOLUTIONS</span>
-          </div>
-          <p class="text-slate-400 text-xs leading-relaxed max-w-md font-sans">
-            Инженерно-аналитическое бюро: оцифровка данных, разработка Telegram-ботов, интеграция ИИ и официальное лицензирование ПО для коммерческого сектора и государственных учреждений Казахстана.
-          </p>
-          <div class="flex items-center gap-2 pt-1 flex-wrap">
-            <span class="px-2 py-1 bg-slate-900 border border-slate-800 rounded text-[10px] text-slate-400">ЭСФ / АВР</span>
-            <span class="px-2 py-1 bg-slate-900 border border-slate-800 rounded text-[10px] text-slate-400">B2B / B2G</span>
-            <span class="px-2 py-1 bg-slate-900 border border-slate-800 rounded text-[10px] text-slate-400">Оплата в ₸</span>
-          </div>
-        </div>
-
-        <!-- Directions -->
-        <div class="space-y-2 sm:space-y-3 min-w-0">
-          <div class="text-white font-semibold text-[11px] uppercase tracking-wider">Направления</div>
-          <ul class="space-y-1.5 sm:space-y-2 text-slate-400 text-[11px] sm:text-xs">
-            <li><a href="#direction-tables" class="hover:text-emeraldAccent transition-colors">Анализ данных</a></li>
-            <li><a href="#direction-bots" class="hover:text-emeraldAccent transition-colors">Telegram-боты</a></li>
-            <li><a href="#direction-ai" class="hover:text-emeraldAccent transition-colors">Внедрение ИИ</a></li>
-            <li><a href="#licensing" class="hover:text-emeraldAccent transition-colors">Лицензии ПО & SaaS</a></li>
-            <li><a href="#cases" class="hover:text-emeraldAccent transition-colors">Кейсы</a></li>
-            <li><a href="#templates" class="hover:text-emeraldAccent transition-colors">Шаблоны</a></li>
-          </ul>
-        </div>
-
-        <!-- Contacts -->
-        <div class="space-y-2 sm:space-y-3 min-w-0">
-          <div class="text-white font-semibold text-[11px] uppercase tracking-wider">Контакты</div>
-          <ul class="space-y-1.5 sm:space-y-2 text-slate-400 text-[11px] sm:text-xs">
-            <li class="flex items-start gap-1.5"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /> <circle cx="12" cy="10" r="3" /></svg> <span>г. Астана, Казахстан</span></li>
-            <li class="flex items-start gap-1.5"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" /> <rect x="2" y="4" width="20" height="16" rx="2" /></svg> <a href="mailto:info@nexcel.kz" class="hover:text-emeraldAccent transition-colors break-all">info@nexcel.kz</a></li>
-            <li class="flex items-start gap-1.5"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z" /></svg> <a href="https://wa.me/77711369095" target="_blank" rel="noopener noreferrer" class="hover:text-emeraldAccent transition-colors">+7 771 136-90-95</a></li>
-          </ul>
-        </div>
-
-      </div>
-
-      <div class="pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-400">
-        <span>© 2026 Nexcel Solutions. Все права защищены.</span>
-        <span>Официальная работа по договору B2B/B2G • Расчеты в тенге (KZT) • ЭСФ и АВР через ИС ЭСФ</span>
-      </div>
-
-    </div>
-  </footer>
+  <div id="site-footer"></div>
 
   <script>
     // Icons are pre-rendered as inline <svg> at build time (see scripts/inline-icons.js) —
     // no icon-library JS runtime is loaded or needed here.
-
-    // ---------- Mobile/tablet navigation menu ----------
-    function toggleMobileMenu() {
-      const menu = document.getElementById('mobile-menu');
-      const toggle = document.getElementById('mobile-menu-toggle');
-      const iconOpen = document.getElementById('mobile-menu-icon-open');
-      const iconClose = document.getElementById('mobile-menu-icon-close');
-      if (!menu || !toggle) return;
-
-      const willOpen = menu.classList.contains('hidden');
-      menu.classList.toggle('hidden');
-      toggle.setAttribute('aria-expanded', String(willOpen));
-      toggle.setAttribute('aria-label', willOpen ? 'Закрыть меню разделов' : 'Открыть меню разделов');
-      if (iconOpen) iconOpen.classList.toggle('hidden', willOpen);
-      if (iconClose) iconClose.classList.toggle('hidden', !willOpen);
-    }
-
-    function closeMobileMenu() {
-      const menu = document.getElementById('mobile-menu');
-      const toggle = document.getElementById('mobile-menu-toggle');
-      const iconOpen = document.getElementById('mobile-menu-icon-open');
-      const iconClose = document.getElementById('mobile-menu-icon-close');
-      if (!menu || menu.classList.contains('hidden')) return;
-
-      menu.classList.add('hidden');
-      if (toggle) {
-        toggle.setAttribute('aria-expanded', 'false');
-        toggle.setAttribute('aria-label', 'Открыть меню разделов');
-      }
-      if (iconOpen) iconOpen.classList.remove('hidden');
-      if (iconClose) iconClose.classList.add('hidden');
-    }
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeMobileMenu();
-    });
 
     // ---------- Hero interactive inspector ----------
     const heroContent = {
@@ -1170,14 +961,33 @@
     };
 
     let currentDirection = 'tables';
+    let heroInitialized = false;
+    let heroAnimation = null;
+    const heroMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    function stopHeroAnimation() {
+      heroAnimation?.cancel();
+      heroAnimation = null;
+    }
+    heroMotion.addEventListener('change', () => {
+      if (heroMotion.matches) stopHeroAnimation();
+    });
+    document.getElementById('hero-panels').addEventListener('focusin', stopHeroAnimation);
 
     function setHeroInspector(key) {
+      if (!heroContent[key]) return;
+      const changed = !heroInitialized || key !== currentDirection;
+      if (changed) stopHeroAnimation();
       currentDirection = key;
+      heroInitialized = true;
 
       Object.keys(heroContent).forEach((k) => {
         const pill = document.getElementById('pill-' + k);
         const panel = document.getElementById('inspector-' + k);
         if (!pill || !panel) return;
+        pill.setAttribute('aria-pressed', String(k === key));
+        pill.setAttribute('aria-controls', panel.id);
+        panel.setAttribute('aria-hidden', String(k !== key));
+        panel.inert = k !== key;
 
         if (k === key) {
           pill.classList.add('bg-darkBg', 'text-white', 'border-darkBg', 'font-medium', 'shadow-xs');
@@ -1195,6 +1005,13 @@
       const tagEl = document.getElementById('hero-window-tag');
       if (filenameEl) filenameEl.textContent = data.filename;
       if (tagEl) tagEl.textContent = data.tag;
+      const panel = document.getElementById('inspector-' + key);
+      if (changed && !heroMotion.matches && panel.animate && !panel.contains(document.activeElement)) {
+        heroAnimation = panel.animate([
+          { opacity: 0, transform: 'translateY(8px)' },
+          { opacity: 1, transform: 'translateY(0)' }
+        ], { duration: 320, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
+      }
     }
 
     // ---------- Hero mini revenue calculator ----------
@@ -1237,6 +1054,51 @@
 
     // ---------- ROI calculator ----------
     const WORK_HOURS_PER_MONTH = 168; // 8ч × 21 рабочий день — норма для приведения месячной ставки к часовой
+    const roiMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let roiFrame = 0;
+    let roiDisplayed = null;
+    let roiTarget = null;
+    let roiLastFrame = null;
+    let roiTargetChangedAt = 0;
+
+    function renderRoi(result) {
+      document.getElementById('calc-res-hours').textContent = Math.round(result.hours) + ' ч';
+      document.getElementById('calc-res-money').textContent = formatTenge(result.money);
+      document.getElementById('calc-res-shifts').textContent = 'Около ' + Math.round(result.hours / 8) + ' полных рабочих смен';
+    }
+
+    function finishRoiAnimation() {
+      cancelAnimationFrame(roiFrame);
+      roiFrame = 0;
+      roiLastFrame = null;
+      if (!roiTarget) return;
+      roiDisplayed = { ...roiTarget };
+      renderRoi(roiDisplayed);
+      // Announce the final calculation, not every animation frame.
+      document.getElementById('calc-announcement').textContent = 'Экономия в месяц: ' + Math.round(roiTarget.hours) + ' ч и ' + formatTenge(roiTarget.money) + '.';
+    }
+
+    roiMotion.addEventListener('change', () => {
+      if (roiMotion.matches) finishRoiAnimation();
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) finishRoiAnimation();
+    });
+
+    function animateRoi(now) {
+      const elapsed = roiLastFrame === null ? 0 : Math.max(0, now - roiLastFrame);
+      roiLastFrame = now;
+      // A continuous follower: new input changes the destination, not the frame loop.
+      // Time-based smoothing behaves the same on 60 Hz and 120 Hz displays.
+      const blend = 1 - Math.exp(-elapsed / 85);
+      roiDisplayed.hours += (roiTarget.hours - roiDisplayed.hours) * blend;
+      roiDisplayed.money += (roiTarget.money - roiDisplayed.money) * blend;
+      renderRoi(roiDisplayed);
+      const settled = Math.abs(roiTarget.hours - roiDisplayed.hours) < 0.01 &&
+        Math.abs(roiTarget.money - roiDisplayed.money) < 0.5;
+      if (settled || now - roiTargetChangedAt >= 1000) finishRoiAnimation();
+      else roiFrame = requestAnimationFrame(animateRoi);
+    }
 
     function updateRoiCalc() {
       const employeesEl = document.getElementById('calc-employees');
@@ -1256,16 +1118,23 @@
       const monthlyHours = employees * hours * 4.33;
       const monthlyMoney = monthlyHours * hourlyRate;
 
-      document.getElementById('calc-res-hours').textContent = Math.round(monthlyHours) + ' ч';
-      document.getElementById('calc-res-money').textContent = formatTenge(monthlyMoney);
-
-      const shifts = Math.round(monthlyHours / 8);
-      document.getElementById('calc-res-shifts').textContent = 'Около ' + shifts + ' полных рабочих смен';
+      roiTarget = { hours: monthlyHours, money: monthlyMoney };
+      roiTargetChangedAt = performance.now();
+      if (!roiDisplayed || roiMotion.matches || document.hidden) {
+        finishRoiAnimation();
+        return;
+      }
+      if (!roiFrame) {
+        roiLastFrame = null;
+        roiFrame = requestAnimationFrame(animateRoi);
+      }
     }
 
     function sendRoiToWhatsApp() {
-      const hoursText = document.getElementById('calc-res-hours').textContent;
-      const moneyText = document.getElementById('calc-res-money').textContent;
+      // A click during count-up must send the final values, not an intermediate frame.
+      finishRoiAnimation();
+      const hoursText = Math.round(roiTarget.hours) + ' ч';
+      const moneyText = formatTenge(roiTarget.money);
 
       openWhatsApp('Здравствуйте! Посчитал(а) на вашем сайте экономию от автоматизации — примерно ' + hoursText + ' и ' + moneyText + ' в месяц. Хочу обсудить, как это внедрить у нас.');
     }
@@ -1277,20 +1146,79 @@
       if (!ans) return;
 
       const isHidden = ans.classList.contains('hidden');
-      document.querySelectorAll('[id^="faq-ans-"]').forEach((el) => el.classList.add('hidden'));
+      document.querySelectorAll('[id^="faq-ans-"]').forEach((el) => {
+        el.classList.add('hidden');
+        el.setAttribute('aria-hidden', 'true');
+        el.inert = true;
+      });
       document.querySelectorAll('[id^="faq-icon-"]').forEach((el) => el.classList.remove('rotate-180'));
       document.querySelectorAll('[aria-controls^="faq-ans-"]').forEach((el) => el.setAttribute('aria-expanded', 'false'));
 
       if (isHidden) {
         ans.classList.remove('hidden');
+        ans.setAttribute('aria-hidden', 'false');
+        ans.inert = false;
         if (icon) icon.classList.add('rotate-180');
         const btn = document.querySelector('[aria-controls="faq-ans-' + index + '"]');
         if (btn) btn.setAttribute('aria-expanded', 'true');
       }
     }
 
+    // ---------- Case results: one-time count-up, stable accessible final text ----------
+    function initCaseCounters() {
+      const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      if (motion.matches || !('IntersectionObserver' in window)) return;
+      const active = new Map();
+      const finish = (target) => {
+        const state = active.get(target);
+        if (!state) return;
+        cancelAnimationFrame(state.frame);
+        state.animation?.cancel();
+        if (state.value) state.value.textContent = state.finalText;
+        active.delete(target);
+      };
+      const observer = new IntersectionObserver(entries => {
+        entries.filter(entry => entry.isIntersecting).forEach(({ target }) => {
+          observer.unobserve(target);
+          if (motion.matches || document.hidden) return;
+          const value = target.querySelector('.case-counter-value');
+          if (!value) {
+            if (!target.animate) return;
+            const animation = target.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 600, easing: 'ease-out' });
+            active.set(target, { animation });
+            animation.finished.then(() => finish(target), () => active.delete(target));
+            return;
+          }
+          const finalText = value.textContent;
+          const total = Number(target.dataset.countTo);
+          const state = { value, finalText, frame: 0 };
+          active.set(target, state);
+          let started = null;
+          const tick = now => {
+            if (started === null) started = now;
+            const progress = Math.min(1, (now - started) / 900);
+            const number = Math.round(total * (1 - Math.pow(1 - progress, 3)));
+            value.textContent = finalText.replace(/[\d\s\u00a0]+/, number.toLocaleString('ru-RU'));
+            if (progress < 1) state.frame = requestAnimationFrame(tick);
+            else finish(target);
+          };
+          state.frame = requestAnimationFrame(tick);
+        });
+      }, { threshold: 0.5 });
+      document.querySelectorAll('[data-count-to], [data-case-zero]').forEach(el => observer.observe(el));
+      motion.addEventListener('change', () => {
+        if (!motion.matches) return;
+        observer.disconnect();
+        [...active.keys()].forEach(finish);
+      });
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) [...active.keys()].forEach(finish);
+      });
+    }
+
     // ---------- Init ----------
     document.addEventListener('DOMContentLoaded', () => {
+      initCaseCounters();
       setHeroInspector('tables');
       updateHeroCalc();
       updateRoiCalc();
@@ -1307,5 +1235,6 @@
     });
   </script>
 
+  <script src="/assets/include-partials.js" defer></script>
 </body>
 </html>
