@@ -9,7 +9,7 @@ const fs = require('node:fs/promises');
   const failures = [];
   try {
     for (const width of [320, 390, 768, 1000, 1024, 1150, 1280, 1440, 1920]) {
-      for (const route of ['/', '/licensing', '/templates']) {
+      for (const route of ['/', '/licensing', '/templates', '/faq']) {
         const page = await context.newPage();
         await page.setViewportSize({ width, height: 900 });
         await page.goto('http://127.0.0.1:5500' + route);
@@ -46,7 +46,7 @@ const fs = require('node:fs/promises');
         results.push({ route, ...result });
         console.log(`Checked ${route} at ${width}px; fonts loaded: ${result.fonts}`);
         if (result.scrollWidth > width || result.overlap.length || result.headingTop < result.headerBottom || result.overflowing.length) failures.push(`${route} at ${width}px: layout`);
-        const needsMono = route !== '/templates';
+        const needsMono = route === '/' || route === '/licensing';
         const fontsLoaded = await page.evaluate(needsMono => ['Inter', 'Manrope', ...(needsMono ? ['JetBrains Mono'] : [])].every(name => [...document.fonts].some(face => face.family.replace(/"/g, '') === name && face.status === 'loaded')), needsMono);
         if (!fontsLoaded) failures.push(`${route} at ${width}px: fonts unavailable`);
         if (route === '/') {
@@ -55,7 +55,7 @@ const fs = require('node:fs/promises');
             const clipped = await page.locator('#inspector-' + key).evaluate(panel => [...panel.querySelectorAll('*')].some(el => {const rect = el.getBoundingClientRect(); return rect.width > 0 && (rect.right > innerWidth + 1 || rect.left < -1);}));
             if (clipped) failures.push(`${width}px: inspector ${key} overflows`);
           }
-          for (const target of ['#direction-tables', '#direction-bots', '#direction-ai', '#calculator', '#cases', '#faq']) {
+          for (const target of ['#direction-tables', '#direction-bots', '#direction-ai', '#calculator', '#cases']) {
             if (width < 1024) await page.locator('#mobile-menu-toggle').click();
             const nav = width < 1024 ? '#mobile-menu' : 'header nav[aria-label="Основная навигация"]';
             await page.locator(`${nav} a[href="/${target}"]`).click();
@@ -84,9 +84,11 @@ const fs = require('node:fs/promises');
       await page.setViewportSize(viewport);
       await page.goto('http://127.0.0.1:5500');
       await page.locator('#mobile-menu-toggle').click();
-      await page.locator('#mobile-menu a[href="/#faq"]').scrollIntoViewIfNeeded();
+      await page.locator('#mobile-menu a[href="/faq"]').scrollIntoViewIfNeeded();
       await page.screenshot({path:`.review/responsive/menu-${viewport.width}x${viewport.height}.png`});
-      await page.locator('#mobile-menu a[href="/#faq"]').click();
+      await page.locator('#mobile-menu a[href="/faq"]').click();
+      await page.waitForURL('**/faq');
+      await page.locator('#site-header header').waitFor();
       if (await page.locator('#mobile-menu-toggle').getAttribute('aria-expanded') !== 'false') failures.push('Landscape menu did not close');
       await page.locator('#mobile-menu-toggle').click();
       await page.keyboard.press('Escape');
@@ -96,5 +98,5 @@ const fs = require('node:fs/promises');
   } finally { await browser.close(); }
   await fs.writeFile('.review/responsive/layout.json', JSON.stringify(results, null, 2));
   if (failures.length) { console.error(failures.join('\n')); process.exitCode = 1; }
-  else console.log('PASS: 27 layouts, 36 inspector panels, 54 main navigation anchors, 9 library anchors, 18 interpage links and 2 short-screen menus.');
+  else console.log('PASS: 36 layouts, 36 inspector panels, 45 main navigation anchors, 9 library anchors, 27 interpage links and 2 short-screen FAQ navigation checks.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

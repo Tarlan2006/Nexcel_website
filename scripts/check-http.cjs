@@ -13,7 +13,7 @@ async function request(route, options = {}) {
 }
 
 async function run() {
-  for (const [route, file] of [['/partials/header.html', 'partials/header.html'], ['/partials/footer.html', 'partials/footer.html'], ['/assets/include-partials.js', 'assets/include-partials.js'], ['/', 'index.html'], ['/licensing', 'licensing.html'], ['/templates', 'templates.html'], ['/assets/styles.css', 'assets/styles.css'], ['/robots.txt', 'robots.txt'], ['/sitemap.xml', 'sitemap.xml'], ['/llms.txt', 'llms.txt']]) {
+  for (const [route, file] of [['/partials/header.html', 'partials/header.html'], ['/partials/footer.html', 'partials/footer.html'], ['/assets/include-partials.js', 'assets/include-partials.js'], ['/', 'index.html'], ['/licensing', 'licensing.html'], ['/templates', 'templates.html'], ['/faq', 'faq.html'], ['/assets/faq.js', 'assets/faq.js'], ['/assets/styles.css', 'assets/styles.css'], ['/robots.txt', 'robots.txt'], ['/sitemap.xml', 'sitemap.xml'], ['/llms.txt', 'llms.txt']]) {
     const response = await request(route, cloudflare && route.startsWith('/partials/') ? { redirect: 'follow' } : {});
     assert.equal(response.status, 200, route);
     assert.equal(await response.text(), await fs.readFile(path.join(root, file), 'utf8'), `${route}: body`);
@@ -28,7 +28,7 @@ async function run() {
     }
     checks++;
   }
-  for (const [route, target] of [['/index.html', '/'], ['/licensing.html', '/licensing'], ['/licensing/', '/licensing'], ['/templates.html', '/templates'], ['/templates/', '/templates'], ['/templates.html?source=check', '/templates?source=check']]) {
+  for (const [route, target] of [['/index.html', '/'], ['/licensing.html', '/licensing'], ['/licensing/', '/licensing'], ['/templates.html', '/templates'], ['/faq.html', '/faq'], ['/faq/', '/faq'], ['/faq.html?source=check', '/faq?source=check'], ['/templates/', '/templates'], ['/templates.html?source=check', '/templates?source=check']]) {
     const response = await request(route);
     assert.equal(response.status, 307, `${route}: redirect`);
     const location = new URL(response.headers.get('location'), base);

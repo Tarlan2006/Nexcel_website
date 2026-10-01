@@ -4,7 +4,7 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 
 const root = path.resolve(__dirname, '..');
-const pages = new Map([['/', 'index.html'], ['/licensing', 'licensing.html'], ['/templates', 'templates.html']]);
+const pages = new Map([['/', 'index.html'], ['/licensing', 'licensing.html'], ['/templates', 'templates.html'], ['/faq', 'faq.html']]);
 const publicFiles = new Set(['favicon.ico', 'robots.txt', 'sitemap.xml', 'llms.txt', 'partials/header.html', 'partials/footer.html']);
 const types = { '.js': 'text/javascript; charset=utf-8', '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.txt': 'text/plain; charset=utf-8', '.xml': 'application/xml', '.svg': 'image/svg+xml', '.png': 'image/png', '.ico': 'image/x-icon' };
 

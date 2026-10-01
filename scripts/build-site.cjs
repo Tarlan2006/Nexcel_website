@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const root = path.resolve(__dirname, '..');
 const output = path.resolve(root, 'dist');
-const files = ['index.html', 'licensing.html', 'templates.html', 'favicon.ico', 'robots.txt', 'sitemap.xml', 'llms.txt', '_headers'];
+const files = ['index.html', 'licensing.html', 'templates.html', 'faq.html', 'favicon.ico', 'robots.txt', 'sitemap.xml', 'llms.txt', '_headers'];
 
 // Validate both the output location and inputs before replacing generated files.
 if (path.dirname(output) !== root || path.basename(output) !== 'dist') throw new Error('Invalid build directory');

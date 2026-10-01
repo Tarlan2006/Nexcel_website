@@ -1,9 +1,103 @@
 const { chromium } = require('@playwright/test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs/promises');
+const os = require('node:os');
+const path = require('node:path');
+
+async function checkClients(browser) {
+  const screenshots = await fs.mkdtemp(path.join(os.tmpdir(), 'nexcel-clients-'));
+  console.log('Screenshots: ' + screenshots);
+  for (const width of [360, 390, 768, 1024, 1440]) {
+    const page = await browser.newPage({ viewport: { width, height: width === 390 ? 844 : width === 768 ? 1024 : 900 }, reducedMotion: 'no-preference' });
+    await page.route('https://fonts.googleapis.com/**', route => route.abort());
+    await page.goto('http://127.0.0.1:5500');
+    const section = page.locator('#clients');
+    const track = page.locator('.clients-track');
+    const originals = page.locator('.clients-group:not([aria-hidden]) .clients-item');
+    await page.locator('#site-header header').waitFor();
+    for (let i = 0; i < 15; i++) {
+      await page.keyboard.press('Tab');
+      assert(!await section.evaluate(el => el.contains(document.activeElement)));
+    }
+    await section.scrollIntoViewIfNeeded();
+    await page.locator('#clients img').evaluateAll(images => Promise.all(images.map(img => img.decode())));
+    assert.equal(await originals.count(), 8);
+    assert.equal(await page.locator('.clients-group[aria-hidden] img[alt=""]').count(), 8);
+    assert.equal(await section.locator('[tabindex]').count(), 0);
+    assert.equal(await section.locator('img[loading="lazy"]').count(), 0);
+    assert.equal(await section.locator('img[loading="eager"]').count(), 16);
+    assert.equal(await originals.locator('img[alt=""]').count(), 3);
+    assert.equal(await originals.locator('span').count(), 3);
+    assert(await section.locator('h2').evaluate(el => {
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      const text = range.getBoundingClientRect(), section = el.closest('section').getBoundingClientRect();
+      return text.left >= section.left && text.right <= section.right && text.top >= section.top && text.bottom <= section.bottom && getComputedStyle(el).overflow === 'visible';
+    }));
+    assert(await originals.locator('span').evaluateAll(labels => labels.every(el => getComputedStyle(el).whiteSpace === 'nowrap' && el.scrollWidth <= el.clientWidth)));
+    assert.equal(await section.locator('h2').textContent(), 'Нам доверяют организации из госсектора, образования и бизнеса');
+    assert.deepEqual(await originals.locator('span').allTextContents(), ['Правительство для граждан', 'КазНУ им. аль-Фараби', 'Nazarbayev University']);
+    assert(await page.locator('#clients img').evaluateAll(images => images.every(img =>
+      img.naturalWidth === Number(img.getAttribute('width')) && img.naturalHeight === Number(img.getAttribute('height')))));
+    await page.mouse.move(0, 0);
+    await page.waitForTimeout(260);
+    assert(await originals.locator('img.clients-logo-fine').evaluateAll(images => images.length === 2 && images.every(el => {
+      const style = getComputedStyle(el);
+      return style.opacity === '0.9' && style.filter === 'grayscale(1) contrast(1.2)';
+    })));
+    const initial = await track.evaluate(el => getComputedStyle(el).transform);
+    await page.waitForTimeout(100);
+    assert.notEqual(await track.evaluate(el => getComputedStyle(el).transform), initial);
+    // At one full duration, the duplicate lands exactly where the original began.
+    const seam = await track.evaluate(el => {
+      const animation = el.getAnimations()[0];
+      animation.currentTime = 0;
+      const first = el.children[0].firstElementChild.getBoundingClientRect().left;
+      const groupWidth = el.children[0].getBoundingClientRect().width;
+      const halfWidth = el.getBoundingClientRect().width / 2;
+      animation.currentTime = Number(animation.effect.getTiming().duration) - 0.001;
+      const last = el.children[1].firstElementChild.getBoundingClientRect().left;
+      animation.currentTime = 0;
+      return { first, last, groupWidth, halfWidth };
+    });
+    assert(Math.abs(seam.first - seam.last) < 0.1);
+    assert.equal(seam.groupWidth, seam.halfWidth);
+    const logoBox = await originals.first().boundingBox();
+    await page.mouse.move(Math.max(32, logoBox.x + logoBox.width / 2), logoBox.y + logoBox.height / 2);
+    assert.equal(await track.evaluate(el => getComputedStyle(el).animationPlayState), 'paused');
+    await page.waitForTimeout(260);
+    assert.equal(await originals.first().locator('img').evaluate(el => getComputedStyle(el).opacity), '1');
+    assert.equal(await originals.first().locator('img').evaluate(el => getComputedStyle(el).filter), 'grayscale(0)');
+    const paused = await track.evaluate(el => getComputedStyle(el).transform);
+    await page.waitForTimeout(100);
+    assert.equal(await track.evaluate(el => getComputedStyle(el).transform), paused);
+    await page.mouse.move(0, 0);
+    await track.evaluate(el => { const animation = el.getAnimations()[0]; animation.pause(); animation.currentTime = 0; });
+    await section.scrollIntoViewIfNeeded();
+    assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+    if ([390, 768, 1440].includes(width)) await section.screenshot({path:path.join(screenshots, `clients-${width}.png`)});
+    await page.emulateMedia({reducedMotion:'reduce'});
+    assert.equal(await track.evaluate(el => getComputedStyle(el).animationName), 'none');
+    assert.equal(await page.locator('.clients-group[aria-hidden]').evaluate(el => getComputedStyle(el).display), 'none');
+    assert.equal(await page.locator('.clients-fade:visible').count(), 0);
+    assert.equal(await page.locator('#clients img:visible').count(), 8);
+    assert(await originals.evaluateAll(items => items.every(el => {
+      const item = el.getBoundingClientRect(), container = el.closest('.clients-marquee').getBoundingClientRect();
+      return item.left >= container.left - 1 && item.right <= container.right + 1;
+    })));
+    assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+    if ([390, 1440].includes(width)) await section.screenshot({path:path.join(screenshots, `clients-reduced-${width}.png`)});
+    await page.emulateMedia({reducedMotion:'no-preference'});
+    assert.equal(await track.evaluate(el => getComputedStyle(el).animationName), 'clients-scroll');
+    await page.close();
+    console.log(`PASS clients ${width}px: motion, seamless loop, hover pause, no tab stops, eager images, logos, reduced motion, no overflow.`);
+  }
+}
 
 (async () => {
   const browser = await chromium.launch({ channel: 'chrome' });
   try {
+    await checkClients(browser);
     for (const width of [390, 1440]) {
       const context = await browser.newContext({ viewport: { width, height: 900 }, reducedMotion: 'no-preference' });
       // Motion behaviour is independent of remote font availability.

@@ -7,3 +7,4 @@ dist/
 # Local audit notes and AI handoff documents
 /audit from claude.txt
 /AI_HANDOFF.md
+/Claude outputs/
