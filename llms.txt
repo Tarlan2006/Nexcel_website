@@ -37,3 +37,9 @@ OCR-распознавание первичных документов (накл
 ## Вопросы и ответы
 
 - [FAQ](https://nexcel.kz/faq): все 12 ответов об оплате, документах, сроках, конфиденциальности, разработке и подключении сервисов.
+
+## Соцсети
+
+- [Telegram](https://t.me/nexcel_kz)
+- [LinkedIn](https://www.linkedin.com/company/nexcel-solutions-kz/)
+- [Instagram](https://www.instagram.com/nexcel.solutions/)

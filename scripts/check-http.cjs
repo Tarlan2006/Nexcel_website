@@ -44,6 +44,20 @@ async function run() {
   assert.equal(await head.text(), '');
   assert.equal((await request('/', { method: 'POST' })).status, 405);
   checks += 2;
+  // The shared footer is fetched at runtime, so inspect built partials as well.
+  const placeholders = [];
+  async function inspectBuiltHtml(directory) {
+    for (const entry of await fs.readdir(directory, { withFileTypes: true })) {
+      const file = path.join(directory, entry.name);
+      if (entry.isDirectory()) await inspectBuiltHtml(file);
+      else if (entry.name.endsWith('.html') && /example\.invalid/i.test(await fs.readFile(file, 'utf8'))) {
+        placeholders.push(path.relative(root, file));
+      }
+    }
+  }
+  await inspectBuiltHtml(path.join(root, 'dist'));
+  assert.equal(placeholders.length, 0, `Replace example.invalid placeholders before publishing: ${placeholders.join(', ')}`);
+  checks++;
   console.log(`PASS: ${checks} HTTP checks (${cloudflare ? 'Cloudflare runtime + headers' : 'local preview'}).`);
 }
 
