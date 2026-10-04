@@ -215,7 +215,7 @@
                 <span>Интерактивный инспектор направлений:</span>
               </div>
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2 font-sans text-xs">
-                <button onclick="setHeroInspector('tables')" id="pill-tables" class="hero-pill p-1.5 sm:p-2 rounded border text-left transition-all bg-darkBg text-white border-darkBg font-medium shadow-xs">
+                <button onclick="setHeroInspector('tables')" id="pill-tables" class="hero-pill p-1.5 sm:p-2 rounded border text-left transition-all bg-darkBg text-white border-darkBg font-medium">
                   Анализ данных
                 </button>
                 <button onclick="setHeroInspector('bots')" id="pill-bots" class="hero-pill p-1.5 sm:p-2 rounded border text-left transition-all bg-white hover:bg-slate-50 text-textMain border-gridBorder">
@@ -309,7 +309,7 @@
                 <div class="p-3 bg-slate-100 rounded-lg space-y-2.5 font-sans text-xs">
                   <div class="flex items-start gap-2">
                     <div class="w-6 h-6 rounded-full bg-slate-400 text-white flex items-center justify-center font-mono text-[10px]">User</div>
-                    <div class="bg-white p-2 rounded-lg border border-gridBorder shadow-2xs max-w-[80%]">
+                    <div class="bg-white p-2 rounded-lg border border-gridBorder max-w-[80%]">
                       Запросить остаток номенклатуры «Арматура А500С 12мм» на складе Астана
                     </div>
                   </div>
@@ -545,7 +545,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
 
           <!-- Direction 1 -->
-          <div id="direction-tables" data-card-reveal class="motion-card bg-white border border-gridBorder rounded-xl p-5 sm:p-8 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
+          <div id="direction-tables" data-card-reveal class="motion-card bg-white border border-gridBorder rounded-xl p-5 sm:p-8 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all">
             <div class="space-y-4">
               <div class="text-xs font-mono">
                 <span class="text-textMuted">Google Sheets / Excel / Looker</span>
@@ -577,7 +577,7 @@
           </div>
 
           <!-- Direction 2 -->
-          <div id="direction-bots" data-card-reveal class="motion-card bg-white border border-gridBorder rounded-xl p-5 sm:p-8 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
+          <div id="direction-bots" data-card-reveal class="motion-card bg-white border border-gridBorder rounded-xl p-5 sm:p-8 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all">
             <div class="space-y-4">
               <div class="text-xs font-mono">
                 <span class="text-textMuted">Telegram Bot API / Python / LLM</span>
@@ -609,7 +609,7 @@
           </div>
 
           <!-- Direction 3 -->
-          <div id="direction-ai" data-card-reveal class="motion-card bg-white border border-gridBorder rounded-xl p-5 sm:p-8 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
+          <div id="direction-ai" data-card-reveal class="motion-card bg-white border border-gridBorder rounded-xl p-5 sm:p-8 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all">
             <div class="space-y-4">
               <div class="text-xs font-mono">
                 <span class="text-textMuted">Computer Vision / OCR / Whisper</span>
@@ -678,6 +678,17 @@
     </section>
 
 
+    <section aria-labelledby="partners-teaser-heading" class="py-8 sm:py-10 border-b border-gridBorder bg-paper">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-center gap-6 md:gap-4 lg:gap-6 text-center">
+        <h2 id="partners-teaser-heading" class="min-w-0 font-heading font-bold text-xl md:text-base lg:text-2xl text-darkBg">Работаем с проверенными решениями</h2>
+        <div class="partner-logos shrink-0">
+          <div class="partner-logo"><img src="/assets/partners/nakivo.png" alt="NAKIVO" loading="lazy" width="612" height="96" /></div>
+          <div class="partner-logo partner-logo--jivo"><img src="/assets/partners/jivo.png" alt="Jivo" loading="lazy" width="133" height="96" /></div>
+        </div>
+        <a href="/licensing#partners" class="shrink-0 text-sm font-semibold text-emeraldAccent underline underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emeraldAccent">Подробнее о партнёрах →</a>
+      </div>
+    </section>
+
     <!-- ==================== 5. INTERACTIVE ROI & SAVINGS CALCULATOR ==================== -->
     <section id="calculator" class="py-10 sm:py-14 lg:py-20 border-b border-gridBorder bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -703,7 +714,7 @@
             </div>
           </div>
 
-          <div class="lg:col-span-7 bg-paper border border-gridBorder rounded-xl p-5 sm:p-8 space-y-5 sm:space-y-8 font-sans shadow-xs">
+          <div class="lg:col-span-7 bg-paper border border-gridBorder rounded-xl p-5 sm:p-8 space-y-5 sm:space-y-8 font-sans">
 
             <div class="space-y-6">
               <!-- Slider 1 -->
@@ -787,7 +798,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
 
           <!-- Case 1 -->
-          <div data-card-reveal class="motion-card bg-paper border border-gridBorder rounded-xl p-5 sm:p-6 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
+          <div data-card-reveal class="motion-card bg-paper border border-gridBorder rounded-xl p-5 sm:p-6 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all">
             <div class="space-y-4">
               <div class="text-xs font-sans">
                 <span class="text-textMuted">Оптовая дистрибуция</span>
@@ -808,7 +819,7 @@
           </div>
 
           <!-- Case 2 -->
-          <div data-card-reveal class="motion-card bg-paper border border-gridBorder rounded-xl p-5 sm:p-6 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
+          <div data-card-reveal class="motion-card bg-paper border border-gridBorder rounded-xl p-5 sm:p-6 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all">
             <div class="space-y-4">
               <div class="text-xs font-sans">
                 <span class="text-textMuted">Метрология и лаборатория</span>
@@ -829,7 +840,7 @@
           </div>
 
           <!-- Case 3 -->
-          <div data-card-reveal class="motion-card bg-paper border border-gridBorder rounded-xl p-5 sm:p-6 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
+          <div data-card-reveal class="motion-card bg-paper border border-gridBorder rounded-xl p-5 sm:p-6 space-y-4 sm:space-y-6 flex flex-col justify-between hover:border-emeraldAccent transition-all">
             <div class="space-y-4">
               <div class="text-xs font-sans">
                 <span class="text-textMuted">Медиа & Спортивное комьюнити</span>
@@ -877,7 +888,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
 
           <!-- Template 1 -->
-          <div data-card-reveal class="motion-card bg-white border border-gridBorder rounded-lg p-5 sm:p-6 space-y-3 sm:space-y-5 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
+          <div data-card-reveal class="motion-card bg-white border border-gridBorder rounded-lg p-5 sm:p-6 space-y-3 sm:space-y-5 flex flex-col justify-between hover:border-emeraldAccent transition-all">
             <div class="space-y-3">
               <div class="w-10 h-10 rounded bg-emeraldLight text-emeraldAccent flex items-center justify-center">
                 <svg aria-hidden="true" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18" /></svg>
@@ -889,14 +900,14 @@
                 Учитывайте доходы, расходы и остатки по счетам в одной таблице.
               </p>
             </div>
-            <button onclick="openLeadModal('Учет ДДС для малого бизнеса', 'data_analytics')" class="motion-button w-full inline-flex items-center justify-center gap-2 bg-paper hover:bg-slate-100 text-darkBg border border-gridBorder py-2.5 rounded font-sans text-xs font-semibold tracking-wide transition-all">
+            <button onclick="requestTemplate('Учет ДДС для малого бизнеса')" class="motion-button w-full inline-flex items-center justify-center gap-2 bg-paper hover:bg-slate-100 text-darkBg border border-gridBorder py-2.5 rounded font-sans text-xs font-semibold tracking-wide transition-all">
               <svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3" /> <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <path d="m7 10 5 5 5-5" /></svg>
               <span>ПОЛУЧИТЬ ШАБЛОН</span>
             </button>
           </div>
 
           <!-- Template 2 -->
-          <div data-card-reveal class="motion-card bg-white border border-gridBorder rounded-lg p-5 sm:p-6 space-y-3 sm:space-y-5 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
+          <div data-card-reveal class="motion-card bg-white border border-gridBorder rounded-lg p-5 sm:p-6 space-y-3 sm:space-y-5 flex flex-col justify-between hover:border-emeraldAccent transition-all">
             <div class="space-y-3">
               <div class="w-10 h-10 rounded bg-emeraldLight text-emeraldAccent flex items-center justify-center">
                 <svg aria-hidden="true" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42Z" /> <path d="m7 16.5-4.74-2.85" /> <path d="m7 16.5 5-3" /> <path d="M7 16.5v5.17" /> <path d="M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3Z" /> <path d="m17 16.5-5-3" /> <path d="m17 16.5 4.74-2.85" /> <path d="M17 16.5v5.17" /> <path d="M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0l-3 1.8Z" /> <path d="M12 8 7.26 5.15" /> <path d="m12 8 4.74-2.85" /> <path d="M12 13.5V8" /></svg>
@@ -908,14 +919,14 @@
                 Контролируйте движение товаров и актуальные складские остатки.
               </p>
             </div>
-            <button onclick="openLeadModal('Складской учет ТМЦ и остатков', 'data_analytics')" class="motion-button w-full inline-flex items-center justify-center gap-2 bg-paper hover:bg-slate-100 text-darkBg border border-gridBorder py-2.5 rounded font-sans text-xs font-semibold tracking-wide transition-all">
+            <button onclick="requestTemplate('Складской учет ТМЦ и остатков')" class="motion-button w-full inline-flex items-center justify-center gap-2 bg-paper hover:bg-slate-100 text-darkBg border border-gridBorder py-2.5 rounded font-sans text-xs font-semibold tracking-wide transition-all">
               <svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3" /> <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <path d="m7 10 5 5 5-5" /></svg>
               <span>ПОЛУЧИТЬ ШАБЛОН</span>
             </button>
           </div>
 
           <!-- Template 3 -->
-          <div data-card-reveal class="motion-card bg-white border border-gridBorder rounded-lg p-5 sm:p-6 space-y-3 sm:space-y-5 flex flex-col justify-between hover:border-emeraldAccent transition-all shadow-xs">
+          <div data-card-reveal class="motion-card bg-white border border-gridBorder rounded-lg p-5 sm:p-6 space-y-3 sm:space-y-5 flex flex-col justify-between hover:border-emeraldAccent transition-all">
             <div class="space-y-3">
               <div class="w-10 h-10 rounded bg-emeraldLight text-emeraldAccent flex items-center justify-center">
                 <svg aria-hidden="true" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 14v2.2l1.6 1" /> <path d="M16 2v3" /> <path d="M21 7.338V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h2.338" /> <path d="M3 9h5.859" /> <path d="M8 2v3" /> <circle cx="16" cy="16" r="6" /></svg>
@@ -927,7 +938,7 @@
                 Рассчитывайте остаток отпуска и компенсации по правилам РК.
               </p>
             </div>
-            <button onclick="openLeadModal('Калькулятор отпусков и компенсаций РК', 'data_analytics')" class="motion-button w-full inline-flex items-center justify-center gap-2 bg-paper hover:bg-slate-100 text-darkBg border border-gridBorder py-2.5 rounded font-sans text-xs font-semibold tracking-wide transition-all">
+            <button onclick="requestTemplate('Калькулятор отпусков и компенсаций РК')" class="motion-button w-full inline-flex items-center justify-center gap-2 bg-paper hover:bg-slate-100 text-darkBg border border-gridBorder py-2.5 rounded font-sans text-xs font-semibold tracking-wide transition-all">
               <svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3" /> <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <path d="m7 10 5 5 5-5" /></svg>
               <span>ПОЛУЧИТЬ ШАБЛОН</span>
             </button>
@@ -955,7 +966,7 @@
         <div class="space-y-3 font-sans" id="faq-container">
 
           <!-- Q1 -->
-          <div class="border border-gridBorder rounded-lg overflow-hidden transition-all bg-white shadow-2xs">
+          <div class="border border-gridBorder rounded-lg overflow-hidden transition-all bg-white">
             <button onclick="toggleFaq(1)" aria-expanded="false" aria-controls="faq-ans-1" class="w-full p-4 text-left font-heading font-bold text-sm sm:text-base text-darkBg flex items-center justify-between gap-4">
               <span>1. Как происходит покупка зарубежного ПО и подписок на ИИ для юрлиц в Казахстане?</span>
               <svg aria-hidden="true" id="faq-icon-1" class="w-4 h-4 text-textMuted transition-transform shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
@@ -968,7 +979,7 @@
           </div>
 
           <!-- Q2 -->
-          <div class="border border-gridBorder rounded-lg overflow-hidden transition-all bg-white shadow-2xs">
+          <div class="border border-gridBorder rounded-lg overflow-hidden transition-all bg-white">
             <button onclick="toggleFaq(2)" aria-expanded="false" aria-controls="faq-ans-2" class="w-full p-4 text-left font-heading font-bold text-sm sm:text-base text-darkBg flex items-center justify-between gap-4">
               <span>2. Работаете ли вы с государственными предприятиями и квазигоссектором?</span>
               <svg aria-hidden="true" id="faq-icon-2" class="w-4 h-4 text-textMuted transition-transform shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
@@ -981,7 +992,7 @@
           </div>
 
           <!-- Q3 -->
-          <div class="border border-gridBorder rounded-lg overflow-hidden transition-all bg-white shadow-2xs">
+          <div class="border border-gridBorder rounded-lg overflow-hidden transition-all bg-white">
             <button onclick="toggleFaq(3)" aria-expanded="false" aria-controls="faq-ans-3" class="w-full p-4 text-left font-heading font-bold text-sm sm:text-base text-darkBg flex items-center justify-between gap-4">
               <span>3. Есть ли регулярная абонентская плата за разработанные таблицы и ботов?</span>
               <svg aria-hidden="true" id="faq-icon-3" class="w-4 h-4 text-textMuted transition-transform shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
@@ -994,7 +1005,7 @@
           </div>
 
           <!-- Q4 -->
-          <div class="border border-gridBorder rounded-lg overflow-hidden transition-all bg-white shadow-2xs">
+          <div class="border border-gridBorder rounded-lg overflow-hidden transition-all bg-white">
             <button onclick="toggleFaq(4)" aria-expanded="false" aria-controls="faq-ans-4" class="w-full p-4 text-left font-heading font-bold text-sm sm:text-base text-darkBg flex items-center justify-between gap-4">
               <span>4. Как обеспечивается конфиденциальность коммерческих данных?</span>
               <svg aria-hidden="true" id="faq-icon-4" class="w-4 h-4 text-textMuted transition-transform shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
@@ -1007,7 +1018,7 @@
           </div>
 
           <!-- Q5 -->
-          <div class="border border-gridBorder rounded-lg overflow-hidden transition-all bg-white shadow-2xs">
+          <div class="border border-gridBorder rounded-lg overflow-hidden transition-all bg-white">
             <button onclick="toggleFaq(5)" aria-expanded="false" aria-controls="faq-ans-5" class="w-full p-4 text-left font-heading font-bold text-sm sm:text-base text-darkBg flex items-center justify-between gap-4">
               <span>5. Каковы стандартные сроки реализации проектов?</span>
               <svg aria-hidden="true" id="faq-icon-5" class="w-4 h-4 text-textMuted transition-transform shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
@@ -1074,11 +1085,11 @@
         panel.inert = k !== key;
 
         if (k === key) {
-          pill.classList.add('bg-darkBg', 'text-white', 'border-darkBg', 'font-medium', 'shadow-xs');
+          pill.classList.add('bg-darkBg', 'text-white', 'border-darkBg', 'font-medium');
           pill.classList.remove('bg-white', 'hover:bg-slate-50', 'text-textMain', 'border-gridBorder');
           panel.classList.remove('hidden');
         } else {
-          pill.classList.remove('bg-darkBg', 'text-white', 'border-darkBg', 'font-medium', 'shadow-xs');
+          pill.classList.remove('bg-darkBg', 'text-white', 'border-darkBg', 'font-medium');
           pill.classList.add('bg-white', 'hover:bg-slate-50', 'text-textMain', 'border-gridBorder');
           panel.classList.add('hidden');
         }
@@ -1132,11 +1143,13 @@
       openWhatsApp('Здравствуйте! Я с вашего сайта nexcel.kz, хочу обсудить проект — ' + topic + '.');
     }
 
-    function openLeadModal(templateName, direction) {
+    function requestTemplate(templateName) {
       openWhatsApp('Здравствуйте! Я с вашего сайта. Отправьте мне, пожалуйста, бесплатный шаблон «' + templateName + '».');
     }
 
     // ---------- ROI calculator ----------
+    const WORK_HOURS_PER_SHIFT = 8;
+    const AVERAGE_WEEKS_PER_MONTH = 4.33;
     const WORK_HOURS_PER_MONTH = 168; // 8ч × 21 рабочий день — норма для приведения месячной ставки к часовой
     const roiMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let roiFrame = 0;
@@ -1148,7 +1161,7 @@
     function renderRoi(result) {
       document.getElementById('calc-res-hours').textContent = Math.round(result.hours) + ' ч';
       document.getElementById('calc-res-money').textContent = formatTenge(result.money);
-      document.getElementById('calc-res-shifts').textContent = 'Около ' + Math.round(result.hours / 8) + ' полных рабочих смен';
+      document.getElementById('calc-res-shifts').textContent = 'Около ' + Math.round(result.hours / WORK_HOURS_PER_SHIFT) + ' полных рабочих смен';
     }
 
     function finishRoiAnimation() {
@@ -1199,7 +1212,7 @@
       document.getElementById('calc-hours-val').textContent = hours + ' часов';
       document.getElementById('calc-rate-val').textContent = monthlyRate.toLocaleString('ru-RU') + ' ₸ / мес';
 
-      const monthlyHours = employees * hours * 4.33;
+      const monthlyHours = employees * hours * AVERAGE_WEEKS_PER_MONTH;
       const monthlyMoney = monthlyHours * hourlyRate;
 
       roiTarget = { hours: monthlyHours, money: monthlyMoney };

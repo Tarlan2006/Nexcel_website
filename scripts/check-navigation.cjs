@@ -1,6 +1,6 @@
 ﻿const {chromium}=require('@playwright/test');const assert=require('node:assert/strict');
 (async()=>{const browser=await chromium.launch({channel:'chrome'});let checks=0;try{
-const expected=['/','/#direction-tables','/#direction-bots','/#direction-ai','/licensing','/#calculator','/#cases','/templates','/#faq'];
+const expected=['/','/#direction-tables','/#direction-bots','/#direction-ai','/licensing','/#calculator','/#cases','/templates','/faq'];
 for(const width of [390,1280])for(const route of ['/','/licensing','/templates']){
 const page=await browser.newPage({viewport:{width,height:900},reducedMotion:'reduce'});await page.route('https://fonts.googleapis.com/**',r=>r.abort());await page.route('https://fonts.gstatic.com/**',r=>r.abort());
 for(const target of expected){await page.goto('http://localhost:5500'+route);await page.locator('header').waitFor();await page.locator('footer').waitFor();const nav=width<1024?'#mobile-menu':'header nav[aria-label="Основная навигация"]';assert.deepEqual(await page.locator(nav+' a').evaluateAll(es=>es.map(e=>e.getAttribute('href'))),expected);assert.equal(await page.locator(nav+' a[aria-current="page"]').getAttribute('href'),route);if(width<1024)await page.locator('#mobile-menu-toggle').click();await page.locator(nav+' a[href="'+target+'"]').click();await page.waitForURL('http://localhost:5500'+target);if(target.includes('#'))await page.locator(target.slice(1)).waitFor();checks++;}

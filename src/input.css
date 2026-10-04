@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Shared site styles, used by all three pages. */
+/* Shared site styles. */
 body {
   background-color: #FBFBFA;
   color: #181A1E;
@@ -17,11 +17,34 @@ body {
     linear-gradient(to bottom, rgba(229, 231, 235, 0.55) 1px, transparent 1px);
 }
 
-.dark-ledger-grid {
-  background-size: 32px 32px;
-  background-image:
-    linear-gradient(to right, rgba(42, 46, 53, 0.65) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(42, 46, 53, 0.65) 1px, transparent 1px);
+/* Same optical settings in cards and teaser; intrinsic ratios stay unchanged. */
+.partner-logo, .partner-logos {
+  --partner-logo-slot-width: 10rem;
+  --partner-logo-gap: 1rem;
+}
+.partner-logo {
+  --partner-logo-width: var(--partner-logo-slot-width);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--partner-logo-slot-width);
+  max-width: 100%;
+  height: 5rem;
+}
+.partner-logo--jivo { --partner-logo-width: 6rem; }
+.partner-logo img {
+  width: var(--partner-logo-width);
+  max-width: 100%;
+  height: auto;
+}
+.partner-logos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+  justify-items: center;
+  gap: var(--partner-logo-gap);
+  width: calc(2 * var(--partner-logo-slot-width) + var(--partner-logo-gap));
+  max-width: 100%;
 }
 
 ::-webkit-scrollbar {
