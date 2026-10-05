@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "build:css": "tailwindcss -i ./src/input.css -o ./assets/styles.css --minify",
-    "build": "npm run build:css && node scripts/build-site.cjs",
+    "build": "npm run build:css && node scripts/build-site.cjs && node scripts/build-news.cjs",
     "dev": "node scripts/dev-server.cjs",
     "dev:cloudflare": "npm run build && wrangler dev --local --ip 127.0.0.1 --port 8787",
     "check:http": "node scripts/check-http.cjs",
