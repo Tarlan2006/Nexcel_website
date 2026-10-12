@@ -16,7 +16,7 @@ async function run() {
   for (const [route, file] of [['/partials/header.html', 'partials/header.html'], ['/partials/footer.html', 'partials/footer.html'], ['/assets/include-partials.js', 'assets/include-partials.js'], ['/', 'index.html'], ['/licensing', 'licensing.html'], ['/templates', 'templates.html'], ['/faq', 'faq.html'], ['/assets/faq.js', 'assets/faq.js'], ['/assets/styles.css', 'assets/styles.css'], ['/robots.txt', 'robots.txt'], ['/sitemap.xml', 'sitemap.xml'], ['/llms.txt', 'llms.txt']]) {
     const response = await request(route, cloudflare && route.startsWith('/partials/') ? { redirect: 'follow' } : {});
     assert.equal(response.status, 200, route);
-    assert.equal(await response.text(), await fs.readFile(path.join(root, file), 'utf8'), `${route}: body`);
+    assert.equal(await response.text(), await fs.readFile(path.join(root, cloudflare ? 'dist' : '.', file), 'utf8'), `${route}: body`);
     if (file.endsWith('.html')) {
       assert.match(response.headers.get('content-type'), /text\/html/);
       if (cloudflare) {
@@ -44,6 +44,29 @@ async function run() {
   assert.equal(await head.text(), '');
   assert.equal((await request('/', { method: 'POST' })).status, 405);
   checks += 2;
+  if (cloudflare) {
+    // News and service files are generated in dist; the source preview does not serve them.
+    const newsFiles = ['news.html', ...(await fs.readdir(path.join(root, 'dist', 'news'))).filter(file => file.endsWith('.html')).map(file => `news/${file}`)];
+    for (const file of newsFiles) {
+      const route = '/' + file.replace(/\.html$/, '');
+      const response = await request(route);
+      assert.equal(response.status, 200, route);
+      const html = await response.text();
+      assert.equal(html, await fs.readFile(path.join(root, 'dist', file), 'utf8'), `${route}: body`);
+      assert.match(html, /<html lang="ru"/);
+      assert.ok(html.includes(`href="https://nexcel.kz${route}"`), `${route}: canonical`);
+      assert.doesNotMatch(html, /(?:href|src)="[^"\n]*\.html(?:[?#"][^\n]*)?/);
+      const ogImage = html.match(/<meta property="og:image" content="https:\/\/nexcel\.kz([^"\n]+)"/);
+      assert.ok(ogImage, `${route}: og:image`);
+      const metadata = await require('sharp')(path.join(root, 'dist', ogImage[1].slice(1))).metadata();
+      assert.equal(metadata.width, 1200, `${route}: OG width`);
+      assert.equal(metadata.height, 630, `${route}: OG height`);
+      const imageResponse = await request(ogImage[1]);
+      assert.equal(imageResponse.status, 200, `${route}: OG image response`);
+      assert.deepEqual(Buffer.from(await imageResponse.arrayBuffer()), await fs.readFile(path.join(root, 'dist', ogImage[1].slice(1))));
+      checks++;
+    }
+  }
   // The shared footer is fetched at runtime, so inspect built partials as well.
   const placeholders = [];
   async function inspectBuiltHtml(directory) {

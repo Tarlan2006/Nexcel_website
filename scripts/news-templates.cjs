@@ -24,6 +24,8 @@ function shell({ title, description, path, ogType, ld, main, image }) {
   <meta property="og:title" content="${esc(title)}" />
   <meta property="og:description" content="${esc(description)}" />
   <meta property="og:image" content="${esc(image ? SITE + image : SITE + "/assets/og-preview.png")}" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -94,7 +96,7 @@ function postPage(p) {
           <time datetime="${esc(p.date)}" class="block text-xs font-sans text-textMuted uppercase tracking-wider">${ruDate(p.date)}</time>
           <h1 class="font-heading font-extrabold text-3xl sm:text-4xl text-darkBg">${esc(p.title)}</h1>
         </header>
-        ${p.image ? `<img src="${esc(p.image)}" alt="${esc(p.title)}" class="w-full h-auto rounded-lg" />` : ''}
+        ${p.image ? `<img src="${esc(p.image)}" alt="${esc(p.title)}" width="${p.imageWidth}" height="${p.imageHeight}" class="w-full h-auto rounded-lg" />` : ''}
         <div class="space-y-3 sm:space-y-4">
         ${renderBody(p.body)}
         </div>
@@ -106,7 +108,7 @@ ${CTA}
     description: p.excerpt,
     path,
     ogType: 'article',
-    image: p.image,
+    image: p.imageWidth === 1200 && p.imageHeight === 630 ? p.image : undefined,
     main,
     ld: {
       '@context': 'https://schema.org',

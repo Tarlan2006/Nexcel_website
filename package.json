@@ -14,6 +14,7 @@
     "check:roi": "node scripts/check-roi.cjs",
     "check:hero": "node scripts/check-hero.cjs",
     "check:faq": "node scripts/check-faq.cjs",
+    "check:navigation": "node scripts/check-navigation.cjs",
     "check:cloudflare": "node scripts/check-http.cjs http://127.0.0.1:8787 --cloudflare"
   },
   "keywords": [],

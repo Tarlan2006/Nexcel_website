@@ -10,6 +10,8 @@ const dist = path.join(root, 'dist');
 const contentDir = path.join(root, 'content', 'news');
 const SITE = 'https://nexcel.kz';
 
+async function buildNews() {
+
 if (!fs.existsSync(dist)) throw new Error('dist/ not found: run build-site first');
 
 const posts = [];
@@ -29,6 +31,9 @@ if (fs.existsSync(contentDir)) {
     if (post.image !== undefined) {
       if (typeof post.image !== 'string' || !/^\/assets\/[a-zA-Z0-9/_-]+\.(png|jpe?g|webp)$/.test(post.image)) throw new Error(`${file}: image must be a local asset path`);
       fs.accessSync(path.join(dist, post.image.slice(1)));
+      const metadata = await require('sharp')(path.join(dist, post.image.slice(1))).metadata();
+      post.imageWidth = metadata.width;
+      post.imageHeight = metadata.height;
     }
     if (post.draft) continue;
     posts.push(post);
@@ -61,3 +66,6 @@ if (fs.existsSync(llmsPath)) {
   fs.writeFileSync(llmsPath, base + (posts.length ? `\n\n## Новости и кейсы\n\n${list}\n` : '\n'));
 }
 console.log(`News built: ${posts.length} post(s) -> dist/news.html, dist/news/`);
+}
+
+buildNews().catch(error => { console.error(error.message); process.exitCode = 1; });
