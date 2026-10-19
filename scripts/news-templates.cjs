@@ -11,6 +11,7 @@ const jsonLd = (obj) => JSON.stringify(obj, null, 2).replace(/</g, '\\u003c');
 
 function shell({ title, description, path, ogType, ld, main, image }) {
   const url = SITE + path;
+  const imageUrl = SITE + (image || '/assets/og-preview.png');
   return `<!DOCTYPE html>
 <html lang="ru" class="scroll-smooth">
 <head>
@@ -23,9 +24,13 @@ function shell({ title, description, path, ogType, ld, main, image }) {
   <meta property="og:url" content="${url}" />
   <meta property="og:title" content="${esc(title)}" />
   <meta property="og:description" content="${esc(description)}" />
-  <meta property="og:image" content="${esc(image ? SITE + image : SITE + "/assets/og-preview.png")}" />
+  <meta property="og:image" content="${esc(imageUrl)}" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="${esc(title)}" />
+  <meta name="twitter:description" content="${esc(description)}" />
+  <meta name="twitter:image" content="${esc(imageUrl)}" />
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -80,7 +85,7 @@ function renderBody(body) {
 
 const CTA = `        <div class="border border-gridBorder rounded-lg bg-white p-4 sm:p-6 space-y-3 font-sans">
           <div class="font-heading font-bold text-base sm:text-lg text-darkBg">Есть похожая задача?</div>
-          <p class="text-sm text-textMuted leading-relaxed">Напишите нам, и мы бесплатно разберём один ваш процесс и скажем, что в нём можно автоматизировать.</p>
+          <p class="text-sm text-textMuted leading-relaxed">Разберём ваш процесс и подскажем, что можно автоматизировать.</p>
           <div class="flex flex-wrap gap-2 text-sm font-semibold">
             <a href="https://wa.me/77711369095" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-4 py-2 rounded bg-emeraldAccent text-white hover:bg-emeraldHover transition-colors">Написать в WhatsApp</a>
             <a href="https://t.me/nexcel_kz" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-4 py-2 rounded border border-gridBorder bg-white text-darkBg hover:text-emeraldAccent transition-colors">Telegram-канал</a>
@@ -108,7 +113,7 @@ ${CTA}
     description: p.excerpt,
     path,
     ogType: 'article',
-    image: p.imageWidth === 1200 && p.imageHeight === 630 ? p.image : undefined,
+    image: p.ogImage || (p.imageWidth === 1200 && p.imageHeight === 630 ? p.image : undefined),
     main,
     ld: {
       '@context': 'https://schema.org',

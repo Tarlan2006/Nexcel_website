@@ -35,6 +35,11 @@ if (fs.existsSync(contentDir)) {
       post.imageWidth = metadata.width;
       post.imageHeight = metadata.height;
     }
+    if (post.ogImage !== undefined) {
+      if (typeof post.ogImage !== 'string' || !/^\/assets\/[a-zA-Z0-9/_-]+\.(png|jpe?g|webp)$/.test(post.ogImage)) throw new Error(`${file}: ogImage must be a local asset path`);
+      const metadata = await require('sharp')(path.join(dist, post.ogImage.slice(1))).metadata();
+      if (metadata.width !== 1200 || metadata.height !== 630) throw new Error(`${file}: ogImage must be 1200x630`);
+    }
     if (post.draft) continue;
     posts.push(post);
   }
