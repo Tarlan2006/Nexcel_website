@@ -8,6 +8,36 @@ const files = ['index.html', 'licensing.html', 'templates.html', 'faq.html', 'fa
 // Validate both the output location and inputs before replacing generated files.
 if (path.dirname(output) !== root || path.basename(output) !== 'dist') throw new Error('Invalid build directory');
 if (fs.existsSync(output) && fs.lstatSync(output).isSymbolicLink()) throw new Error('dist must not be a symlink');
+
+// Run after build-news so generated articles receive the same static navigation.
+if (process.argv.includes('--inline-partials')) {
+  const partials = ['header', 'footer'].map(name => ({
+    placeholder: new RegExp(`<div id="site-${name}">\\s*</div>`, 'g'),
+    html: `<div id="site-${name}">${fs.readFileSync(path.join(output, 'partials', `${name}.html`), 'utf8')}</div>`
+  }));
+  let changed = 0;
+  function inlinePartials(directory) {
+    for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+      const file = path.join(directory, entry.name);
+      if (entry.isSymbolicLink()) throw new Error('Build output must not contain symlinks');
+      if (entry.isDirectory()) {
+        if (file !== path.join(output, 'partials')) inlinePartials(file);
+      } else if (entry.name.endsWith('.html')) {
+        const original = fs.readFileSync(file, 'utf8');
+        let html = original;
+        for (const partial of partials) html = html.replace(partial.placeholder, () => partial.html);
+        if (html !== original) {
+          fs.writeFileSync(file, html);
+          changed++;
+        }
+      }
+    }
+  }
+  inlinePartials(output);
+  console.log(`Shared partials inlined in ${changed} page(s)`);
+  return;
+}
+
 const publicFiles = new Set([...files, '.assetsignore']);
 function collectAssets(relative) {
   for (const entry of fs.readdirSync(path.join(root, relative), { withFileTypes: true })) {

@@ -88,9 +88,11 @@
     const container = document.getElementById(id);
     if (!container) return;
     try {
-      const response = await fetch(url);
-      if (!response.ok) throw new Error('HTTP ' + response.status);
-      container.innerHTML = await response.text();
+      if (!container.firstElementChild) {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        container.innerHTML = await response.text();
+      }
       if (initialize) initialize();
     } catch (error) {
       console.warn('Could not load ' + url + ':', error);
