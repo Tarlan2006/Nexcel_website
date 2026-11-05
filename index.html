@@ -215,16 +215,16 @@
                 <span>Интерактивный инспектор направлений:</span>
               </div>
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2 font-sans text-xs">
-                <button onclick="setHeroInspector('tables')" id="pill-tables" class="hero-pill p-1.5 sm:p-2 rounded border text-left transition-all bg-darkBg text-white border-darkBg font-medium">
+                <button data-action="hero-direction" data-action-value="tables" id="pill-tables" class="hero-pill p-1.5 sm:p-2 rounded border text-left transition-all bg-darkBg text-white border-darkBg font-medium">
                   Анализ данных
                 </button>
-                <button onclick="setHeroInspector('bots')" id="pill-bots" class="hero-pill p-1.5 sm:p-2 rounded border text-left transition-all bg-white hover:bg-slate-50 text-textMain border-gridBorder">
+                <button data-action="hero-direction" data-action-value="bots" id="pill-bots" class="hero-pill p-1.5 sm:p-2 rounded border text-left transition-all bg-white hover:bg-slate-50 text-textMain border-gridBorder">
                   Telegram-боты
                 </button>
-                <button onclick="setHeroInspector('ai')" id="pill-ai" class="hero-pill p-1.5 sm:p-2 rounded border text-left transition-all bg-white hover:bg-slate-50 text-textMain border-gridBorder">
+                <button data-action="hero-direction" data-action-value="ai" id="pill-ai" class="hero-pill p-1.5 sm:p-2 rounded border text-left transition-all bg-white hover:bg-slate-50 text-textMain border-gridBorder">
                   Внедрение ИИ
                 </button>
-                <button onclick="setHeroInspector('saas')" id="pill-saas" class="hero-pill p-1.5 sm:p-2 rounded border text-left transition-all bg-white hover:bg-slate-50 text-textMain border-gridBorder">
+                <button data-action="hero-direction" data-action-value="saas" id="pill-saas" class="hero-pill p-1.5 sm:p-2 rounded border text-left transition-all bg-white hover:bg-slate-50 text-textMain border-gridBorder">
                   Лицензии & SaaS
                 </button>
               </div>
@@ -232,7 +232,7 @@
 
             <!-- CTA Buttons -->
             <div class="flex flex-wrap items-center gap-2 sm:gap-4 pt-1 sm:pt-3">
-              <button onclick="openWhatsAppWithCurrentTopic()"
+              <button data-action="whatsapp-topic"
                  class="motion-button inline-flex items-center justify-center gap-2 bg-emeraldAccent hover:bg-emeraldHover text-white px-5 sm:px-6 py-3.5 rounded font-sans text-xs font-semibold tracking-wider transition-all shadow-md active:scale-95">
                 <svg aria-hidden="true" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" /> <path d="m21.854 2.147-10.94 10.939" /></svg>
                 <span>ОБСУДИТЬ ПРОЕКТ В WHATSAPP</span>
@@ -570,7 +570,7 @@
 
             <div class="pt-4 border-t border-gridBorder flex items-center justify-between text-xs font-sans">
               <span class="text-textMuted font-mono">Сроки: от 1 до 5 дней</span>
-              <button onclick="openWhatsApp('Здравствуйте! Я с вашего сайта, хочу обсудить настройку учета и таблиц для нашей компании.')" class="text-emeraldAccent font-semibold hover:underline flex items-center gap-1 py-4 -my-4">
+              <button data-action="whatsapp-message" data-action-value="Здравствуйте! Я с вашего сайта, хочу обсудить настройку учета и таблиц для нашей компании." class="text-emeraldAccent font-semibold hover:underline flex items-center gap-1 py-4 -my-4">
                 Обсудить учет <svg aria-hidden="true" class="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10" /> <path d="M7 17 17 7" /></svg>
               </button>
             </div>
@@ -602,7 +602,7 @@
 
             <div class="pt-4 border-t border-gridBorder flex items-center justify-between text-xs font-sans">
               <span class="text-textMuted font-mono">Сроки: от 3 до 7 дней</span>
-              <button onclick="openWhatsApp('Здравствуйте! Я с вашего сайта, хочу заказать Telegram-бота с ИИ для бизнеса.')" class="text-emeraldAccent font-semibold hover:underline flex items-center gap-1 py-4 -my-4">
+              <button data-action="whatsapp-message" data-action-value="Здравствуйте! Я с вашего сайта, хочу заказать Telegram-бота с ИИ для бизнеса." class="text-emeraldAccent font-semibold hover:underline flex items-center gap-1 py-4 -my-4">
                 Заказать бота <svg aria-hidden="true" class="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10" /> <path d="M7 17 17 7" /></svg>
               </button>
             </div>
@@ -634,7 +634,7 @@
 
             <div class="pt-4 border-t border-gridBorder flex items-center justify-between text-xs font-sans">
               <span class="text-textMuted font-mono">Сроки: от 3 до 8 дней</span>
-              <button onclick="openWhatsApp('Здравствуйте! Я с вашего сайта, интересует внедрение ИИ и распознавание документов (OCR) в нашей компании.')" class="text-emeraldAccent font-semibold hover:underline flex items-center gap-1 py-4 -my-4">
+              <button data-action="whatsapp-message" data-action-value="Здравствуйте! Я с вашего сайта, интересует внедрение ИИ и распознавание документов (OCR) в нашей компании." class="text-emeraldAccent font-semibold hover:underline flex items-center gap-1 py-4 -my-4">
                 Интегрировать ИИ <svg aria-hidden="true" class="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10" /> <path d="M7 17 17 7" /></svg>
               </button>
             </div>
@@ -766,7 +766,7 @@
 
             <div class="text-center pt-2">
               <p id="calc-announcement" class="sr-only" role="status" aria-atomic="true"></p>
-              <button onclick="sendRoiToWhatsApp()" class="motion-button inline-flex items-center gap-2 bg-emeraldAccent hover:bg-emeraldHover text-white px-6 py-3 rounded text-xs font-semibold tracking-wider transition-all w-full sm:w-auto justify-center shadow-sm">
+              <button data-action="send-roi" class="motion-button inline-flex items-center gap-2 bg-emeraldAccent hover:bg-emeraldHover text-white px-6 py-3 rounded text-xs font-semibold tracking-wider transition-all w-full sm:w-auto justify-center shadow-sm">
                 <span>ЗАФИКСИРОВАТЬ ЭКОНОМИЮ И ОБСУДИТЬ В WHATSAPP</span>
                 <svg aria-hidden="true" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg>
               </button>
@@ -900,7 +900,7 @@
                 Учитывайте доходы, расходы и остатки по счетам в одной таблице.
               </p>
             </div>
-            <button onclick="requestTemplate('Учет ДДС для малого бизнеса')" class="motion-button w-full inline-flex items-center justify-center gap-2 bg-paper hover:bg-slate-100 text-darkBg border border-gridBorder py-2.5 rounded font-sans text-xs font-semibold tracking-wide transition-all">
+            <button data-action="request-template" data-action-value="Учет ДДС для малого бизнеса" class="motion-button w-full inline-flex items-center justify-center gap-2 bg-paper hover:bg-slate-100 text-darkBg border border-gridBorder py-2.5 rounded font-sans text-xs font-semibold tracking-wide transition-all">
               <svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3" /> <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <path d="m7 10 5 5 5-5" /></svg>
               <span>ПОЛУЧИТЬ ШАБЛОН</span>
             </button>
@@ -919,7 +919,7 @@
                 Контролируйте движение товаров и актуальные складские остатки.
               </p>
             </div>
-            <button onclick="requestTemplate('Складской учет ТМЦ и остатков')" class="motion-button w-full inline-flex items-center justify-center gap-2 bg-paper hover:bg-slate-100 text-darkBg border border-gridBorder py-2.5 rounded font-sans text-xs font-semibold tracking-wide transition-all">
+            <button data-action="request-template" data-action-value="Складской учет ТМЦ и остатков" class="motion-button w-full inline-flex items-center justify-center gap-2 bg-paper hover:bg-slate-100 text-darkBg border border-gridBorder py-2.5 rounded font-sans text-xs font-semibold tracking-wide transition-all">
               <svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3" /> <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <path d="m7 10 5 5 5-5" /></svg>
               <span>ПОЛУЧИТЬ ШАБЛОН</span>
             </button>
@@ -938,7 +938,7 @@
                 Рассчитывайте остаток отпуска и компенсации по правилам РК.
               </p>
             </div>
-            <button onclick="requestTemplate('Калькулятор отпусков и компенсаций РК')" class="motion-button w-full inline-flex items-center justify-center gap-2 bg-paper hover:bg-slate-100 text-darkBg border border-gridBorder py-2.5 rounded font-sans text-xs font-semibold tracking-wide transition-all">
+            <button data-action="request-template" data-action-value="Калькулятор отпусков и компенсаций РК" class="motion-button w-full inline-flex items-center justify-center gap-2 bg-paper hover:bg-slate-100 text-darkBg border border-gridBorder py-2.5 rounded font-sans text-xs font-semibold tracking-wide transition-all">
               <svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3" /> <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <path d="m7 10 5 5 5-5" /></svg>
               <span>ПОЛУЧИТЬ ШАБЛОН</span>
             </button>
@@ -967,7 +967,7 @@
 
           <!-- Q1 -->
           <div class="border border-gridBorder rounded-lg overflow-hidden transition-all bg-white">
-            <button onclick="toggleFaq(1)" aria-expanded="false" aria-controls="faq-ans-1" class="w-full p-4 text-left font-heading font-bold text-sm sm:text-base text-darkBg flex items-center justify-between gap-4">
+            <button data-action="faq-toggle" data-action-value="1" aria-expanded="false" aria-controls="faq-ans-1" class="w-full p-4 text-left font-heading font-bold text-sm sm:text-base text-darkBg flex items-center justify-between gap-4">
               <span>1. Как происходит покупка зарубежного ПО и подписок на ИИ для юрлиц в Казахстане?</span>
               <svg aria-hidden="true" id="faq-icon-1" class="w-4 h-4 text-textMuted transition-transform shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
             </button>
@@ -980,7 +980,7 @@
 
           <!-- Q2 -->
           <div class="border border-gridBorder rounded-lg overflow-hidden transition-all bg-white">
-            <button onclick="toggleFaq(2)" aria-expanded="false" aria-controls="faq-ans-2" class="w-full p-4 text-left font-heading font-bold text-sm sm:text-base text-darkBg flex items-center justify-between gap-4">
+            <button data-action="faq-toggle" data-action-value="2" aria-expanded="false" aria-controls="faq-ans-2" class="w-full p-4 text-left font-heading font-bold text-sm sm:text-base text-darkBg flex items-center justify-between gap-4">
               <span>2. Работаете ли вы с государственными предприятиями и квазигоссектором?</span>
               <svg aria-hidden="true" id="faq-icon-2" class="w-4 h-4 text-textMuted transition-transform shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
             </button>
@@ -993,7 +993,7 @@
 
           <!-- Q3 -->
           <div class="border border-gridBorder rounded-lg overflow-hidden transition-all bg-white">
-            <button onclick="toggleFaq(3)" aria-expanded="false" aria-controls="faq-ans-3" class="w-full p-4 text-left font-heading font-bold text-sm sm:text-base text-darkBg flex items-center justify-between gap-4">
+            <button data-action="faq-toggle" data-action-value="3" aria-expanded="false" aria-controls="faq-ans-3" class="w-full p-4 text-left font-heading font-bold text-sm sm:text-base text-darkBg flex items-center justify-between gap-4">
               <span>3. Есть ли регулярная абонентская плата за разработанные таблицы и ботов?</span>
               <svg aria-hidden="true" id="faq-icon-3" class="w-4 h-4 text-textMuted transition-transform shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
             </button>
@@ -1006,7 +1006,7 @@
 
           <!-- Q4 -->
           <div class="border border-gridBorder rounded-lg overflow-hidden transition-all bg-white">
-            <button onclick="toggleFaq(4)" aria-expanded="false" aria-controls="faq-ans-4" class="w-full p-4 text-left font-heading font-bold text-sm sm:text-base text-darkBg flex items-center justify-between gap-4">
+            <button data-action="faq-toggle" data-action-value="4" aria-expanded="false" aria-controls="faq-ans-4" class="w-full p-4 text-left font-heading font-bold text-sm sm:text-base text-darkBg flex items-center justify-between gap-4">
               <span>4. Как обеспечивается конфиденциальность коммерческих данных?</span>
               <svg aria-hidden="true" id="faq-icon-4" class="w-4 h-4 text-textMuted transition-transform shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
             </button>
@@ -1019,7 +1019,7 @@
 
           <!-- Q5 -->
           <div class="border border-gridBorder rounded-lg overflow-hidden transition-all bg-white">
-            <button onclick="toggleFaq(5)" aria-expanded="false" aria-controls="faq-ans-5" class="w-full p-4 text-left font-heading font-bold text-sm sm:text-base text-darkBg flex items-center justify-between gap-4">
+            <button data-action="faq-toggle" data-action-value="5" aria-expanded="false" aria-controls="faq-ans-5" class="w-full p-4 text-left font-heading font-bold text-sm sm:text-base text-darkBg flex items-center justify-between gap-4">
               <span>5. Каковы стандартные сроки реализации проектов?</span>
               <svg aria-hidden="true" id="faq-icon-5" class="w-4 h-4 text-textMuted transition-transform shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
             </button>
@@ -1043,270 +1043,9 @@
   <!-- ==================== 9. FOOTER ==================== -->
   <div id="site-footer"></div>
 
-  <script>
-    // Icons are pre-rendered as inline <svg> at build time (see scripts/inline-icons.js) —
-    // no icon-library JS runtime is loaded or needed here.
-
-    // ---------- Hero interactive inspector ----------
-    const heroContent = {
-      tables: { filename: 'Nexcel_Engine_v4.gs', tag: 'LIVE SIMULATOR', topic: 'анализ данных и учет в Google Таблицах' },
-      bots: { filename: 'telegram_bot.py', tag: 'BOT ONLINE', topic: 'разработку Telegram-бота с ИИ' },
-      ai: { filename: 'ocr_scanner.py', tag: 'AI VISION', topic: 'внедрение ИИ и распознавание документов' },
-      saas: { filename: 'licensing_portal.ts', tag: 'B2B PORTAL', topic: 'лицензии ПО и подписки на ИИ' }
-    };
-
-    let currentDirection = 'tables';
-    let heroInitialized = false;
-    let heroAnimation = null;
-    const heroMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    function stopHeroAnimation() {
-      heroAnimation?.cancel();
-      heroAnimation = null;
-    }
-    heroMotion.addEventListener('change', () => {
-      if (heroMotion.matches) stopHeroAnimation();
-    });
-    document.getElementById('hero-panels').addEventListener('focusin', stopHeroAnimation);
-
-    function setHeroInspector(key) {
-      if (!heroContent[key]) return;
-      const changed = !heroInitialized || key !== currentDirection;
-      if (changed) stopHeroAnimation();
-      currentDirection = key;
-      heroInitialized = true;
-
-      Object.keys(heroContent).forEach((k) => {
-        const pill = document.getElementById('pill-' + k);
-        const panel = document.getElementById('inspector-' + k);
-        if (!pill || !panel) return;
-        pill.setAttribute('aria-pressed', String(k === key));
-        pill.setAttribute('aria-controls', panel.id);
-        panel.setAttribute('aria-hidden', String(k !== key));
-        panel.inert = k !== key;
-
-        if (k === key) {
-          pill.classList.add('bg-darkBg', 'text-white', 'border-darkBg', 'font-medium');
-          pill.classList.remove('bg-white', 'hover:bg-slate-50', 'text-textMain', 'border-gridBorder');
-          panel.classList.remove('hidden');
-        } else {
-          pill.classList.remove('bg-darkBg', 'text-white', 'border-darkBg', 'font-medium');
-          pill.classList.add('bg-white', 'hover:bg-slate-50', 'text-textMain', 'border-gridBorder');
-          panel.classList.add('hidden');
-        }
-      });
-
-      const data = heroContent[key];
-      const filenameEl = document.getElementById('hero-window-filename');
-      const tagEl = document.getElementById('hero-window-tag');
-      if (filenameEl) filenameEl.textContent = data.filename;
-      if (tagEl) tagEl.textContent = data.tag;
-      const panel = document.getElementById('inspector-' + key);
-      if (changed && !heroMotion.matches && panel.animate && !panel.contains(document.activeElement)) {
-        heroAnimation = panel.animate([
-          { opacity: 0, transform: 'translateY(8px)' },
-          { opacity: 1, transform: 'translateY(0)' }
-        ], { duration: 320, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
-      }
-    }
-
-    // ---------- Hero mini revenue calculator ----------
-    function formatTenge(value) {
-      return Math.round(value).toLocaleString('ru-RU') + ' ₸';
-    }
-
-    function updateHeroCalc() {
-      const ordersEl = document.getElementById('hero-orders');
-      const checkEl = document.getElementById('hero-check');
-      const revEl = document.getElementById('hero-total-rev');
-      const timeEl = document.getElementById('hero-time-saved');
-      if (!ordersEl || !checkEl || !revEl) return;
-
-      const orders = parseFloat(ordersEl.value) || 0;
-      const check = parseFloat(checkEl.value) || 0;
-      const total = orders * check;
-
-      revEl.textContent = formatTenge(total);
-
-      if (timeEl) {
-        const hours = Math.max(4, Math.round(orders * 0.135));
-        timeEl.textContent = '~' + hours + ' часов в месяц';
-      }
-    }
-
-    // ---------- WhatsApp helper ----------
-    function openWhatsApp(message) {
-      window.open('https://wa.me/77711369095?text=' + encodeURIComponent(message), '_blank', 'noopener,noreferrer');
-    }
-
-    function openWhatsAppWithCurrentTopic() {
-      const topic = heroContent[currentDirection] ? heroContent[currentDirection].topic : 'оцифровку и автоматизацию бизнеса';
-      openWhatsApp('Здравствуйте! Я с вашего сайта nexcel.kz, хочу обсудить проект — ' + topic + '.');
-    }
-
-    function requestTemplate(templateName) {
-      openWhatsApp('Здравствуйте! Я с вашего сайта. Отправьте мне, пожалуйста, бесплатный шаблон «' + templateName + '».');
-    }
-
-    // ---------- ROI calculator ----------
-    const WORK_HOURS_PER_SHIFT = 8;
-    const AVERAGE_WEEKS_PER_MONTH = 4.33;
-    const WORK_HOURS_PER_MONTH = 168; // 8ч × 21 рабочий день — норма для приведения месячной ставки к часовой
-    const roiMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    let roiFrame = 0;
-    let roiDisplayed = null;
-    let roiTarget = null;
-    let roiLastFrame = null;
-    let roiTargetChangedAt = 0;
-
-    function renderRoi(result) {
-      document.getElementById('calc-res-hours').textContent = Math.round(result.hours) + ' ч';
-      document.getElementById('calc-res-money').textContent = formatTenge(result.money);
-      document.getElementById('calc-res-shifts').textContent = 'Около ' + Math.round(result.hours / WORK_HOURS_PER_SHIFT) + ' полных рабочих смен';
-    }
-
-    function finishRoiAnimation() {
-      cancelAnimationFrame(roiFrame);
-      roiFrame = 0;
-      roiLastFrame = null;
-      if (!roiTarget) return;
-      roiDisplayed = { ...roiTarget };
-      renderRoi(roiDisplayed);
-      // Announce the final calculation, not every animation frame.
-      document.getElementById('calc-announcement').textContent = 'Экономия в месяц: ' + Math.round(roiTarget.hours) + ' ч и ' + formatTenge(roiTarget.money) + '.';
-    }
-
-    roiMotion.addEventListener('change', () => {
-      if (roiMotion.matches) finishRoiAnimation();
-    });
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) finishRoiAnimation();
-    });
-
-    function animateRoi(now) {
-      const elapsed = roiLastFrame === null ? 0 : Math.max(0, now - roiLastFrame);
-      roiLastFrame = now;
-      // A continuous follower: new input changes the destination, not the frame loop.
-      // Time-based smoothing behaves the same on 60 Hz and 120 Hz displays.
-      const blend = 1 - Math.exp(-elapsed / 85);
-      roiDisplayed.hours += (roiTarget.hours - roiDisplayed.hours) * blend;
-      roiDisplayed.money += (roiTarget.money - roiDisplayed.money) * blend;
-      renderRoi(roiDisplayed);
-      const settled = Math.abs(roiTarget.hours - roiDisplayed.hours) < 0.01 &&
-        Math.abs(roiTarget.money - roiDisplayed.money) < 0.5;
-      if (settled || now - roiTargetChangedAt >= 1000) finishRoiAnimation();
-      else roiFrame = requestAnimationFrame(animateRoi);
-    }
-
-    function updateRoiCalc() {
-      const employeesEl = document.getElementById('calc-employees');
-      const hoursEl = document.getElementById('calc-hours');
-      const rateEl = document.getElementById('calc-rate');
-      if (!employeesEl || !hoursEl || !rateEl) return;
-
-      const employees = parseFloat(employeesEl.value) || 0;
-      const hours = parseFloat(hoursEl.value) || 0;
-      const monthlyRate = parseFloat(rateEl.value) || 0;
-      const hourlyRate = monthlyRate / WORK_HOURS_PER_MONTH;
-
-      document.getElementById('calc-employees-val').textContent = employees + ' чел';
-      document.getElementById('calc-hours-val').textContent = hours + ' часов';
-      document.getElementById('calc-rate-val').textContent = monthlyRate.toLocaleString('ru-RU') + ' ₸ / мес';
-
-      const monthlyHours = employees * hours * AVERAGE_WEEKS_PER_MONTH;
-      const monthlyMoney = monthlyHours * hourlyRate;
-
-      roiTarget = { hours: monthlyHours, money: monthlyMoney };
-      roiTargetChangedAt = performance.now();
-      if (!roiDisplayed || roiMotion.matches || document.hidden) {
-        finishRoiAnimation();
-        return;
-      }
-      if (!roiFrame) {
-        roiLastFrame = null;
-        roiFrame = requestAnimationFrame(animateRoi);
-      }
-    }
-
-    function sendRoiToWhatsApp() {
-      // A click during count-up must send the final values, not an intermediate frame.
-      finishRoiAnimation();
-      const hoursText = Math.round(roiTarget.hours) + ' ч';
-      const moneyText = formatTenge(roiTarget.money);
-
-      openWhatsApp('Здравствуйте! Посчитал(а) на вашем сайте экономию от автоматизации — примерно ' + hoursText + ' и ' + moneyText + ' в месяц. Хочу обсудить, как это внедрить у нас.');
-    }
-
-    // ---------- Case results: one-time count-up, stable accessible final text ----------
-    function initCaseCounters() {
-      const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-      if (motion.matches || !('IntersectionObserver' in window)) return;
-      const active = new Map();
-      const finish = (target) => {
-        const state = active.get(target);
-        if (!state) return;
-        cancelAnimationFrame(state.frame);
-        state.animation?.cancel();
-        if (state.value) state.value.textContent = state.finalText;
-        active.delete(target);
-      };
-      const observer = new IntersectionObserver(entries => {
-        entries.filter(entry => entry.isIntersecting).forEach(({ target }) => {
-          observer.unobserve(target);
-          if (motion.matches || document.hidden) return;
-          const value = target.querySelector('.case-counter-value');
-          if (!value) {
-            if (!target.animate) return;
-            const animation = target.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 600, easing: 'ease-out' });
-            active.set(target, { animation });
-            animation.finished.then(() => finish(target), () => active.delete(target));
-            return;
-          }
-          const finalText = value.textContent;
-          const total = Number(target.dataset.countTo);
-          const state = { value, finalText, frame: 0 };
-          active.set(target, state);
-          let started = null;
-          const tick = now => {
-            if (started === null) started = now;
-            const progress = Math.min(1, (now - started) / 900);
-            const number = Math.round(total * (1 - Math.pow(1 - progress, 3)));
-            value.textContent = finalText.replace(/[\d\s\u00a0]+/, number.toLocaleString('ru-RU'));
-            if (progress < 1) state.frame = requestAnimationFrame(tick);
-            else finish(target);
-          };
-          state.frame = requestAnimationFrame(tick);
-        });
-      }, { threshold: 0.5 });
-      document.querySelectorAll('[data-count-to], [data-case-zero]').forEach(el => observer.observe(el));
-      motion.addEventListener('change', () => {
-        if (!motion.matches) return;
-        observer.disconnect();
-        [...active.keys()].forEach(finish);
-      });
-      document.addEventListener('visibilitychange', () => {
-        if (document.hidden) [...active.keys()].forEach(finish);
-      });
-    }
-
-    // ---------- Init ----------
-    document.addEventListener('DOMContentLoaded', () => {
-      initCaseCounters();
-      setHeroInspector('tables');
-      updateHeroCalc();
-      updateRoiCalc();
-
-      const heroOrders = document.getElementById('hero-orders');
-      const heroCheck = document.getElementById('hero-check');
-      if (heroOrders) heroOrders.addEventListener('input', updateHeroCalc);
-      if (heroCheck) heroCheck.addEventListener('input', updateHeroCalc);
-
-      ['calc-employees', 'calc-hours', 'calc-rate'].forEach((id) => {
-        const el = document.getElementById(id);
-        if (el) el.addEventListener('input', updateRoiCalc);
-      });
-    });
-  </script>
+  <script src="/assets/home.js" defer></script>
 
   <script src="/assets/include-partials.js" defer></script>
+  <script src="/assets/actions.js" defer></script>
 </body>
 </html>

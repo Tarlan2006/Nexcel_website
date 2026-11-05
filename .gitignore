@@ -4,6 +4,16 @@ node_modules/
 dist/
 .review/
 
+# Local secrets must never be committed. Examples contain placeholders only.
+.env
+.env.*
+!.env.example
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+.local/
+.local-tools/
+
 # Local audit notes and AI handoff documents
 /audit from claude.txt
 /AI_HANDOFF.md

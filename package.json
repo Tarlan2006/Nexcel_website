@@ -15,7 +15,8 @@
     "check:hero": "node scripts/check-hero.cjs",
     "check:faq": "node scripts/check-faq.cjs",
     "check:navigation": "node scripts/check-navigation.cjs",
-    "check:cloudflare": "node scripts/check-http.cjs http://127.0.0.1:8787 --cloudflare"
+    "check:cloudflare": "node scripts/check-http.cjs http://127.0.0.1:8787 --cloudflare",
+    "check:security": "node scripts/check-security.cjs"
   },
   "keywords": [],
   "author": "",
@@ -25,9 +26,9 @@
     "@playwright/test": "^1.63.0",
     "lucide-static": "^1.38.0",
     "png-to-ico": "^3.0.2",
-    "sharp": "^0.35.4",
+    "sharp": "^0.35.5",
     "simple-icons": "^16.29.0",
     "tailwindcss": "^3.4.19",
-    "wrangler": "^4.142.0"
+    "wrangler": "^4.158.0"
   }
 }

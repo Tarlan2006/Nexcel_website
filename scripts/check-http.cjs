@@ -12,6 +12,19 @@ async function request(route, options = {}) {
   return fetch(new URL(route, base), { redirect: 'manual', signal: AbortSignal.timeout(10000), ...options });
 }
 
+function checkSecurityHeaders(response) {
+  assert.equal(response.headers.get('x-frame-options'), 'SAMEORIGIN');
+  assert.equal(response.headers.get('x-content-type-options'), 'nosniff');
+  assert.equal(response.headers.get('referrer-policy'), 'strict-origin-when-cross-origin');
+  assert.equal(response.headers.get('permissions-policy'), 'camera=(), microphone=(), geolocation=()');
+  assert.equal(response.headers.get('strict-transport-security'), 'max-age=31536000');
+  const csp = response.headers.get('content-security-policy') || '';
+  for (const directive of ["default-src 'none'", "script-src 'self'", "script-src-attr 'none'", "object-src 'none'", "base-uri 'none'", "form-action 'none'", "frame-ancestors 'self'"]) {
+    assert.ok(csp.split(';').map(value => value.trim()).includes(directive), `Missing CSP directive: ${directive}`);
+  }
+  assert.equal(response.headers.get('access-control-allow-origin'), null);
+}
+
 async function run() {
   for (const [route, file] of [['/partials/header.html', 'partials/header.html'], ['/partials/footer.html', 'partials/footer.html'], ['/assets/include-partials.js', 'assets/include-partials.js'], ['/', 'index.html'], ['/licensing', 'licensing.html'], ['/templates', 'templates.html'], ['/faq', 'faq.html'], ['/assets/faq.js', 'assets/faq.js'], ['/assets/styles.css', 'assets/styles.css'], ['/robots.txt', 'robots.txt'], ['/sitemap.xml', 'sitemap.xml'], ['/llms.txt', 'llms.txt']]) {
     const response = await request(route, cloudflare && route.startsWith('/partials/') ? { redirect: 'follow' } : {});
@@ -20,10 +33,7 @@ async function run() {
     if (file.endsWith('.html')) {
       assert.match(response.headers.get('content-type'), /text\/html/);
       if (cloudflare) {
-        assert.equal(response.headers.get('x-frame-options'), 'SAMEORIGIN');
-        assert.equal(response.headers.get('x-content-type-options'), 'nosniff');
-        assert.equal(response.headers.get('referrer-policy'), 'strict-origin-when-cross-origin');
-        assert.equal(response.headers.get('permissions-policy'), 'camera=(), microphone=(), geolocation=()');
+        checkSecurityHeaders(response);
       }
     }
     checks++;
@@ -35,7 +45,7 @@ async function run() {
     assert.equal(location.pathname + location.search, target, `${route}: destination`);
     checks++;
   }
-  for (const route of ['/does-not-exist', '/package.json', '/package-lock.json', '/wrangler.jsonc', '/AI_HANDOFF.md', '/audit%20from%20claude.txt', '/.assetsignore', '/.ignore', '/.git/config', '/.wrangler/state', '/src/input.css', '/scripts/dev-server.cjs', '/node_modules/wrangler/package.json', '/_headers']) {
+  for (const route of ['/does-not-exist', '/package.json', '/package-lock.json', '/wrangler.jsonc', '/AI_HANDOFF.md', '/audit%20from%20claude.txt', '/.assetsignore', '/.ignore', '/.git/config', '/.wrangler/state', '/src/input.css', '/scripts/dev-server.cjs', '/node_modules/wrangler/package.json', '/_headers', '/.env', '/.env.production', '/.dev.vars', '/.dev.vars.production', '/.local/preview.json', '/.local-tools/npm.cmd']) {
     assert.equal((await request(route)).status, 404, `${route}: must not be public`);
     checks++;
   }
@@ -51,6 +61,7 @@ async function run() {
       const route = '/' + file.replace(/\.html$/, '');
       const response = await request(route);
       assert.equal(response.status, 200, route);
+      checkSecurityHeaders(response);
       const html = await response.text();
       assert.equal(html, await fs.readFile(path.join(root, 'dist', file), 'utf8'), `${route}: body`);
       assert.match(html, /<html lang="ru"/);

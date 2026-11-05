@@ -44,7 +44,7 @@ const assert = require('node:assert/strict');
         window.open = url => { window.capturedRoiUrl = url; };
         document.getElementById('calc-employees').value = 50;
         document.getElementById('calc-employees').dispatchEvent(new Event('input'));
-        document.querySelector('[onclick="sendRoiToWhatsApp()"]').click();
+        document.querySelector('[data-action="send-roi"]').click();
         return new URL(window.capturedRoiUrl).searchParams.get('text');
       });
       assert(message.includes('217 ч'));

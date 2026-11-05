@@ -60,7 +60,7 @@
                 <li>• Автоматическая сводка</li>
               </ul>
             </div>
-            <button type="button" onclick="requestTemplate('Учет ДДС для малого бизнеса')" class="motion-button w-full inline-flex items-center justify-center px-4 py-2.5 rounded bg-paper hover:bg-slate-100 text-darkBg border border-gridBorder text-sm font-semibold transition-colors">Получить шаблон</button>
+            <button type="button" data-action="request-template" data-action-value="Учет ДДС для малого бизнеса" class="motion-button w-full inline-flex items-center justify-center px-4 py-2.5 rounded bg-paper hover:bg-slate-100 text-darkBg border border-gridBorder text-sm font-semibold transition-colors">Получить шаблон</button>
           </article>
 
           <article data-card-reveal class="motion-card hover:border-emeraldAccent bg-white border border-gridBorder rounded-lg p-5 sm:p-6 space-y-5 flex flex-col justify-between">
@@ -74,7 +74,7 @@
                 <li>• Контроль минимального запаса</li>
               </ul>
             </div>
-            <button type="button" onclick="requestTemplate('Складской учет ТМЦ и остатков')" class="motion-button w-full inline-flex items-center justify-center px-4 py-2.5 rounded bg-paper hover:bg-slate-100 text-darkBg border border-gridBorder text-sm font-semibold transition-colors">Получить шаблон</button>
+            <button type="button" data-action="request-template" data-action-value="Складской учет ТМЦ и остатков" class="motion-button w-full inline-flex items-center justify-center px-4 py-2.5 rounded bg-paper hover:bg-slate-100 text-darkBg border border-gridBorder text-sm font-semibold transition-colors">Получить шаблон</button>
           </article>
 
           <article data-card-reveal class="motion-card hover:border-emeraldAccent bg-white border border-gridBorder rounded-lg p-5 sm:p-6 space-y-5 flex flex-col justify-between">
@@ -88,7 +88,7 @@
                 <li>• Оценка компенсации</li>
               </ul>
             </div>
-            <button type="button" onclick="requestTemplate('Калькулятор отпусков и компенсаций РК')" class="motion-button w-full inline-flex items-center justify-center px-4 py-2.5 rounded bg-paper hover:bg-slate-100 text-darkBg border border-gridBorder text-sm font-semibold transition-colors">Получить шаблон</button>
+            <button type="button" data-action="request-template" data-action-value="Калькулятор отпусков и компенсаций РК" class="motion-button w-full inline-flex items-center justify-center px-4 py-2.5 rounded bg-paper hover:bg-slate-100 text-darkBg border border-gridBorder text-sm font-semibold transition-colors">Получить шаблон</button>
           </article>
         </div>
       </div>
@@ -97,12 +97,8 @@
 
   <div id="site-footer"></div>
 
-  <script>
-    function requestTemplate(templateName) {
-      const message = 'Здравствуйте! Я с сайта Nexcel. Отправьте мне, пожалуйста, бесплатный шаблон «' + templateName + '».';
-      window.open('https://wa.me/77711369095?text=' + encodeURIComponent(message), '_blank', 'noopener,noreferrer');
-    }
-  </script>
+  <script src="/assets/templates.js" defer></script>
   <script src="/assets/include-partials.js" defer></script>
+  <script src="/assets/actions.js" defer></script>
 </body>
 </html>
