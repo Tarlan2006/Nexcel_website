@@ -18,11 +18,8 @@ body {
 }
 
 /* Same optical settings in cards and teaser; intrinsic ratios stay unchanged. */
-.partner-logo, .partner-logos {
-  --partner-logo-slot-width: 10rem;
-  --partner-logo-gap: 1rem;
-}
 .partner-logo {
+  --partner-logo-slot-width: 10rem;
   --partner-logo-width: var(--partner-logo-slot-width);
   display: flex;
   align-items: center;
@@ -37,16 +34,6 @@ body {
   max-width: 100%;
   height: auto;
 }
-.partner-logos {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  align-items: center;
-  justify-items: center;
-  gap: var(--partner-logo-gap);
-  width: calc(2 * var(--partner-logo-slot-width) + var(--partner-logo-gap));
-  max-width: 100%;
-}
-
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -100,14 +87,15 @@ body {
 }
 
 /* Equal groups include their trailing gap, so half a track is one exact cycle. */
-.clients-marquee { position: relative; overflow: hidden; }
-.clients-track {
+.clients-marquee, .partner-marquee { position: relative; overflow: hidden; }
+.clients-track, .partner-marquee-track {
   display: flex;
   width: max-content;
   animation: clients-scroll 40s linear infinite;
   will-change: transform;
 }
-.clients-group {
+.partner-marquee-track { animation-duration: 30s; }
+.clients-group, .partner-marquee-group {
   display: flex;
   flex-shrink: 0;
   align-items: center;
@@ -129,20 +117,29 @@ body {
 .clients-item:hover img { filter: grayscale(0); opacity: 1; }
 .clients-item:hover span { color: #141619; }
 .clients-marquee:hover .clients-track { animation-play-state: paused; }
+@media (hover: hover) {
+  .partner-marquee:hover .partner-marquee-track { animation-play-state: paused; }
+}
 @keyframes clients-scroll {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
 }
 @media (min-width: 640px) {
-  .clients-group { gap: 4rem; padding-right: 4rem; }
+  .clients-group, .partner-marquee-group { gap: 4rem; padding-right: 4rem; }
+}
+@media (min-width: 1024px) {
+  /* The five partner slots and their gaps must fill the widest viewport. */
+  .partner-marquee-group { gap: 5.5rem; padding-right: 5.5rem; }
 }
 @media (max-width: 639px) {
   .clients-track { animation-duration: 32s; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .clients-track { width: 100%; animation: none; transform: none; will-change: auto; }
-  .clients-group { width: 100%; flex-wrap: wrap; justify-content: center; gap: 2rem 2.5rem; padding-right: 0; }
-  .clients-group[aria-hidden="true"], .clients-fade { display: none; }
+  .clients-track, .partner-marquee-track { width: 100%; animation: none; transform: none; will-change: auto; }
+  .clients-group, .partner-marquee-group { width: 100%; flex-wrap: wrap; justify-content: center; gap: 2rem 2.5rem; padding-right: 0; }
+  .clients-group[aria-hidden="true"], .partner-marquee-group[aria-hidden="true"], .clients-fade, .partner-marquee-fade { display: none; }
+  .partner-marquee-group { gap: 0.5rem 1rem; }
+  .partner-marquee-group .partner-logo { max-width: calc(50% - 0.5rem); }
 }
 
 /* The final text reserves width and is the only number read by screen readers. */
