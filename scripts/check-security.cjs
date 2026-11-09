@@ -7,6 +7,8 @@ const { execFileSync } = require('node:child_process');
 const { chromium } = require('@playwright/test');
 
 const base = process.argv[2] || 'http://127.0.0.1:8787';
+const siteOrigin = new URL(base).origin;
+const metrikaTag = 'https://mc.yandex.ru/metrika/tag.js';
 const root = path.resolve(__dirname, '..');
 
 async function run() {
@@ -28,9 +30,15 @@ async function run() {
   try {
     for (const width of [390, 1440]) {
       const context = await browser.newContext({ viewport: { width, height: 900 }, reducedMotion: 'reduce' });
-      // Keep the test deterministic and prevent all external communication.
+      // Load Metrika scripts under CSP while keeping analytics and contact traffic isolated.
       await context.route('**/*', route => {
-        if (new URL(route.request().url()).origin === new URL(base).origin) return route.continue();
+        const request = route.request();
+        const url = new URL(request.url());
+        if (url.origin === siteOrigin) return route.continue();
+        const metrikaScript = url.origin === 'https://mc.yandex.ru' && url.pathname.startsWith('/metrika/');
+        if (request.resourceType() === 'script' && (metrikaScript || url.origin === 'https://yastatic.net')) {
+          return route.continue();
+        }
         return route.abort();
       });
       await context.addInitScript(() => {
@@ -45,7 +53,10 @@ async function run() {
       const errors = [];
       page.on('pageerror', error => errors.push(error.message));
       for (const route of routes) {
-        const response = await page.goto(new URL(route, base).href);
+        const [, response] = await Promise.all([
+          page.waitForResponse(response => response.ok() && response.url().split('?')[0] === metrikaTag),
+          page.goto(new URL(route, base).href)
+        ]);
         assert.equal(response.status(), 200, route);
         assert.ok(response.headers()['content-security-policy'], `${route}: enforced CSP`);
         await page.locator('header nav').first().waitFor({ state: 'attached' });

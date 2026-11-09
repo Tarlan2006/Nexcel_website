@@ -18,9 +18,21 @@ function checkSecurityHeaders(response) {
   assert.equal(response.headers.get('referrer-policy'), 'strict-origin-when-cross-origin');
   assert.equal(response.headers.get('permissions-policy'), 'camera=(), microphone=(), geolocation=()');
   assert.equal(response.headers.get('strict-transport-security'), 'max-age=31536000');
-  const csp = response.headers.get('content-security-policy') || '';
-  for (const directive of ["default-src 'none'", "script-src 'self'", "script-src-attr 'none'", "object-src 'none'", "base-uri 'none'", "form-action 'none'", "frame-ancestors 'self'"]) {
-    assert.ok(csp.split(';').map(value => value.trim()).includes(directive), `Missing CSP directive: ${directive}`);
+  const csp = (response.headers.get('content-security-policy') || '').split(';').map(value => value.trim());
+  const requiredDirectives = [
+    "default-src 'none'",
+    "script-src 'self' https://mc.yandex.ru https://yastatic.net",
+    "script-src-attr 'none'",
+    "img-src 'self' data: https://mc.yandex.ru",
+    "connect-src 'self' https://mc.yandex.ru https://mc.yandex.md/cc",
+    'frame-src blob: https://mc.yandex.ru https://mc.yandex.md/metrika/zzlc.html',
+    "object-src 'none'",
+    "base-uri 'none'",
+    "form-action 'none'",
+    "frame-ancestors 'self'"
+  ];
+  for (const directive of requiredDirectives) {
+    assert.ok(csp.includes(directive), `Missing CSP directive: ${directive}`);
   }
   assert.equal(response.headers.get('access-control-allow-origin'), null);
 }
