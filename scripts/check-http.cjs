@@ -6,7 +6,7 @@ const path = require('node:path');
 const base = process.argv[2] || 'http://127.0.0.1:5500';
 const cloudflare = process.argv.includes('--cloudflare');
 const root = path.resolve(__dirname, '..');
-const serviceRoutes = ['/avtomatizaciya-excel'];
+const serviceRoutes = ['/avtomatizaciya-excel', '/seo'];
 let checks = 0;
 
 async function request(route, options = {}) {

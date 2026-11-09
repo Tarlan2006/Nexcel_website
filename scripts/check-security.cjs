@@ -10,7 +10,7 @@ const base = process.argv[2] || 'http://127.0.0.1:8787';
 const siteOrigin = new URL(base).origin;
 const metrikaTag = 'https://mc.yandex.ru/metrika/tag.js';
 const root = path.resolve(__dirname, '..');
-const serviceRoutes = ['/avtomatizaciya-excel'];
+const serviceRoutes = ['/avtomatizaciya-excel', '/seo'];
 
 async function checkServicePage(page, route) {
   assert.equal(await page.locator('h1').count(), 1, `${route}: exactly one H1`);

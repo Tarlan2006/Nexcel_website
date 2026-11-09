@@ -9,7 +9,7 @@ const fs = require('node:fs/promises');
   const failures = [];
   try {
     for (const width of [320, 390, 768, 1000, 1024, 1150, 1280, 1440, 1920]) {
-      for (const route of ['/', '/licensing', '/avtomatizaciya-excel', '/templates', '/faq']) {
+      for (const route of ['/', '/licensing', '/avtomatizaciya-excel', '/seo', '/templates', '/faq']) {
         const page = await context.newPage();
         await page.setViewportSize({ width, height: 900 });
         await page.goto('http://127.0.0.1:5500' + route);
