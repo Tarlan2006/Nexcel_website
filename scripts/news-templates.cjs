@@ -104,6 +104,7 @@ const CTA = `        <div class="border border-gridBorder rounded-lg bg-white p-
         </div>`;
 
 function relatedSection(p) {
+  if (/^## Читайте также[ \t]*$/m.test(p.body)) return '';
   const links = p.relatedPosts.map((related) => `            <li><a href="/news/${esc(related.slug)}" class="text-emeraldAccent font-semibold hover:underline">${esc(related.title)}</a></li>`).join('\n');
   return `        <section aria-labelledby="related-heading" class="border border-gridBorder rounded-lg bg-white p-4 sm:p-6 space-y-3 font-sans">
           <h2 id="related-heading" class="font-heading font-bold text-base sm:text-lg text-darkBg">Смотрите также</h2>
