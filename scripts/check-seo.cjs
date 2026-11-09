@@ -64,6 +64,8 @@ async function inspectHtml(page, html) {
       // FAQ answers hidden until a user opens the question still count as page copy.
       if (!element.matches('.faq-answer')) element.remove();
     }
+    // Count the About page's prose separately from its diagram and step labels.
+    for (const element of copy.querySelectorAll('#scheme-flow, #work-steps')) element.remove();
     const walker = doc.createTreeWalker(copy, NodeFilter.SHOW_TEXT);
     const textNodes = [];
     while (walker.nextNode()) textNodes.push(walker.currentNode.textContent);
