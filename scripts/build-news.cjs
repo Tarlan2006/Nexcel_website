@@ -17,12 +17,36 @@ const serviceTitles = new Map([
   ['seo', 'SEO-аудит и продвижение сайтов']
 ]);
 
-function gitLastmod(...files) {
-  const result = spawnSync('git', ['log', '-1', '--format=%cs', '--', ...files], {
+function gitText(...args) {
+  const result = spawnSync('git', args, {
     cwd: root, encoding: 'utf8', windowsHide: true
   });
-  const date = result.stdout?.trim();
-  return result.status === 0 && /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : '';
+  return result.status === 0 ? result.stdout.trim() : '';
+}
+
+function isDate(date) {
+  return typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date) &&
+    Number.isFinite(Date.parse(date)) && new Date(date).toISOString().slice(0, 10) === date;
+}
+
+function pageLastmods(files) {
+  const snapshotPath = path.join(root, 'content', 'lastmod.json');
+  const previous = fs.existsSync(snapshotPath) ? fs.readFileSync(snapshotPath, 'utf8') : '';
+  const snapshot = previous ? JSON.parse(previous) : {};
+  // A shallow checkout can report the boundary commit as a change to every file.
+  const hasHistory = fs.existsSync(path.join(root, '.git')) &&
+    gitText('rev-parse', '--is-shallow-repository') === 'false';
+  const dates = {};
+  for (const file of [...files].sort()) {
+    const date = (hasHistory ? gitText('log', '-1', '--format=%cs', '--', file) : '') || snapshot[file];
+    if (!isDate(date)) throw new Error('Missing or invalid lastmod for ' + file);
+    dates[file] = date;
+  }
+  if (hasHistory && !process.env.CI) {
+    const next = JSON.stringify(dates, null, 2) + '\n';
+    if (previous.replace(/\r\n/g, '\n') !== next) fs.writeFileSync(snapshotPath, next, 'utf8');
+  }
+  return dates;
 }
 
 const lastmodTag = date => date ? '\n    <lastmod>' + date + '</lastmod>' : '';
@@ -47,7 +71,7 @@ if (fs.existsSync(contentDir)) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(post.date)) throw new Error(`${file}: date must be YYYY-MM-DD`);
     for (const key of ['date', 'updated']) {
       if (post[key] === undefined && key === 'updated') continue;
-      if (typeof post[key] !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(post[key]) || !Number.isFinite(Date.parse(post[key])) || new Date(post[key]).toISOString().slice(0, 10) !== post[key]) throw new Error(`${file}: invalid ${key}`);
+      if (!isDate(post[key])) throw new Error(`${file}: invalid ${key}`);
     }
     if (post.draft !== undefined && typeof post.draft !== 'boolean') throw new Error(`${file}: draft must be boolean`);
     if (post.image !== undefined) {
@@ -63,7 +87,6 @@ if (fs.existsSync(contentDir)) {
       if (metadata.width !== 1200 || metadata.height !== 630) throw new Error(`${file}: ogImage must be 1200x630`);
     }
     if (post.draft) continue;
-    post.source = 'content/news/' + file;
     posts.push(post);
   }
 }
@@ -93,18 +116,19 @@ fs.mkdirSync(path.join(dist, 'news'), { recursive: true });
 fs.writeFileSync(path.join(dist, 'news.html'), indexPage(posts));
 for (const p of posts) fs.writeFileSync(path.join(dist, 'news', `${p.slug}.html`), postPage(p));
 
-// Read dates from the source files' Git history. A source archive has no Git dates.
+// Page dates come from their own source history; articles use their editorial dates.
 const smPath = path.join(dist, 'sitemap.xml');
 let sm = fs.readFileSync(smPath, 'utf8').replace(/\s*<url>\s*<loc>https:\/\/nexcel\.kz\/news(?:\/[^<]*)?<\/loc>[\s\S]*?<\/url>/g, '');
-sm = sm.replace(/(<loc>https:\/\/nexcel\.kz\/([a-z0-9-]*)<\/loc>)(?:\s*<lastmod>[^<]*<\/lastmod>)?/g,
-  (_, loc, slug) => loc + lastmodTag(gitLastmod((slug || 'index') + '.html')));
+const pageLocation = /(<loc>https:\/\/nexcel\.kz\/([a-z0-9-]*)<\/loc>)(?:\s*<lastmod>[^<]*<\/lastmod>)?/g;
+const sourceFile = slug => (slug || 'index') + '.html';
+const dates = pageLastmods([...sm.matchAll(pageLocation)].map(match => sourceFile(match[2])));
+sm = sm.replace(pageLocation, (_, loc, slug) => loc + lastmodTag(dates[sourceFile(slug)]));
 const latestPostDate = posts.reduce((latest, post) => {
   const modified = post.updated || post.date;
   return modified > latest ? modified : latest;
 }, '');
-const newsLastmod = gitLastmod('scripts/build-news.cjs', 'scripts/news-templates.cjs', ...posts.map(post => post.source)) || latestPostDate;
-const urls = [`  <url>\n    <loc>${SITE}/news</loc>${lastmodTag(newsLastmod)}\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`]
-  .concat(posts.map((p) => `  <url>\n    <loc>${SITE}/news/${p.slug}</loc>${lastmodTag(gitLastmod(p.source) || p.updated || p.date)}\n    <priority>0.6</priority>\n  </url>`));
+const urls = [`  <url>\n    <loc>${SITE}/news</loc>${lastmodTag(latestPostDate)}\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`]
+  .concat(posts.map((p) => `  <url>\n    <loc>${SITE}/news/${p.slug}</loc>${lastmodTag(p.updated || p.date)}\n    <priority>0.6</priority>\n  </url>`));
 sm = sm.replace('</urlset>', urls.join('\n') + '\n</urlset>');
 fs.writeFileSync(smPath, sm);
 

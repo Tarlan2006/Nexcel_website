@@ -1,5 +1,6 @@
 // Validate the built documents and print the metadata used in the PR review.
 const assert = require('node:assert/strict');
+const { existsSync } = require('node:fs');
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const { spawnSync } = require('node:child_process');
@@ -15,8 +16,8 @@ const faqCounts = new Map([
 ]);
 const jargon = /оцифров[\p{L}]*|mini[\p{Pd}\s]erp|инспектор\s+направлений|доказательн[\p{L}]*\s+баз[\p{L}]*/iu;
 
-function gitDate(files) {
-  const result = spawnSync('git', ['log', '-1', '--format=%cs', '--', ...files], {
+function gitText(...args) {
+  const result = spawnSync('git', args, {
     cwd: root, encoding: 'utf8', windowsHide: true
   });
   return result.status === 0 ? result.stdout.trim() : '';
@@ -25,10 +26,7 @@ function gitDate(files) {
 async function getPosts() {
   const folder = path.join(root, 'content', 'news');
   const files = (await fs.readdir(folder)).filter(file => file.endsWith('.json'));
-  const posts = await Promise.all(files.map(async file => ({
-    ...JSON.parse(await fs.readFile(path.join(folder, file), 'utf8')),
-    source: 'content/news/' + file
-  })));
+  const posts = await Promise.all(files.map(async file => JSON.parse(await fs.readFile(path.join(folder, file), 'utf8'))));
   return new Map(posts.filter(post => !post.draft).map(post => ['/news/' + post.slug, post]));
 }
 
@@ -84,6 +82,9 @@ async function inspectHtml(page, html) {
 
 async function run() {
   const posts = await getPosts();
+  const pageDates = JSON.parse(await fs.readFile(path.join(root, 'content', 'lastmod.json'), 'utf8'));
+  const hasHistory = existsSync(path.join(root, '.git')) && gitText('rev-parse', '--is-shallow-repository') === 'false';
+  const latestPostDate = [...posts.values()].map(post => post.updated || post.date).sort().at(-1);
   const rootFiles = (await fs.readdir(dist)).filter(file => file.endsWith('.html')).sort();
   const newsFiles = (await fs.readdir(path.join(dist, 'news'))).filter(file => file.endsWith('.html')).sort();
   const files = rootFiles.concat(newsFiles.map(file => 'news/' + file));
@@ -132,11 +133,13 @@ async function run() {
           assert.equal(crumb.itemListElement[0].item, site + '/');
           assert.equal(crumb.itemListElement.at(-1).item, site + route);
         }
-        const sources = route === '/news'
-          ? ['scripts/build-news.cjs', 'scripts/news-templates.cjs', ...[...posts.values()].map(post => post.source)]
-          : [posts.get(route)?.source || file];
-        const lastmod = gitDate(sources);
-        if (lastmod) assert.equal(sitemap.get(site + route), lastmod, route + ': lastmod from Git');
+        const post = posts.get(route);
+        const lastmod = post ? post.updated || post.date : route === '/news' ? latestPostDate : pageDates[file];
+        assert.match(lastmod, /^\d{4}-\d{2}-\d{2}$/, route + ': lastmod format');
+        assert.equal(sitemap.get(site + route), lastmod, route + ': sitemap lastmod');
+        if (hasHistory && !post && route !== '/news') {
+          assert.equal(lastmod, gitText('log', '-1', '--format=%cs', '--', file), route + ': page date matches Git');
+        }
       }
 
       if (faqCounts.has(route)) {
