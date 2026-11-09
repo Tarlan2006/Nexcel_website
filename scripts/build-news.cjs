@@ -9,6 +9,10 @@ const root = path.resolve(__dirname, '..');
 const dist = path.join(root, 'dist');
 const contentDir = path.join(root, 'content', 'news');
 const SITE = 'https://nexcel.kz';
+const serviceTitles = new Map([
+  ['avtomatizaciya-excel', 'Автоматизация Excel'],
+  ['seo', 'SEO-оптимизация и продвижение сайтов']
+]);
 
 async function buildNews() {
 
@@ -44,10 +48,25 @@ if (fs.existsSync(contentDir)) {
     posts.push(post);
   }
 }
-const slugs = new Set();
+const postsBySlug = new Map();
 for (const p of posts) {
-  if (slugs.has(p.slug)) throw new Error(`Duplicate slug: ${p.slug}`);
-  slugs.add(p.slug);
+  if (postsBySlug.has(p.slug)) throw new Error(`Duplicate slug: ${p.slug}`);
+  postsBySlug.set(p.slug, p);
+}
+
+for (const p of posts) {
+  if (!Array.isArray(p.related) || p.related.length !== 2 || new Set(p.related).size !== 2) {
+    throw new Error(`${p.slug}: expected two distinct related articles`);
+  }
+  p.relatedPosts = p.related.map((slug) => {
+    const related = postsBySlug.get(slug);
+    if (!related || related === p) throw new Error(`${p.slug}: invalid related article "${slug}"`);
+    return related;
+  });
+  p.relatedServiceTitle = serviceTitles.get(p.relatedService);
+  if (!p.relatedServiceTitle || !fs.existsSync(path.join(dist, p.relatedService + '.html'))) {
+    throw new Error(`${p.slug}: invalid related service "${p.relatedService}"`);
+  }
 }
 posts.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
 

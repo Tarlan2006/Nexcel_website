@@ -93,6 +93,17 @@ const CTA = `        <div class="border border-gridBorder rounded-lg bg-white p-
           </div>
         </div>`;
 
+function relatedSection(p) {
+  const links = p.relatedPosts.map((related) => `            <li><a href="/news/${esc(related.slug)}" class="text-emeraldAccent font-semibold hover:underline">${esc(related.title)}</a></li>`).join('\n');
+  return `        <section aria-labelledby="related-heading" class="border border-gridBorder rounded-lg bg-white p-4 sm:p-6 space-y-3 font-sans">
+          <h2 id="related-heading" class="font-heading font-bold text-base sm:text-lg text-darkBg">Смотрите также</h2>
+          <ul class="space-y-2 text-sm sm:text-base leading-relaxed">
+${links}
+          </ul>
+          <p class="text-sm sm:text-base text-textMuted">Услуга: <a href="/${esc(p.relatedService)}" class="text-emeraldAccent font-semibold hover:underline">${esc(p.relatedServiceTitle)}</a></p>
+        </section>`;
+}
+
 function postPage(p) {
   const path = `/news/${p.slug}`;
   const main = `    <article class="py-10 sm:py-14 lg:py-20 border-b border-gridBorder bg-paper">
@@ -107,6 +118,7 @@ function postPage(p) {
         ${renderBody(p.body)}
         </div>
 ${CTA}
+${relatedSection(p)}
       </div>
     </article>`;
   return shell({

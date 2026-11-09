@@ -1,5 +1,10 @@
 {
   "slug": "protokoly-poverki-schetchikov-vody",
+  "related": [
+    "podbor-zapchastej-raschet-dokumenty-v-edinoj-sisteme",
+    "5-priznakov-chto-excel-pora-avtomatizirovat"
+  ],
+  "relatedService": "avtomatizaciya-excel",
   "date": "2026-10-12",
   "title": "Протоколы поверки счётчиков воды: из рутины в таблицу",
   "excerpt": "Лаборатория тратила ~15 минут на протокол. Собрали базу в Google Sheets и автоматизировали: 6 000 протоколов за ~3 часа (оценка).",

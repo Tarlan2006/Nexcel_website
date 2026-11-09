@@ -1,5 +1,10 @@
 {
   "slug": "logistika-uchet-iz-excel-v-edinuyu-sistemu",
+  "related": [
+    "otchetnost-50-tochek-v-odnoj-sisteme",
+    "zayavki-na-zapchasti-iz-excel-v-obshchuyu-sistemu"
+  ],
+  "relatedService": "avtomatizaciya-excel",
   "date": "2026-10-19",
   "title": "Логистика: из хаоса в Excel в единый учёт",
   "excerpt": "Международная логистическая компания вела рейсы и оплаты в десятках таблиц. Мы собрали единую систему на Google Sheets: удалённо, из Астаны.",

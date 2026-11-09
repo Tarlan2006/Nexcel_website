@@ -1,5 +1,10 @@
 {
   "slug": "zayavki-na-zapchasti-iz-excel-v-obshchuyu-sistemu",
+  "related": [
+    "podbor-zapchastej-raschet-dokumenty-v-edinoj-sisteme",
+    "logistika-uchet-iz-excel-v-edinuyu-sistemu"
+  ],
+  "relatedService": "avtomatizaciya-excel",
   "date": "2026-10-30",
   "title": "Заявки на запчасти аграрной компании: из Excel-файла в систему",
   "excerpt": "Заявки на запчасти держались на одном Excel-файле. Мы перенесли их в общую систему на Google Таблицах: от заявки до оплаты.",

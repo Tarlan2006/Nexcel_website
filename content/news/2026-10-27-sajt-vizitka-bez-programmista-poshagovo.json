@@ -1,5 +1,10 @@
 {
   "slug": "sajt-vizitka-bez-programmista-poshagovo",
+  "related": [
+    "podbor-zapchastej-raschet-dokumenty-v-edinoj-sisteme",
+    "logistika-uchet-iz-excel-v-edinuyu-sistemu"
+  ],
+  "relatedService": "seo",
   "date": "2026-10-27",
   "title": "Сайт-визитка без программиста: пошаговая инструкция",
   "excerpt": "Как собрать первый сайт без разработчика и без оплаты хостинга: Gemini Canvas, файл index.html и Netlify. И что эта схема не даёт.",

@@ -1,5 +1,10 @@
 {
   "slug": "avtomatizaciya-cash-flow-autstaffing-zakazchik-iz-chekhii",
+  "related": [
+    "otchetnost-50-tochek-v-odnoj-sisteme",
+    "5-priznakov-chto-excel-pora-avtomatizirovat"
+  ],
+  "relatedService": "avtomatizaciya-excel",
   "date": "2026-11-03",
   "title": "Cash flow для аутстаффинга: задача из Чехии, решение в Excel",
   "excerpt": "Чешская компания в сфере аутстаффинга попросила собрать управленческий учёт с учётом её специфики. Мы разработали инструмент в Excel, где отчёты cash flow обновляются автоматически.",

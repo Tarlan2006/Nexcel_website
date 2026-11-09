@@ -1,5 +1,10 @@
 {
   "slug": "otchetnost-50-tochek-v-odnoj-sisteme",
+  "related": [
+    "avtomatizaciya-cash-flow-autstaffing-zakazchik-iz-chekhii",
+    "logistika-uchet-iz-excel-v-edinuyu-sistemu"
+  ],
+  "relatedService": "avtomatizaciya-excel",
   "date": "2026-10-08",
   "title": "Отчётность 50+ точек: из WhatsApp в одну систему",
   "excerpt": "Как мы собрали отчётность сети шиномонтажей, автомоек и магазинов в одну систему на Google Sheets: у каждого направления своя страница, у владельца отдельная, отчёты собираются в один клик.",
