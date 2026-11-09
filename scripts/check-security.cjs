@@ -10,6 +10,35 @@ const base = process.argv[2] || 'http://127.0.0.1:8787';
 const siteOrigin = new URL(base).origin;
 const metrikaTag = 'https://mc.yandex.ru/metrika/tag.js';
 const root = path.resolve(__dirname, '..');
+const serviceRoutes = ['/avtomatizaciya-excel'];
+
+async function checkServicePage(page, route) {
+  assert.equal(await page.locator('h1').count(), 1, `${route}: exactly one H1`);
+  const canonical = page.locator('link[rel="canonical"]');
+  assert.equal(await canonical.count(), 1, `${route}: exactly one canonical`);
+  assert.equal(await canonical.getAttribute('href'), `https://nexcel.kz${route}`);
+  const entities = await page.locator('script[type="application/ld+json"]').evaluateAll(scripts =>
+    scripts.flatMap(script => {
+      const data = JSON.parse(script.textContent);
+      return data['@graph'] || data;
+    })
+  );
+  assert.ok(entities.some(entity => entity['@type'] === 'Service'), `${route}: Service schema`);
+  const faq = entities.find(entity => entity['@type'] === 'FAQPage');
+  assert.ok(faq, `${route}: FAQPage schema`);
+  const questions = page.locator('#service-faq details');
+  assert.equal(await questions.count(), 4, `${route}: FAQ item count`);
+  for (const [index, item] of faq.mainEntity.entries()) {
+    const question = questions.nth(index);
+    const summary = question.locator('summary');
+    const answer = question.locator('p');
+    assert.equal((await summary.innerText()).trim(), item.name, `${route}: FAQ question ${index + 1}`);
+    await summary.click();
+    assert.ok(await answer.isVisible(), `${route}: FAQ answer ${index + 1} is visible`);
+    assert.equal((await answer.innerText()).trim(), item.acceptedAnswer.text, `${route}: FAQ answer ${index + 1}`);
+  }
+  assert.equal(faq.mainEntity.length, 4, `${route}: FAQ schema item count`);
+}
 
 async function run() {
   const secrets = ['.env', '.env.production', '.dev.vars', '.dev.vars.production', 'nested/.env.local'];
@@ -20,7 +49,7 @@ async function run() {
 
   const articles = (await fs.readdir(path.join(root, 'dist', 'news')))
     .filter(file => file.endsWith('.html')).map(file => '/news/' + file.slice(0, -5));
-  const routes = ['/', '/licensing', '/templates', '/faq', '/news', ...articles];
+  const routes = ['/', '/licensing', ...serviceRoutes, '/templates', '/faq', '/news', ...articles];
   const browser = await chromium.launch({
     headless: true,
     ...(process.env.BROWSER_CHANNEL ? { channel: process.env.BROWSER_CHANNEL } : {})
@@ -67,6 +96,7 @@ async function run() {
         assert.equal(unsafe, false, `${route}: executable inline code`);
         assert.deepEqual(await page.evaluate(() => window.securityViolations), [], `${route}: CSP violations`);
         await page.locator('script[type="application/ld+json"]').evaluateAll(elements => elements.forEach(el => JSON.parse(el.textContent)));
+        if (serviceRoutes.includes(route)) await checkServicePage(page, route);
 
         if (width < 1024) {
           const toggle = page.locator('#mobile-menu-toggle');

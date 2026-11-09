@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./index.html', './licensing.html', './templates.html', './faq.html', './partials/*.html', './assets/include-partials.js', './assets/home.js', './scripts/news-templates.cjs'],
+  content: ['./index.html', './licensing.html', './avtomatizaciya-excel.html', './templates.html', './faq.html', './partials/*.html', './assets/include-partials.js', './assets/home.js', './scripts/news-templates.cjs'],
   safelist: [
     { pattern: /^(bg|text|border)-(paper|paperSecondary|darkBg|textMain|textMuted|emeraldAccent|emeraldHover|emeraldLight|gridBorder|gridBorderDark)(\/.*)?$/ },
     'hidden',

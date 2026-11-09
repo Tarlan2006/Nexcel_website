@@ -6,6 +6,7 @@ const path = require('node:path');
 const base = process.argv[2] || 'http://127.0.0.1:5500';
 const cloudflare = process.argv.includes('--cloudflare');
 const root = path.resolve(__dirname, '..');
+const serviceRoutes = ['/avtomatizaciya-excel'];
 let checks = 0;
 
 async function request(route, options = {}) {
@@ -38,7 +39,8 @@ function checkSecurityHeaders(response) {
 }
 
 async function run() {
-  for (const [route, file] of [['/partials/header.html', 'partials/header.html'], ['/partials/footer.html', 'partials/footer.html'], ['/assets/include-partials.js', 'assets/include-partials.js'], ['/', 'index.html'], ['/licensing', 'licensing.html'], ['/templates', 'templates.html'], ['/faq', 'faq.html'], ['/assets/faq.js', 'assets/faq.js'], ['/assets/styles.css', 'assets/styles.css'], ['/robots.txt', 'robots.txt'], ['/sitemap.xml', 'sitemap.xml'], ['/llms.txt', 'llms.txt']]) {
+  const servicePages = serviceRoutes.map(route => [route, `${route.slice(1)}.html`]);
+  for (const [route, file] of [['/partials/header.html', 'partials/header.html'], ['/partials/footer.html', 'partials/footer.html'], ['/assets/include-partials.js', 'assets/include-partials.js'], ['/', 'index.html'], ['/licensing', 'licensing.html'], ...servicePages, ['/templates', 'templates.html'], ['/faq', 'faq.html'], ['/assets/faq.js', 'assets/faq.js'], ['/assets/styles.css', 'assets/styles.css'], ['/robots.txt', 'robots.txt'], ['/sitemap.xml', 'sitemap.xml'], ['/llms.txt', 'llms.txt']]) {
     const response = await request(route, cloudflare && route.startsWith('/partials/') ? { redirect: 'follow' } : {});
     assert.equal(response.status, 200, route);
     assert.equal(await response.text(), await fs.readFile(path.join(root, cloudflare ? 'dist' : '.', file), 'utf8'), `${route}: body`);
@@ -50,7 +52,8 @@ async function run() {
     }
     checks++;
   }
-  for (const [route, target] of [['/index.html', '/'], ['/licensing.html', '/licensing'], ['/licensing/', '/licensing'], ['/templates.html', '/templates'], ['/faq.html', '/faq'], ['/faq/', '/faq'], ['/faq.html?source=check', '/faq?source=check'], ['/templates/', '/templates'], ['/templates.html?source=check', '/templates?source=check']]) {
+  const serviceRedirects = serviceRoutes.flatMap(route => [[`${route}.html`, route], [`${route}/`, route], [`${route}.html?source=check`, `${route}?source=check`]]);
+  for (const [route, target] of [['/index.html', '/'], ['/licensing.html', '/licensing'], ['/licensing/', '/licensing'], ...serviceRedirects, ['/templates.html', '/templates'], ['/faq.html', '/faq'], ['/faq/', '/faq'], ['/faq.html?source=check', '/faq?source=check'], ['/templates/', '/templates'], ['/templates.html?source=check', '/templates?source=check']]) {
     const response = await request(route);
     assert.equal(response.status, 307, `${route}: redirect`);
     const location = new URL(response.headers.get('location'), base);
