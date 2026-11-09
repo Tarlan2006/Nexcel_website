@@ -20,12 +20,10 @@ async function checkClients(browser) {
       assert(!await section.evaluate(el => el.contains(document.activeElement)));
     }
     await section.scrollIntoViewIfNeeded();
-    await page.locator('#clients img').evaluateAll(images => Promise.all(images.map(img => img.decode())));
     assert.equal(await originals.count(), 8);
     assert.equal(await page.locator('.clients-group[aria-hidden] img[alt=""]').count(), 8);
     assert.equal(await section.locator('[tabindex]').count(), 0);
-    assert.equal(await section.locator('img[loading="lazy"]').count(), 0);
-    assert.equal(await section.locator('img[loading="eager"]').count(), 16);
+    assert.equal(await section.locator('img[loading="lazy"][decoding="async"]').count(), 16);
     assert.equal(await originals.locator('img[alt=""]').count(), 3);
     assert.equal(await originals.locator('span').count(), 3);
     assert(await section.locator('h2').evaluate(el => {
@@ -37,8 +35,21 @@ async function checkClients(browser) {
     assert(await originals.locator('span').evaluateAll(labels => labels.every(el => getComputedStyle(el).whiteSpace === 'nowrap' && el.scrollWidth <= el.clientWidth)));
     assert.equal(await section.locator('h2').textContent(), 'Нам доверяют организации из госсектора, образования и бизнеса');
     assert.deepEqual(await originals.locator('span').allTextContents(), ['Правительство для граждан', 'КазНУ им. аль-Фараби', 'Nazarbayev University']);
-    assert(await page.locator('#clients img').evaluateAll(images => images.every(img =>
-      img.naturalWidth === Number(img.getAttribute('width')) && img.naturalHeight === Number(img.getAttribute('height')))));
+    assert(await section.locator('img').evaluateAll(async images => {
+      // Measure each source without waiting for its offscreen lazy copies to enter the carousel viewport.
+      const sources = new Map();
+      const matches = await Promise.all(images.map(async img => {
+        if (!sources.has(img.src)) {
+          const source = new Image();
+          source.src = img.src;
+          sources.set(img.src, source.decode().then(() => source));
+        }
+        const source = await sources.get(img.src);
+        return source.naturalWidth === Number(img.getAttribute('width')) &&
+          source.naturalHeight === Number(img.getAttribute('height'));
+      }));
+      return matches.every(Boolean);
+    }));
     await page.mouse.move(0, 0);
     await page.waitForTimeout(260);
     assert(await originals.locator('img.clients-logo-fine').evaluateAll(images => images.length === 2 && images.every(el => {
@@ -90,7 +101,7 @@ async function checkClients(browser) {
     await page.emulateMedia({reducedMotion:'no-preference'});
     assert.equal(await track.evaluate(el => getComputedStyle(el).animationName), 'clients-scroll');
     await page.close();
-    console.log(`PASS clients ${width}px: motion, seamless loop, hover pause, no tab stops, eager images, logos, reduced motion, no overflow.`);
+    console.log(`PASS clients ${width}px: motion, seamless loop, hover pause, no tab stops, lazy images, logos, reduced motion, no overflow.`);
   }
 }
 
