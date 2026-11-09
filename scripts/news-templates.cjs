@@ -196,7 +196,7 @@ ${cards}
       '@id': `${SITE}/news#page`,
       name: 'Кейсы и статьи Nexcel Solutions',
       url: `${SITE}/news`,
-      publisher: { '@id': ORGANIZATION_ID },
+      publisher: { '@id': ORGANIZATION_ID, '@type': 'Organization', name: BRAND, url: SITE + '/' },
       inLanguage: 'ru'
     }
   });
