@@ -171,7 +171,7 @@ async function checkLinks(page, mobile) {
   await page.waitForURL(base + '/');
   await page.locator('#site-header-row').waitFor();
   await expect(nav.locator('a[href="/o-kompanii"]')).toHaveCount(0);
-  await page.locator('#site-footer a[href="/o-kompanii"]').click();
+  await page.locator('#site-footer nav[aria-label="Компания"] a[href="/o-kompanii"]').click();
   await page.waitForURL(base + '/o-kompanii');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('О компании Nexcel Solutions');
 

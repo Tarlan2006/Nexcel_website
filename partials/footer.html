@@ -1,7 +1,7 @@
 <footer class="bg-darkBg text-slate-400 font-sans text-xs border-t border-slate-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12 space-y-6 sm:space-y-8">
 
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-6 sm:gap-8">
+      <div class="grid grid-cols-2 gap-x-4 gap-y-6 sm:gap-y-8 md:grid-cols-5 md:gap-x-6 lg:gap-x-8">
 
         <!-- Brand Info -->
         <div class="space-y-3 col-span-2">
@@ -11,7 +11,9 @@
           <p class="text-slate-400 text-xs leading-relaxed max-w-md font-sans">
             Автоматизируем отчёты, учёт и заявки для бизнеса и госорганизаций Казахстана. Разрабатываем Telegram-ботов, внедряем ИИ и поставляем лицензии на ПО.
           </p>
-          <a href="/o-kompanii" class="inline-block hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emeraldAccent">О компании</a>
+          <a href="/o-kompanii" class="inline-flex min-h-11 items-center gap-1.5 rounded text-sm font-semibold text-emeraldOnDark underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emeraldOnDark md:min-h-0">
+            Подробнее о компании <span aria-hidden="true">→</span>
+          </a>
           <div class="flex items-center gap-2 pt-1 flex-wrap">
             <span class="px-2 py-1 bg-slate-900 border border-slate-800 rounded text-[10px] text-slate-400">ЭСФ / АВР</span>
             <span class="px-2 py-1 bg-slate-900 border border-slate-800 rounded text-[10px] text-slate-400">B2B / B2G</span>
@@ -39,23 +41,30 @@
           </div>
         </div>
 
-        <!-- Directions -->
-        <div class="space-y-2 sm:space-y-3 min-w-0">
-          <div class="text-white font-semibold text-[11px] uppercase tracking-wider">Направления</div>
-          <ul class="space-y-1.5 sm:space-y-2 text-slate-400 text-[11px] sm:text-xs">
-            <li><a href="/avtomatizaciya-excel" class="hover:text-emeraldAccent transition-colors">Автоматизация Excel</a></li>
-            <li><a href="/telegram-boty" class="hover:text-emeraldAccent transition-colors">Telegram-боты</a></li>
-            <li><a href="/vnedrenie-ii" class="hover:text-emeraldAccent transition-colors">Внедрение ИИ</a></li>
-            <li><a href="/licensing" class="hover:text-emeraldAccent transition-colors">Лицензии ПО & SaaS</a></li>
-            <li><a href="/seo" class="hover:text-emeraldAccent transition-colors">SEO-оптимизация</a></li>
-            <li><a href="/licensing#partners" class="hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emeraldAccent">Партнёры</a></li>
-            <li><a href="/templates" class="hover:text-emeraldAccent transition-colors">Шаблоны</a></li>
-            <li><a href="/news" class="hover:text-emeraldAccent transition-colors">Кейсы и статьи</a></li>
+        <nav aria-label="Услуги" class="space-y-2 sm:space-y-3 min-w-0">
+          <div class="text-white font-semibold text-[11px] uppercase tracking-wider">Услуги</div>
+          <ul class="space-y-1.5 sm:space-y-2 text-slate-400 text-sm">
+            <li><a href="/avtomatizaciya-excel" class="hover:text-emeraldOnDark transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emeraldOnDark">Автоматизация Excel</a></li>
+            <li><a href="/telegram-boty" class="hover:text-emeraldOnDark transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emeraldOnDark">Telegram-боты</a></li>
+            <li><a href="/vnedrenie-ii" class="hover:text-emeraldOnDark transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emeraldOnDark">Внедрение ИИ</a></li>
+            <li><a href="/licensing" class="hover:text-emeraldOnDark transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emeraldOnDark">Лицензии ПО &amp; SaaS</a></li>
+            <li><a href="/seo" class="hover:text-emeraldOnDark transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emeraldOnDark">SEO-оптимизация</a></li>
           </ul>
-        </div>
+        </nav>
+
+        <nav aria-label="Компания" class="space-y-2 sm:space-y-3 min-w-0">
+          <div class="text-white font-semibold text-[11px] uppercase tracking-wider">Компания</div>
+          <ul class="space-y-1.5 sm:space-y-2 text-slate-400 text-sm">
+            <li><a href="/o-kompanii" class="hover:text-emeraldOnDark transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emeraldOnDark">О компании</a></li>
+            <li><a href="/news" class="hover:text-emeraldOnDark transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emeraldOnDark">Кейсы и статьи</a></li>
+            <li><a href="/templates" class="hover:text-emeraldOnDark transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emeraldOnDark">Шаблоны</a></li>
+            <li><a href="/licensing#partners" class="hover:text-emeraldOnDark transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emeraldOnDark">Партнёры</a></li>
+            <li><a href="/faq" class="hover:text-emeraldOnDark transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emeraldOnDark">FAQ</a></li>
+          </ul>
+        </nav>
 
         <!-- Contacts -->
-        <div class="space-y-2 sm:space-y-3 min-w-0">
+        <div class="col-span-2 space-y-2 sm:space-y-3 min-w-0 md:col-span-1">
           <div class="text-white font-semibold text-[11px] uppercase tracking-wider">Контакты</div>
           <ul class="space-y-1.5 sm:space-y-2 text-slate-400 text-[11px] sm:text-xs">
             <li class="flex items-start gap-1.5"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /> <circle cx="12" cy="10" r="3" /></svg> <span>г. Астана, Казахстан</span></li>
