@@ -9,6 +9,9 @@ const { chromium } = require('@playwright/test');
 const root = path.resolve(__dirname, '..');
 const dist = path.join(root, 'dist');
 const site = 'https://nexcel.kz';
+const organizationId = site + '/#organization';
+const organizationRef = { '@id': organizationId };
+const articleOrganization = { ...organizationRef, '@type': 'Organization', name: 'Nexcel Solutions' };
 const newServices = ['/telegram-boty', '/vnedrenie-ii'];
 const services = ['/avtomatizaciya-excel', ...newServices, '/licensing', '/seo'];
 const faqCounts = new Map([
@@ -32,6 +35,12 @@ async function getPosts() {
 
 function routeFor(file) {
   return file === 'index.html' ? '/' : '/' + file.slice(0, -5);
+}
+
+function* schemaIdNodes(value) {
+  if (!value || typeof value !== 'object') return;
+  if (typeof value['@id'] === 'string') yield value;
+  for (const child of Object.values(value)) yield* schemaIdNodes(child);
 }
 
 async function inspectHtml(page, html) {
@@ -92,6 +101,8 @@ async function run() {
   const xml = await fs.readFile(path.join(dist, 'sitemap.xml'), 'utf8');
   const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || 'chrome' });
   const report = [];
+  const schemaIds = new Set();
+  const schemaReferences = [];
   try {
     const page = await browser.newPage();
     await page.route('**/*', request => request.abort());
@@ -110,6 +121,24 @@ async function run() {
       const route = routeFor(file);
       const html = await fs.readFile(path.join(dist, file), 'utf8');
       const data = await inspectHtml(page, html);
+      const idNodes = [...schemaIdNodes(data.entities)];
+      const organizationNodes = idNodes.filter(node => node['@id'] === organizationId);
+      for (const node of idNodes) {
+        const id = node['@id'];
+        if (Object.keys(node).length === 1 || (id === organizationId && route !== '/')) {
+          schemaReferences.push({ route, id });
+        } else {
+          schemaIds.add(id);
+        }
+      }
+      if (posts.has(route)) {
+        const article = data.entities.find(entity => entity['@type'] === 'Article');
+        assert.deepEqual(article?.author, articleOrganization, route + ': article author');
+        assert.deepEqual(article?.publisher, articleOrganization, route + ': article publisher');
+        assert.equal(organizationNodes.length, 2, route + ': organization references');
+      } else if (route !== '/') {
+        assert.deepEqual(organizationNodes, [organizationRef], route + ': organization reference');
+      }
       assert.equal(data.headings.length, 1, route + ': H1 count');
       assert.ok(data.headings[0], route + ': H1 text');
       assert.equal(data.titles.length, 1, route + ': title count');
@@ -151,7 +180,8 @@ async function run() {
         })), data.faqs, route + ': FAQPage matches visible text');
       }
       if (services.includes(route)) {
-        assert.ok(data.entities.some(entity => entity['@type'] === 'Service'), route + ': Service schema');
+        const service = data.entities.find(entity => entity['@type'] === 'Service');
+        assert.deepEqual(service?.provider, organizationRef, route + ': Service provider');
         assert.ok(data.ending.some(link => link.href.startsWith('https://wa.me/77711369095') &&
           link.text === 'Обсудить задачу в WhatsApp'), route + ': final WhatsApp CTA');
         const related = data.ending.filter(link => services.includes(link.href));
@@ -161,6 +191,9 @@ async function run() {
       }
       if (route === '/') {
         const org = data.entities.find(entity => entity['@type'] === 'ProfessionalService');
+        assert.deepEqual(organizationNodes, [org], 'homepage organization definition');
+        assert.equal(org.name, 'Nexcel Solutions');
+        assert.equal(org.url, site + '/');
         const offers = org.hasOfferCatalog.itemListElement.map(offer => offer.itemOffered.url).sort();
         assert.deepEqual(offers, services.map(service => site + service).sort(), 'OfferCatalog service URLs');
         for (const service of newServices) {
@@ -170,6 +203,9 @@ async function run() {
       }
       if (newServices.includes(route)) assert.ok(data.words >= 450, route + ': ' + data.words + ' words');
       report.push({ route, title, description, h1: data.headings[0], words: data.words });
+    }
+    for (const { route, id } of schemaReferences) {
+      assert.ok(schemaIds.has(id), route + ': undefined JSON-LD reference ' + id);
     }
   } finally {
     await browser.close();

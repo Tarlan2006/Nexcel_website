@@ -2,7 +2,7 @@
 // so every Tailwind class used here is compiled into assets/styles.css by `npm run build:css`.
 const SITE = 'https://nexcel.kz';
 const BRAND = 'Nexcel Solutions';
-const BRAND_ALIASES = ['Nexcel', 'Nexcel.kz'];
+const ORGANIZATION_ID = SITE + '/#organization';
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const MONTHS = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
 function ruDate(iso) {
@@ -121,6 +121,7 @@ ${links}
 function postPage(p) {
   const path = `/news/${p.slug}`;
   const description = p.seoDescription || p.excerpt;
+  const organization = { '@id': ORGANIZATION_ID, '@type': 'Organization', name: BRAND };
   const main = `    <article class="py-10 sm:py-14 lg:py-20 border-b border-gridBorder bg-paper">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
         <a href="/news" class="inline-flex items-center gap-1 text-sm font-semibold text-emeraldAccent hover:underline"><span aria-hidden="true">←</span> Все кейсы и статьи</a>
@@ -148,8 +149,6 @@ ${relatedSection(p)}
       '@context': 'https://schema.org',
       '@type': 'Article',
       '@id': `${SITE}${path}#article`,
-      name: BRAND,
-      alternateName: BRAND_ALIASES,
       headline: p.title,
       description,
       datePublished: p.date,
@@ -157,8 +156,8 @@ ${relatedSection(p)}
       inLanguage: 'ru',
       mainEntityOfPage: `${SITE}${path}`,
       image: p.image ? SITE + p.image : `${SITE}/assets/og-preview.png`,
-      author: { '@type': 'Organization', name: BRAND, alternateName: BRAND_ALIASES, url: SITE },
-      publisher: { '@type': 'Organization', name: BRAND, alternateName: BRAND_ALIASES, url: SITE }
+      author: organization,
+      publisher: organization
     }
   });
 }
@@ -197,6 +196,7 @@ ${cards}
       '@id': `${SITE}/news#page`,
       name: 'Кейсы и статьи Nexcel Solutions',
       url: `${SITE}/news`,
+      publisher: { '@id': ORGANIZATION_ID },
       inLanguage: 'ru'
     }
   });
