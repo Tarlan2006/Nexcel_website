@@ -1,11 +1,11 @@
 <header class="fixed top-0 left-0 right-0 z-50 bg-paper/90 backdrop-blur-md border-b border-gridBorder">
-    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2 sm:gap-4">
+    <div id="site-header-row" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
 
       <!-- Brand & Infinity Logo -->
-      <a href="/" class="flex items-center gap-2 sm:gap-3 shrink-0 group min-w-0">
+      <a id="site-brand" href="/" class="flex items-center gap-2 sm:gap-3 shrink-0 group min-w-0 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">
         <div class="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded bg-darkBg text-white transition-transform group-hover:scale-105 shadow-sm shrink-0">
           <!-- Infinity N Monogram SVG -->
-          <svg class="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg aria-hidden="true" class="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M22 68V36C22 28 30 24 38 28C46 32 54 48 62 64C70 80 82 78 86 68C90 58 84 46 72 46C62 46 54 60 48 68"
                   stroke="url(#infinityGrad)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
             <circle cx="22" cy="68" r="4" fill="#1B6B44"/>
@@ -26,58 +26,67 @@
         </div>
       </a>
 
-      <!-- Primary navigation (desktop, ≥1024px) -->
-      <nav aria-label="Основная навигация" class="hidden lg:flex items-center gap-2 xl:gap-3 2xl:gap-5 text-[11px] 2xl:text-xs font-medium text-textMain/80 font-sans whitespace-nowrap">
-        <a href="/" class="hover:text-emeraldAccent transition-colors">Главная</a>
-        <a href="/avtomatizaciya-excel" class="hover:text-emeraldAccent transition-colors">Excel</a>
-        <a href="/#direction-bots" class="hover:text-emeraldAccent transition-colors">Telegram + ИИ</a>
-        <a href="/#direction-ai" class="hover:text-emeraldAccent transition-colors">Внедрение ИИ</a>
-        <a href="/licensing" class="hover:text-emeraldAccent transition-colors text-emeraldAccent font-semibold">Лицензии ПО</a>
-        <a href="/seo" class="hover:text-emeraldAccent transition-colors">SEO</a>
-        <a href="/#calculator" class="hover:text-emeraldAccent transition-colors text-textMuted">Калькулятор</a>
-        <a href="/#cases" class="hover:text-emeraldAccent transition-colors text-textMuted">Кейсы</a>
-        <a href="/templates" class="hover:text-emeraldAccent transition-colors text-textMuted">Шаблоны</a>
-        <a href="/news" class="hover:text-emeraldAccent transition-colors text-textMuted">Новости</a>
-        <a href="/faq" class="hover:text-emeraldAccent transition-colors text-textMuted">FAQ</a>
+      <nav aria-label="Основная навигация" class="hidden lg:flex items-center gap-5 xl:gap-7 text-sm font-medium text-textMain font-sans whitespace-nowrap">
+        <div id="desktop-services" class="relative">
+          <button type="button" id="desktop-services-toggle" aria-haspopup="menu" aria-controls="desktop-services-menu" aria-expanded="false"
+                  class="group inline-flex items-center gap-1.5 rounded py-2 hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">
+            Услуги
+            <svg aria-hidden="true" class="h-4 w-4 shrink-0 transition-transform group-aria-expanded:rotate-180 motion-reduce:transition-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
+          </button>
+          <ul id="desktop-services-menu" role="menu" aria-labelledby="desktop-services-toggle" hidden
+              class="absolute left-0 top-full z-10 max-h-[calc(100dvh-4rem)] w-64 overflow-y-auto rounded-lg border border-gridBorder bg-white p-1.5 shadow-lg">
+            <li role="none"><a role="menuitem" tabindex="-1" href="/avtomatizaciya-excel" class="block rounded px-3 py-2 hover:bg-paperSecondary hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">Автоматизация Excel</a></li>
+            <li role="none"><a role="menuitem" tabindex="-1" href="/#direction-bots" class="block rounded px-3 py-2 hover:bg-paperSecondary hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">Telegram + ИИ</a></li>
+            <li role="none"><a role="menuitem" tabindex="-1" href="/#direction-ai" class="block rounded px-3 py-2 hover:bg-paperSecondary hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">Внедрение ИИ</a></li>
+            <li role="none"><a role="menuitem" tabindex="-1" href="/licensing" class="block rounded px-3 py-2 hover:bg-paperSecondary hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">Лицензии ПО</a></li>
+            <li role="none"><a role="menuitem" tabindex="-1" href="/seo" class="block rounded px-3 py-2 hover:bg-paperSecondary hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">SEO-оптимизация</a></li>
+            <li role="none" class="mt-1 border-t border-gridBorder pt-1"><a role="menuitem" tabindex="-1" href="/#calculator" class="block rounded px-3 py-2 hover:bg-paperSecondary hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">Калькулятор окупаемости</a></li>
+          </ul>
+        </div>
+        <a href="/#cases" class="rounded py-2 hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">Кейсы</a>
+        <a href="/templates" class="rounded py-2 hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">Шаблоны</a>
+        <a href="/news" class="rounded py-2 hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">Новости</a>
+        <a href="/faq" class="rounded py-2 hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">FAQ</a>
       </nav>
 
-      <!-- Fast Contact Actions -->
-      <div class="flex items-center gap-1.5 sm:gap-3 shrink-0">
-        <a href="mailto:info@nexcel.kz" class="hidden md:inline-flex lg:hidden xl:inline-flex items-center gap-1.5 text-xs font-sans text-textMuted hover:text-darkBg transition-colors border border-gridBorder px-2.5 py-1.5 rounded bg-white">
-          <svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldAccent" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" /> <rect x="2" y="4" width="20" height="16" rx="2" /></svg>
-          <span>info@nexcel.kz</span>
-        </a>
+      <a id="desktop-whatsapp" href="https://wa.me/77711369095?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%AF%20%D1%81%20%D0%B2%D0%B0%D1%88%D0%B5%D0%B3%D0%BE%20%D1%81%D0%B0%D0%B9%D1%82%D0%B0%20nexcel.kz%2C%20%D1%85%D0%BE%D1%87%D1%83%20%D1%83%D0%B7%D0%BD%D0%B0%D1%82%D1%8C%20%D0%BF%D0%BE%D0%B4%D1%80%D0%BE%D0%B1%D0%BD%D0%B5%D0%B5%20%D0%BF%D1%80%D0%BE%20%D0%BE%D1%86%D0%B8%D1%84%D1%80%D0%BE%D0%B2%D0%BA%D1%83%20%D0%B8%20%D0%B0%D0%B2%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8E%20%D0%B1%D0%B8%D0%B7%D0%BD%D0%B5%D1%81%D0%B0." target="_blank" rel="noopener noreferrer"
+         aria-label="Написать в WhatsApp: +7 771 136-90-95" title="WhatsApp: +7 771 136-90-95"
+         class="hidden lg:inline-flex items-center justify-center w-11 h-11 bg-emeraldAccent hover:bg-emeraldHover text-white rounded-[35%] transition-colors shadow-sm shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">
+        <svg aria-hidden="true" class="w-4 h-4 sm:w-5 sm:h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" /></svg>
+      </a>
 
-        <a href="https://wa.me/77711369095?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%AF%20%D1%81%20%D0%B2%D0%B0%D1%88%D0%B5%D0%B3%D0%BE%20%D1%81%D0%B0%D0%B9%D1%82%D0%B0%20nexcel.kz%2C%20%D1%85%D0%BE%D1%87%D1%83%20%D1%83%D0%B7%D0%BD%D0%B0%D1%82%D1%8C%20%D0%BF%D0%BE%D0%B4%D1%80%D0%BE%D0%B1%D0%BD%D0%B5%D0%B5%20%D0%BF%D1%80%D0%BE%20%D0%BE%D1%86%D0%B8%D1%84%D1%80%D0%BE%D0%B2%D0%BA%D1%83%20%D0%B8%20%D0%B0%D0%B2%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8E%20%D0%B1%D0%B8%D0%B7%D0%BD%D0%B5%D1%81%D0%B0." target="_blank" rel="noopener noreferrer"
-           aria-label="Написать в WhatsApp: +7 771 136-90-95"
-           title="WhatsApp: +7 771 136-90-95"
-           class="inline-flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 bg-emeraldAccent hover:bg-emeraldHover text-white rounded-[35%] transition-all shadow-sm active:scale-95 shrink-0">
-          <svg aria-hidden="true" class="w-4 h-4 sm:w-5 sm:h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" /></svg>
-        </a>
-
-        <!-- Mobile/tablet menu toggle (<1024px) -->
-        <button type="button" id="mobile-menu-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Открыть меню разделов"
-           class="lg:hidden inline-flex items-center justify-center w-11 h-11 rounded border border-gridBorder bg-white text-darkBg shrink-0">
+      <button type="button" id="mobile-menu-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Открыть меню разделов"
+           class="lg:hidden inline-flex items-center justify-center w-11 h-11 rounded border border-gridBorder bg-white text-darkBg shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">
           <svg aria-hidden="true" id="mobile-menu-icon-open" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16" /> <path d="M4 6h16" /> <path d="M4 18h16" /></svg>
           <svg aria-hidden="true" id="mobile-menu-icon-close" class="hidden w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18" /> <path d="m6 6 12 12" /></svg>
         </button>
-      </div>
     </div>
 
-    <!-- Mobile/tablet navigation panel (<1024px) -->
     <nav id="mobile-menu" aria-label="Меню разделов" aria-hidden="true" inert class="hidden lg:hidden border-t border-gridBorder bg-paper max-h-[calc(100dvh-4rem)] overflow-y-auto">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col gap-1 text-sm font-sans">
-        <a href="/" class="py-2.5 px-2 rounded hover:bg-white hover:text-emeraldAccent transition-colors">Главная</a>
-        <a href="/avtomatizaciya-excel" class="py-2.5 px-2 rounded hover:bg-white hover:text-emeraldAccent transition-colors">Автоматизация Excel</a>
-        <a href="/#direction-bots" class="py-2.5 px-2 rounded hover:bg-white hover:text-emeraldAccent transition-colors">Telegram + ИИ</a>
-        <a href="/#direction-ai" class="py-2.5 px-2 rounded hover:bg-white hover:text-emeraldAccent transition-colors">Внедрение ИИ</a>
-        <a href="/licensing" class="py-2.5 px-2 rounded hover:bg-white text-emeraldAccent font-semibold transition-colors">Лицензии ПО & SaaS</a>
-        <a href="/seo" class="py-2.5 px-2 rounded hover:bg-white hover:text-emeraldAccent transition-colors">SEO-оптимизация</a>
-        <a href="/#calculator" class="py-2.5 px-2 rounded hover:bg-white hover:text-emeraldAccent transition-colors text-textMuted">Калькулятор</a>
-        <a href="/#cases" class="py-2.5 px-2 rounded hover:bg-white hover:text-emeraldAccent transition-colors text-textMuted">Кейсы</a>
-        <a href="/templates" class="py-2.5 px-2 rounded hover:bg-white hover:text-emeraldAccent transition-colors text-textMuted">Шаблоны</a>
-        <a href="/news" class="py-2.5 px-2 rounded hover:bg-white hover:text-emeraldAccent transition-colors text-textMuted">Новости</a>
-        <a href="/faq" class="py-2.5 px-2 rounded hover:bg-white hover:text-emeraldAccent transition-colors text-textMuted">FAQ</a>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-col gap-1 text-sm font-medium text-textMain font-sans">
+        <div>
+          <button type="button" id="mobile-services-toggle" aria-controls="mobile-services-menu" aria-expanded="false"
+                  class="group flex w-full items-center justify-between gap-2 rounded px-3 py-2.5 text-left hover:bg-white hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">
+            Услуги
+            <svg aria-hidden="true" class="h-4 w-4 shrink-0 transition-transform group-aria-expanded:rotate-180 motion-reduce:transition-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
+          </button>
+          <div id="mobile-services-menu" hidden class="ml-3 mt-1 border-l border-gridBorder pl-2">
+            <a href="/avtomatizaciya-excel" class="block rounded px-3 py-2.5 hover:bg-white hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">Автоматизация Excel</a>
+            <a href="/#direction-bots" class="block rounded px-3 py-2.5 hover:bg-white hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">Telegram + ИИ</a>
+            <a href="/#direction-ai" class="block rounded px-3 py-2.5 hover:bg-white hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">Внедрение ИИ</a>
+            <a href="/licensing" class="block rounded px-3 py-2.5 hover:bg-white hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">Лицензии ПО</a>
+            <a href="/seo" class="block rounded px-3 py-2.5 hover:bg-white hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">SEO-оптимизация</a>
+            <a href="/#calculator" class="block rounded px-3 py-2.5 hover:bg-white hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent mt-1 border-t border-gridBorder">Калькулятор окупаемости</a>
+          </div>
+        </div>
+        <a href="/#cases" class="block rounded px-3 py-2.5 hover:bg-white hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">Кейсы</a>
+        <a href="/templates" class="block rounded px-3 py-2.5 hover:bg-white hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">Шаблоны</a>
+        <a href="/news" class="block rounded px-3 py-2.5 hover:bg-white hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">Новости</a>
+        <a href="/faq" class="block rounded px-3 py-2.5 hover:bg-white hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">FAQ</a>
+        <a id="mobile-whatsapp" href="https://wa.me/77711369095?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%AF%20%D1%81%20%D0%B2%D0%B0%D1%88%D0%B5%D0%B3%D0%BE%20%D1%81%D0%B0%D0%B9%D1%82%D0%B0%20nexcel.kz%2C%20%D1%85%D0%BE%D1%87%D1%83%20%D1%83%D0%B7%D0%BD%D0%B0%D1%82%D1%8C%20%D0%BF%D0%BE%D0%B4%D1%80%D0%BE%D0%B1%D0%BD%D0%B5%D0%B5%20%D0%BF%D1%80%D0%BE%20%D0%BE%D1%86%D0%B8%D1%84%D1%80%D0%BE%D0%B2%D0%BA%D1%83%20%D0%B8%20%D0%B0%D0%B2%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8E%20%D0%B1%D0%B8%D0%B7%D0%BD%D0%B5%D1%81%D0%B0." target="_blank" rel="noopener noreferrer"
+           class="mt-2 inline-flex items-center justify-center rounded bg-emeraldAccent px-4 py-3 text-center font-semibold text-white hover:bg-emeraldHover transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">
+          Написать в WhatsApp
+        </a>
       </div>
     </nav>
   </header>

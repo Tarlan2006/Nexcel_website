@@ -11,6 +11,63 @@ const siteOrigin = new URL(base).origin;
 const metrikaTag = 'https://mc.yandex.ru/metrika/tag.js';
 const root = path.resolve(__dirname, '..');
 const serviceRoutes = ['/avtomatizaciya-excel', '/seo'];
+const serviceLinks = [
+  '/avtomatizaciya-excel', '/#direction-bots', '/#direction-ai', '/licensing', '/seo', '/#calculator'
+];
+
+async function checkHeader(page, response, width, route) {
+  const links = await page.evaluate(source => {
+    const html = new DOMParser().parseFromString(source, 'text/html');
+    return ['desktop', 'mobile'].map(mode =>
+      [...html.querySelectorAll(`#${mode}-services-menu a[href]`)].map(link => link.getAttribute('href'))
+    );
+  }, await response.text());
+  assert.deepEqual(links, [serviceLinks, serviceLinks], `${route}: services are ordinary links in the served HTML`);
+
+  const mobile = width < 1024;
+  const mode = mobile ? 'mobile' : 'desktop';
+  const toggle = page.locator(`#${mode}-services-toggle`);
+  const menu = page.locator(`#${mode}-services-menu`);
+  const whatsapp = page.locator(`#${mode}-whatsapp`);
+  const mainToggle = page.locator('#mobile-menu-toggle');
+  if (mobile) {
+    await mainToggle.click();
+    assert.equal(await mainToggle.getAttribute('aria-expanded'), 'true', `${route}: mobile navigation opens`);
+  } else {
+    assert.equal(await toggle.getAttribute('aria-haspopup'), 'menu');
+    assert.equal(await menu.getAttribute('role'), 'menu');
+  }
+  await whatsapp.waitFor();
+  const contactUrl = new URL(await whatsapp.getAttribute('href'));
+  assert.equal(contactUrl.origin, 'https://wa.me');
+  assert.equal(contactUrl.pathname, '/77711369095');
+  assert.ok(contactUrl.searchParams.get('text'));
+  assert.equal(await whatsapp.getAttribute('target'), '_blank');
+  assert.ok((await whatsapp.getAttribute('rel')).split(/\s+/).includes('noopener'));
+
+  assert.equal(await toggle.getAttribute('aria-controls'), `${mode}-services-menu`);
+  assert.equal(await toggle.getAttribute('aria-expanded'), 'false');
+  assert.equal(await menu.isVisible(), false);
+  await toggle.press('Enter');
+  assert.equal(await toggle.getAttribute('aria-expanded'), 'true', `${route}: services open with Enter`);
+  await menu.waitFor();
+  if (serviceLinks.includes(route)) {
+    assert.equal(await menu.locator('a[aria-current="page"]').getAttribute('href'), route);
+  }
+  const firstLink = menu.locator('a[href]').first();
+  if (mobile) await firstLink.focus();
+  assert.equal(await firstLink.evaluate(link => document.activeElement === link), true);
+  await page.keyboard.press('Escape');
+  await menu.waitFor({ state: 'hidden' });
+  assert.equal(await toggle.getAttribute('aria-expanded'), 'false');
+  assert.equal(await toggle.evaluate(button => document.activeElement === button), true, `${route}: Escape restores focus`);
+  if (mobile) {
+    assert.equal(await mainToggle.getAttribute('aria-expanded'), 'true', `${route}: Escape closes only the accordion first`);
+    await page.keyboard.press('Escape');
+    assert.equal(await mainToggle.getAttribute('aria-expanded'), 'false');
+    assert.equal(await mainToggle.evaluate(button => document.activeElement === button), true);
+  }
+}
 
 async function checkServicePage(page, route) {
   assert.equal(await page.locator('h1').count(), 1, `${route}: exactly one H1`);
@@ -98,13 +155,7 @@ async function run() {
         await page.locator('script[type="application/ld+json"]').evaluateAll(elements => elements.forEach(el => JSON.parse(el.textContent)));
         if (serviceRoutes.includes(route)) await checkServicePage(page, route);
 
-        if (width < 1024) {
-          const toggle = page.locator('#mobile-menu-toggle');
-          await toggle.click();
-          assert.equal(await toggle.getAttribute('aria-expanded'), 'true');
-          await toggle.click();
-          assert.equal(await toggle.getAttribute('aria-expanded'), 'false');
-        }
+        await checkHeader(page, response, width, route);
         for (const button of await page.locator('button[data-action]').all()) {
           const action = await button.getAttribute('data-action');
           const value = await button.getAttribute('data-action-value');
@@ -174,7 +225,7 @@ async function run() {
   } finally {
     await browser.close();
   }
-  console.log(`PASS: ${pages} page/viewport checks, ${actions} button actions, calculators, secret exclusions, and CSP injection blocking.`);
+  console.log(`PASS: ${pages} page/viewport checks (including static and keyboard navigation under CSP), ${actions} button actions, calculators, secret exclusions, and CSP injection blocking.`);
 }
 
 run().catch(error => { console.error(error); process.exitCode = 1; });

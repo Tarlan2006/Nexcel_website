@@ -1,26 +1,62 @@
 const { chromium } = require('@playwright/test');
 const fs = require('node:fs/promises');
 
+const desktopWidth = 1024;
+const serviceAnchors = ['#direction-bots', '#direction-ai', '#calculator'];
+const headerAnchors = [...serviceAnchors, '#cases'];
+
+async function openNavigation(page, width, services = false) {
+  const mobile = width < desktopWidth;
+  if (mobile) await page.locator('#mobile-menu-toggle').click();
+  if (services) {
+    const prefix = mobile ? 'mobile' : 'desktop';
+    await page.locator(`#${prefix}-services-toggle`).click();
+    return page.locator(`#${prefix}-services-menu`);
+  }
+  return page.locator(mobile ? '#mobile-menu' : '#site-header-row nav');
+}
+
+function fitsViewport(element) {
+  const bounds = element.getBoundingClientRect();
+  return bounds.width > 0 && bounds.left >= -1 && bounds.right <= innerWidth + 1 &&
+    document.documentElement.scrollWidth <= innerWidth;
+}
+
 (async () => {
   await fs.mkdir('.review/responsive', { recursive: true });
   const browser = await chromium.launch({ channel: 'chrome', headless: true });
   const context = await browser.newContext({ reducedMotion: 'reduce' });
   const results = [];
   const failures = [];
-  const widths = [320, 390, 768, 1000, 1024, 1150, 1280, 1440, 1920];
+  const widths = [320, 360, 390, 768, 1000, 1024, 1150, 1280, 1440, 1536, 1920];
   try {
     for (const width of widths) {
       for (const route of ['/', '/licensing', '/avtomatizaciya-excel', '/seo', '/templates', '/faq']) {
         const page = await context.newPage();
         await page.setViewportSize({ width, height: 900 });
         await page.goto('http://127.0.0.1:5500' + route);
-        await page.locator('#site-header header').waitFor();
+        await page.locator('#site-header-row').waitFor();
         await page.locator('#site-footer footer').waitFor();
         await page.evaluate(() => document.fonts.ready);
         const result = await page.evaluate(() => {
-          const visible = el => el.getBoundingClientRect().width > 0 && el.getBoundingClientRect().height > 0;
-          const header = document.querySelector('header');
-          const items = [...header.querySelectorAll('a, button')].filter(visible).map(el => ({ text: el.textContent.trim() || el.getAttribute('aria-label'), rect: el.getBoundingClientRect().toJSON() }));
+          const visible = el => el && el.getBoundingClientRect().width > 0 && el.getBoundingClientRect().height > 0;
+          const header = document.querySelector('#site-header header');
+          const row = document.getElementById('site-header-row');
+          const rowBounds = row.getBoundingClientRect();
+          const rowCenter = rowBounds.top + rowBounds.height / 2;
+          const items = [...row.querySelectorAll('a, button')].filter(visible).map(el => ({
+            text: el.textContent.trim() || el.getAttribute('aria-label'),
+            rect: el.getBoundingClientRect().toJSON()
+          }));
+          const singleHeaderRow = items.every(({ rect }) =>
+            Math.abs(rect.top + rect.height / 2 - rowCenter) <= 1 &&
+            rect.left >= rowBounds.left - 1 && rect.right <= rowBounds.right + 1
+          );
+          const desktop = matchMedia('(min-width: 1024px)').matches;
+          const correctHeaderControls = Boolean(visible(row.querySelector('#site-brand'))) &&
+            Boolean(visible(row.querySelector('nav'))) === desktop &&
+            Boolean(visible(row.querySelector('#desktop-whatsapp'))) === desktop &&
+            Boolean(visible(row.querySelector('#mobile-menu-toggle'))) === !desktop;
           const overlap = [];
           for (let i = 0; i < items.length; i++) for (let j = i + 1; j < items.length; j++) {
             const a = items[i].rect, b = items[j].rect;
@@ -28,7 +64,8 @@ const fs = require('node:fs/promises');
           }
           return {
             width: innerWidth, scrollWidth: document.documentElement.scrollWidth,
-            overlap, headerBottom: header.getBoundingClientRect().bottom,
+            overlap, singleHeaderRow, correctHeaderControls,
+            headerBottom: header.getBoundingClientRect().bottom,
             headingTop: document.querySelector('h1').getBoundingClientRect().top,
             overflowing: [...document.querySelectorAll('body *')].filter(visible).filter(el => el.getBoundingClientRect().right > innerWidth + 1 || el.getBoundingClientRect().left < -1).map(el => ({tag: el.tagName, id: el.id, text: el.textContent.trim().slice(0, 60)})).slice(0, 12),
             fonts: ['Inter', 'Manrope', ...(document.querySelector('.font-mono') ? ['JetBrains Mono'] : [])].every(name => [...document.fonts].some(face => face.family.replace(/"/g, '') === name && face.status === 'loaded'))
@@ -47,6 +84,7 @@ const fs = require('node:fs/promises');
         results.push({ route, ...result });
         console.log(`Checked ${route} at ${width}px; fonts loaded: ${result.fonts}`);
         if (result.scrollWidth > width || result.overlap.length || result.headingTop < result.headerBottom || result.overflowing.length) failures.push(`${route} at ${width}px: layout`);
+        if (!result.singleHeaderRow || !result.correctHeaderControls) failures.push(`${route} at ${width}px: header controls do not fit on one row`);
         const needsMono = route === '/' || route === '/licensing';
         const fontsLoaded = await page.evaluate(needsMono => ['Inter', 'Manrope', ...(needsMono ? ['JetBrains Mono'] : [])].every(name => [...document.fonts].some(face => face.family.replace(/"/g, '') === name && face.status === 'loaded')), needsMono);
         if (!fontsLoaded) failures.push(`${route} at ${width}px: fonts unavailable`);
@@ -56,13 +94,14 @@ const fs = require('node:fs/promises');
             const clipped = await page.locator('#inspector-' + key).evaluate(panel => [...panel.querySelectorAll('*')].some(el => {const rect = el.getBoundingClientRect(); return rect.width > 0 && (rect.right > innerWidth + 1 || rect.left < -1);}));
             if (clipped) failures.push(`${width}px: inspector ${key} overflows`);
           }
-          for (const target of ['#direction-bots', '#direction-ai', '#calculator', '#cases']) {
-            if (width < 1024) await page.locator('#mobile-menu-toggle').click();
-            const nav = width < 1024 ? '#mobile-menu' : 'header nav[aria-label="Основная навигация"]';
-            await page.locator(`${nav} a[href="/${target}"]`).click();
+          for (const target of headerAnchors) {
+            const services = serviceAnchors.includes(target);
+            const nav = await openNavigation(page, width, services);
+            if (services && !await nav.evaluate(fitsViewport)) failures.push(`${width}px: services panel overflows`);
+            await nav.locator(`a[href="/${target}"]`).click();
             const position = await page.locator(target).evaluate(el => ({ top: el.getBoundingClientRect().top, header: document.querySelector('header').getBoundingClientRect().bottom }));
             if (position.top < position.header - 1) failures.push(`${width}px: ${target} behind header`);
-            if (width < 1024 && await page.locator('#mobile-menu-toggle').getAttribute('aria-expanded') !== 'false') failures.push(`${width}px: menu stayed open`);
+            if (width < desktopWidth && await page.locator('#mobile-menu-toggle').getAttribute('aria-expanded') !== 'false') failures.push(`${width}px: menu stayed open`);
           }
         }
         if (route === '/templates') {
@@ -71,10 +110,9 @@ const fs = require('node:fs/promises');
           if (bounds.top < bounds.header) failures.push(`${width}px: library behind header`);
         }
         if (route !== '/') {
-          if (width < 1024) await page.locator('#mobile-menu-toggle').click();
-          const nav = width < 1024 ? '#mobile-menu' : 'header nav[aria-label="Основная навигация"]';
           const target = route === '/licensing' ? '/templates' : '/licensing';
-          await page.locator(`${nav} a[href="${target}"]`).click();
+          const nav = await openNavigation(page, width, target === '/licensing');
+          await nav.locator(`a[href="${target}"]`).click();
           if (new URL(page.url()).pathname !== target) failures.push(`${width}px: interpage navigation`);
         }
         await page.close();
@@ -84,7 +122,13 @@ const fs = require('node:fs/promises');
       const page = await context.newPage();
       await page.setViewportSize(viewport);
       await page.goto('http://127.0.0.1:5500');
-      await page.locator('#mobile-menu-toggle').click();
+      const services = await openNavigation(page, viewport.width, true);
+      const whatsapp = page.locator('#mobile-whatsapp');
+      await whatsapp.scrollIntoViewIfNeeded();
+      if (!await services.evaluate(fitsViewport) || !await whatsapp.evaluate(element => {
+        const bounds = element.getBoundingClientRect();
+        return bounds.height > 0 && bounds.top >= 0 && bounds.bottom <= innerHeight + 1;
+      })) failures.push(`${viewport.width}x${viewport.height}: mobile menu does not fit or scroll to WhatsApp`);
       await page.locator('#mobile-menu a[href="/faq"]').scrollIntoViewIfNeeded();
       await page.screenshot({path:`.review/responsive/menu-${viewport.width}x${viewport.height}.png`});
       await page.locator('#mobile-menu a[href="/faq"]').click();
@@ -99,5 +143,5 @@ const fs = require('node:fs/promises');
   } finally { await browser.close(); }
   await fs.writeFile('.review/responsive/layout.json', JSON.stringify(results, null, 2));
   if (failures.length) { console.error(failures.join('\n')); process.exitCode = 1; }
-  else console.log('PASS:', results.length, 'layouts,', widths.length * 4, 'inspector panels,', widths.length * 4, 'main navigation anchors,', widths.length, 'library anchors,', results.length - widths.length, 'interpage links and 2 short-screen FAQ navigation checks.');
+  else console.log('PASS:', results.length, 'single-row header layouts,', widths.length * 4, 'inspector panels,', widths.length * headerAnchors.length, 'main navigation anchors,', widths.length, 'library anchors,', results.length - widths.length, 'interpage links and 2 short-screen mobile menu checks.');
 })().catch(error => { console.error(error); process.exitCode = 1; });
