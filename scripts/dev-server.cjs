@@ -6,7 +6,12 @@ const path = require('node:path');
 const root = path.resolve(__dirname, '..');
 const pages = new Map([['/', 'index.html'], ['/licensing', 'licensing.html'], ['/avtomatizaciya-excel', 'avtomatizaciya-excel.html'], ['/seo', 'seo.html'], ['/templates', 'templates.html'], ['/faq', 'faq.html']]);
 const publicFiles = new Set(['favicon.ico', 'robots.txt', 'sitemap.xml', 'llms.txt', 'partials/header.html', 'partials/footer.html']);
-const types = { '.js': 'text/javascript; charset=utf-8', '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.txt': 'text/plain; charset=utf-8', '.xml': 'application/xml', '.svg': 'image/svg+xml', '.png': 'image/png', '.ico': 'image/x-icon' };
+const types = { '.js': 'text/javascript; charset=utf-8', '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.txt': 'text/plain; charset=utf-8', '.xml': 'application/xml', '.svg': 'image/svg+xml', '.png': 'image/png', '.webp': 'image/webp', '.ico': 'image/x-icon' };
+
+function pageFile(route) {
+  if (route === '/news' || /^\/news\/[a-z0-9-]+$/.test(route)) return `dist${route}.html`;
+  return pages.get(route);
+}
 
 const server = http.createServer(async (req, res) => {
   if (!['GET', 'HEAD'].includes(req.method)) {
@@ -17,12 +22,13 @@ const server = http.createServer(async (req, res) => {
     const url = new URL(req.url, 'http://localhost');
     const pathname = decodeURIComponent(url.pathname);
     const canonical = pathname === '/index.html' ? '/' : pathname.replace(/(?:\.html|\/)$/, '');
-    if (pathname !== canonical && pages.has(canonical)) {
+    const page = pageFile(canonical);
+    if (pathname !== canonical && page) {
       res.writeHead(307, { Location: canonical + url.search }).end();
       return;
     }
-    const relative = pages.get(pathname) || pathname.slice(1);
-    const allowed = pages.has(pathname) || publicFiles.has(relative) || /^assets\/[\w./-]+$/.test(relative);
+    const relative = page || pathname.slice(1);
+    const allowed = page || publicFiles.has(relative) || /^assets\/[\w./-]+$/.test(relative);
     const absolute = path.resolve(root, relative);
     if (!allowed || !absolute.startsWith(root + path.sep) || relative.split('/').some(part => part.startsWith('.'))) {
       res.writeHead(404).end('Not found');

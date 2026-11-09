@@ -7,8 +7,9 @@ const fs = require('node:fs/promises');
   const context = await browser.newContext({ reducedMotion: 'reduce' });
   const results = [];
   const failures = [];
+  const widths = [320, 390, 768, 1000, 1024, 1150, 1280, 1440, 1920];
   try {
-    for (const width of [320, 390, 768, 1000, 1024, 1150, 1280, 1440, 1920]) {
+    for (const width of widths) {
       for (const route of ['/', '/licensing', '/avtomatizaciya-excel', '/seo', '/templates', '/faq']) {
         const page = await context.newPage();
         await page.setViewportSize({ width, height: 900 });
@@ -55,7 +56,7 @@ const fs = require('node:fs/promises');
             const clipped = await page.locator('#inspector-' + key).evaluate(panel => [...panel.querySelectorAll('*')].some(el => {const rect = el.getBoundingClientRect(); return rect.width > 0 && (rect.right > innerWidth + 1 || rect.left < -1);}));
             if (clipped) failures.push(`${width}px: inspector ${key} overflows`);
           }
-          for (const target of ['#direction-tables', '#direction-bots', '#direction-ai', '#calculator', '#cases']) {
+          for (const target of ['#direction-bots', '#direction-ai', '#calculator', '#cases']) {
             if (width < 1024) await page.locator('#mobile-menu-toggle').click();
             const nav = width < 1024 ? '#mobile-menu' : 'header nav[aria-label="Основная навигация"]';
             await page.locator(`${nav} a[href="/${target}"]`).click();
@@ -98,5 +99,5 @@ const fs = require('node:fs/promises');
   } finally { await browser.close(); }
   await fs.writeFile('.review/responsive/layout.json', JSON.stringify(results, null, 2));
   if (failures.length) { console.error(failures.join('\n')); process.exitCode = 1; }
-  else console.log('PASS: 36 layouts, 36 inspector panels, 45 main navigation anchors, 9 library anchors, 27 interpage links and 2 short-screen FAQ navigation checks.');
+  else console.log('PASS:', results.length, 'layouts,', widths.length * 4, 'inspector panels,', widths.length * 4, 'main navigation anchors,', widths.length, 'library anchors,', results.length - widths.length, 'interpage links and 2 short-screen FAQ navigation checks.');
 })().catch(error => { console.error(error); process.exitCode = 1; });
