@@ -21,7 +21,7 @@ const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url, 'http://localhost');
     const pathname = decodeURIComponent(url.pathname);
-    const canonical = pathname === '/index.html' ? '/' : pathname.replace(/(?:\.html|\/)$/, '');
+    const canonical = pathname === '/' || pathname === '/index.html' ? '/' : pathname.replace(/(?:\.html|\/)$/, '');
     const page = pageFile(canonical);
     if (pathname !== canonical && page) {
       res.writeHead(307, { Location: canonical + url.search }).end();
