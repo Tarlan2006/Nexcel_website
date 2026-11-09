@@ -7,7 +7,7 @@ const root = path.resolve(__dirname, '..');
 const pages = new Map([
   ['/', 'index.html'], ['/licensing', 'licensing.html'], ['/avtomatizaciya-excel', 'avtomatizaciya-excel.html'],
   ['/telegram-boty', 'telegram-boty.html'], ['/vnedrenie-ii', 'vnedrenie-ii.html'], ['/seo', 'seo.html'],
-  ['/templates', 'templates.html'], ['/faq', 'faq.html']
+  ['/templates', 'templates.html'], ['/faq', 'faq.html'], ['/o-kompanii', 'o-kompanii.html']
 ]);
 const publicFiles = new Set(['favicon.ico', 'robots.txt', 'sitemap.xml', 'llms.txt', 'partials/header.html', 'partials/footer.html']);
 const types = { '.js': 'text/javascript; charset=utf-8', '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.txt': 'text/plain; charset=utf-8', '.xml': 'application/xml', '.svg': 'image/svg+xml', '.png': 'image/png', '.webp': 'image/webp', '.ico': 'image/x-icon' };

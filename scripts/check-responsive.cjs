@@ -30,7 +30,7 @@ function fitsViewport(element) {
   const widths = [320, 360, 390, 768, 1000, 1024, 1150, 1280, 1440, 1536, 1920];
   try {
     for (const width of widths) {
-      for (const route of ['/', '/licensing', '/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/seo', '/templates', '/faq']) {
+      for (const route of ['/', '/licensing', '/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/seo', '/templates', '/faq', '/o-kompanii']) {
         const page = await context.newPage();
         await page.setViewportSize({ width, height: 900 });
         await page.goto('http://127.0.0.1:5500' + route);

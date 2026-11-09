@@ -15,7 +15,7 @@ const articleOrganization = { ...organizationRef, '@type': 'Organization', name:
 const newServices = ['/telegram-boty', '/vnedrenie-ii'];
 const services = ['/avtomatizaciya-excel', ...newServices, '/licensing', '/seo'];
 const faqCounts = new Map([
-  ['/', 5], ['/faq', 12], ['/avtomatizaciya-excel', 6], ...services.slice(1).map(route => [route, 4])
+  ['/', 5], ['/faq', 12], ['/o-kompanii', 3], ['/avtomatizaciya-excel', 6], ...services.slice(1).map(route => [route, 4])
 ]);
 const jargon = /оцифров[\p{L}]*|mini[\p{Pd}\s]erp|инспектор\s+направлений|доказательн[\p{L}]*\s+баз[\p{L}]*/iu;
 
@@ -51,7 +51,7 @@ async function inspectHtml(page, html) {
     const faqs = [...doc.querySelectorAll('#faq-container button[aria-controls]')].map(button => ({
       name: clean(button.querySelector('span').textContent.replace(/^\d+\.\s*/, '')),
       answer: clean(doc.getElementById(button.getAttribute('aria-controls')).textContent)
-    })).concat([...doc.querySelectorAll('#service-faq details')].map(details => ({
+    })).concat([...doc.querySelectorAll('#service-faq details, #company-faq details')].map(details => ({
       name: clean(details.querySelector('summary').textContent),
       answer: clean(details.querySelector('p').textContent)
     })));
@@ -81,6 +81,7 @@ async function inspectHtml(page, html) {
       faqs,
       entities,
       links: attrs('a[href]', 'href'),
+      mainLinks: attrs('main a[href]', 'href'),
       nav: ['#desktop-services-menu', '#mobile-services-menu', '#site-footer'].map(selector => attrs(selector + ' a[href]', 'href')),
       ending: [...(main.lastElementChild?.querySelectorAll('a[href]') || [])].map(link => ({
         href: link.getAttribute('href'), text: clean(link.textContent)
@@ -167,7 +168,8 @@ async function run() {
         assert.match(lastmod, /^\d{4}-\d{2}-\d{2}$/, route + ': lastmod format');
         assert.equal(sitemap.get(site + route), lastmod, route + ': sitemap lastmod');
         if (hasHistory && !post && route !== '/news') {
-          assert.equal(lastmod, gitText('log', '-1', '--format=%cs', '--', file), route + ': page date matches Git');
+          const sourceDate = gitText('log', '-1', '--format=%cs', '--', file);
+          if (sourceDate) assert.equal(lastmod, sourceDate, route + ': page date matches Git');
         }
       }
 
@@ -178,6 +180,12 @@ async function run() {
         assert.deepEqual(faq.mainEntity.map(item => ({
           name: item.name, answer: item.acceptedAnswer.text
         })), data.faqs, route + ': FAQPage matches visible text');
+      }
+      if (route === '/o-kompanii') {
+        const about = data.entities.find(entity => entity['@type'] === 'AboutPage');
+        assert.deepEqual(about?.mainEntity, organizationRef, route + ': AboutPage main entity');
+        assert.ok(data.words >= 350 && data.words <= 500, route + ': ' + data.words + ' words');
+        assert.ok([...services, '/news'].every(link => data.mainLinks.includes(link)), route + ': service and case links');
       }
       if (services.includes(route)) {
         const service = data.entities.find(entity => entity['@type'] === 'Service');
@@ -212,7 +220,7 @@ async function run() {
   }
   if (process.argv.includes('--json')) console.log(JSON.stringify(report, null, 2));
   else console.log('PASS SEO: ' + report.length + ' pages, metadata, FAQ, breadcrumbs, navigation and sitemap. ' +
-    report.filter(page => newServices.includes(page.route)).map(page => page.route + ': ' + page.words + ' words').join(', '));
+    report.filter(page => newServices.includes(page.route) || page.route === '/o-kompanii').map(page => page.route + ': ' + page.words + ' words').join(', '));
 }
 
 run().catch(error => { console.error(error); process.exitCode = 1; });

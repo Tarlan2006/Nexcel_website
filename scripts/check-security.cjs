@@ -108,7 +108,7 @@ async function run() {
 
   const articles = (await fs.readdir(path.join(root, 'dist', 'news')))
     .filter(file => file.endsWith('.html')).map(file => '/news/' + file.slice(0, -5));
-  const routes = ['/', ...serviceFaqCounts.keys(), '/templates', '/faq', '/news', ...articles];
+  const routes = ['/', ...serviceFaqCounts.keys(), '/templates', '/faq', '/o-kompanii', '/news', ...articles];
   const browser = await chromium.launch({
     headless: true,
     ...(process.env.BROWSER_CHANNEL ? { channel: process.env.BROWSER_CHANNEL } : {})

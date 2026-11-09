@@ -169,6 +169,11 @@ async function checkLinks(page, mobile) {
   }
   await page.locator('#site-brand').click();
   await page.waitForURL(base + '/');
+  await page.locator('#site-header-row').waitFor();
+  await expect(nav.locator('a[href="/o-kompanii"]')).toHaveCount(0);
+  await page.locator('#site-footer a[href="/o-kompanii"]').click();
+  await page.waitForURL(base + '/o-kompanii');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('О компании Nexcel Solutions');
 
   await page.goto(base + '/templates#library');
   await expect(nav.locator('a[href="/templates"]')).toHaveAttribute('aria-current', 'page');
@@ -201,7 +206,7 @@ async function run() {
     await page.locator('#pill-bots').click();
     await page.locator('#inspector-bots').waitFor();
     assert.deepEqual(errors, []);
-    const clicks = 2 * (services.length + sections.length + 1);
+    const clicks = 2 * (services.length + sections.length + 2);
     console.log('PASS: static header links, desktop dropdown and mobile accordion interactions, ' + clicks + ' navigation clicks, active states, fetch failure isolation');
   } finally {
     await browser.close();
