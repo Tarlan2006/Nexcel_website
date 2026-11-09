@@ -1,6 +1,8 @@
 // HTML templates for the News section. Kept in scripts/ and listed in tailwind.config.js `content`
 // so every Tailwind class used here is compiled into assets/styles.css by `npm run build:css`.
 const SITE = 'https://nexcel.kz';
+const BRAND = 'Nexcel Solutions';
+const BRAND_ALIASES = ['Nexcel', 'Nexcel.kz'];
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const MONTHS = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
 function ruDate(iso) {
@@ -31,6 +33,7 @@ function shell({ title, description, path, pageName, ogType, ld, main, image }) 
   <meta name="description" content="${esc(description)}" />
   <link rel="canonical" href="${url}" />
   <meta property="og:type" content="${ogType}" />
+  <meta property="og:site_name" content="${BRAND}" />
   <meta property="og:url" content="${url}" />
   <meta property="og:title" content="${esc(title)}" />
   <meta property="og:description" content="${esc(description)}" />
@@ -145,6 +148,8 @@ ${relatedSection(p)}
       '@context': 'https://schema.org',
       '@type': 'Article',
       '@id': `${SITE}${path}#article`,
+      name: BRAND,
+      alternateName: BRAND_ALIASES,
       headline: p.title,
       description,
       datePublished: p.date,
@@ -152,8 +157,8 @@ ${relatedSection(p)}
       inLanguage: 'ru',
       mainEntityOfPage: `${SITE}${path}`,
       image: p.image ? SITE + p.image : `${SITE}/assets/og-preview.png`,
-      author: { '@type': 'Organization', name: 'Nexcel Solutions', url: SITE },
-      publisher: { '@type': 'Organization', name: 'Nexcel Solutions', url: SITE }
+      author: { '@type': 'Organization', name: BRAND, alternateName: BRAND_ALIASES, url: SITE },
+      publisher: { '@type': 'Organization', name: BRAND, alternateName: BRAND_ALIASES, url: SITE }
     }
   });
 }
