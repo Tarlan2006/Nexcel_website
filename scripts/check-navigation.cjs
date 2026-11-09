@@ -25,24 +25,24 @@ async function checkStaticHeader(page) {
     const desktopNav = doc.querySelector('#desktop-services-toggle')?.closest('nav');
     return {
       brand: doc.querySelector('a#site-brand')?.getAttribute('href'),
-      emailLinks: hrefs(doc, 'header a[href^="mailto:"]'),
+      contactGroups: ['desktop', 'mobile'].map(mode => hrefs(doc.querySelector(`#${mode}-contacts`))),
       desktopServices: hrefs(doc.querySelector('#desktop-services-menu')),
       desktopSections: hrefs(desktopNav, 'a[href]', '#desktop-services-menu, #desktop-whatsapp'),
       mobileServices: hrefs(doc.querySelector('#mobile-services-menu')),
-      mobileSections: hrefs(doc.querySelector('#mobile-menu'), 'a[href]', '#mobile-services-menu, #mobile-whatsapp'),
+      mobileSections: hrefs(doc.querySelector('#mobile-menu'), 'a[href]', '#mobile-services-menu, #mobile-contacts'),
       mobileLast: [...doc.querySelectorAll('#mobile-menu a[href]')].at(-1)?.id,
       contacts: hrefs(doc, 'a#desktop-whatsapp[href], a#mobile-whatsapp[href]')
     };
   }, await response.text());
 
   assert.equal(header.brand, '/');
-  assert.deepEqual(header.emailLinks, []);
   assert.deepEqual(header.desktopServices, services);
   assert.deepEqual(header.desktopSections, sections);
   assert.deepEqual(header.mobileServices, services);
   assert.deepEqual(header.mobileSections, sections);
   assert.equal(header.mobileLast, 'mobile-whatsapp');
   assert.equal(header.contacts.length, 2);
+  assert.deepEqual(header.contactGroups, header.contacts.map(contact => ['mailto:info@nexcel.kz', contact]));
   for (const contact of header.contacts) {
     const url = new URL(contact);
     assert.equal(url.origin + url.pathname, 'https://wa.me/77711369095');
@@ -121,10 +121,12 @@ async function checkMobileAccordion(page) {
   const toggle = page.locator('#mobile-services-toggle');
   const services = page.locator('#mobile-services-menu');
   await expect(page.locator('#desktop-whatsapp')).toBeHidden();
+  await expect(page.locator('#desktop-email')).toBeHidden();
   await expect(menu).toBeHidden();
   await menuToggle.press('Enter');
   await expect(menu).toBeVisible();
   await expect(page.locator('#mobile-whatsapp')).toBeVisible();
+  await expect(page.locator('#mobile-email')).toBeVisible();
   await expect(toggle).toHaveAttribute('aria-controls', 'mobile-services-menu');
   await expect(toggle).toHaveAttribute('aria-expanded', 'false');
   await expect(services).toBeHidden();

@@ -55,6 +55,7 @@ function fitsViewport(element) {
           const desktop = matchMedia('(min-width: 1024px)').matches;
           const correctHeaderControls = Boolean(visible(row.querySelector('#site-brand'))) &&
             Boolean(visible(row.querySelector('nav'))) === desktop &&
+            Boolean(visible(row.querySelector('#desktop-email'))) === desktop &&
             Boolean(visible(row.querySelector('#desktop-whatsapp'))) === desktop &&
             Boolean(visible(row.querySelector('#mobile-menu-toggle'))) === !desktop;
           const overlap = [];
@@ -123,12 +124,14 @@ function fitsViewport(element) {
       await page.setViewportSize(viewport);
       await page.goto('http://127.0.0.1:5500');
       const services = await openNavigation(page, viewport.width, true);
-      const whatsapp = page.locator('#mobile-whatsapp');
-      await whatsapp.scrollIntoViewIfNeeded();
-      if (!await services.evaluate(fitsViewport) || !await whatsapp.evaluate(element => {
-        const bounds = element.getBoundingClientRect();
-        return bounds.height > 0 && bounds.top >= 0 && bounds.bottom <= innerHeight + 1;
-      })) failures.push(`${viewport.width}x${viewport.height}: mobile menu does not fit or scroll to WhatsApp`);
+      const contacts = page.locator('#mobile-contacts');
+      await contacts.scrollIntoViewIfNeeded();
+      if (!await services.evaluate(fitsViewport) || !await contacts.evaluate(element => {
+        const [email, whatsapp] = [...element.querySelectorAll('a')].map(link => link.getBoundingClientRect());
+        return email.width > 0 && whatsapp.width > 0 && Math.abs(email.top - whatsapp.top) <= 1 &&
+          email.left >= 0 && email.right <= whatsapp.left && whatsapp.right <= innerWidth + 1 &&
+          email.top >= 0 && whatsapp.bottom <= innerHeight + 1;
+      })) failures.push(`${viewport.width}x${viewport.height}: mobile contacts do not fit side by side`);
       await page.locator('#mobile-menu a[href="/faq"]').scrollIntoViewIfNeeded();
       await page.screenshot({path:`.review/responsive/menu-${viewport.width}x${viewport.height}.png`});
       await page.locator('#mobile-menu a[href="/faq"]').click();
