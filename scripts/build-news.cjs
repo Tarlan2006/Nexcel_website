@@ -9,6 +9,8 @@ const root = path.resolve(__dirname, '..');
 const dist = path.join(root, 'dist');
 const contentDir = path.join(root, 'content', 'news');
 const SITE = 'https://nexcel.kz';
+// Date of the last change to the news listing itself. New articles can supersede it.
+const NEWS_INDEX_LASTMOD = '2026-11-09';
 const serviceTitles = new Map([
   ['avtomatizaciya-excel', 'Автоматизация Excel'],
   ['seo', 'SEO-оптимизация и продвижение сайтов']
@@ -77,7 +79,11 @@ for (const p of posts) fs.writeFileSync(path.join(dist, 'news', `${p.slug}.html`
 // sitemap.xml: add /news and every post
 const smPath = path.join(dist, 'sitemap.xml');
 let sm = fs.readFileSync(smPath, 'utf8').replace(/\s*<url>\s*<loc>https:\/\/nexcel\.kz\/news(?:\/[^<]*)?<\/loc>[\s\S]*?<\/url>/g, '');
-const urls = [`  <url>\n    <loc>${SITE}/news</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`]
+const newsLastmod = posts.reduce((latest, post) => {
+  const modified = post.updated || post.date;
+  return modified > latest ? modified : latest;
+}, NEWS_INDEX_LASTMOD);
+const urls = [`  <url>\n    <loc>${SITE}/news</loc>\n    <lastmod>${newsLastmod}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`]
   .concat(posts.map((p) => `  <url>\n    <loc>${SITE}/news/${p.slug}</loc>\n    <lastmod>${p.updated || p.date}</lastmod>\n    <priority>0.6</priority>\n  </url>`));
 sm = sm.replace('</urlset>', urls.join('\n') + '\n</urlset>');
 fs.writeFileSync(smPath, sm);
