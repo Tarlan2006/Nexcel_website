@@ -73,6 +73,7 @@ async function inspectHtml(page, html) {
       descriptions: attrs('meta[name="description"]', 'content'),
       ogTitles: attrs('meta[property="og:title"]', 'content'),
       ogDescriptions: attrs('meta[property="og:description"]', 'content'),
+      ogSiteNames: attrs('meta[property="og:site_name"]', 'content'),
       canonicals: attrs('link[rel="canonical"]', 'href'),
       hasKeywords: Boolean(doc.querySelector('meta[name="keywords" i]')),
       headings: [...doc.querySelectorAll('h1')].map(el => clean(el.textContent)),
@@ -118,6 +119,7 @@ async function run() {
     }, xml));
     assert.deepEqual([...sitemap.keys()].sort(), files.map(routeFor).filter(route => route !== '/404').map(route => site + route).sort(), 'sitemap covers the indexable pages');
     assert.doesNotMatch(llms, jargon, 'llms.txt: jargon');
+    assert.ok(llms.includes('[О компании Nexcel Solutions](' + site + '/o-kompanii)'), 'llms.txt: company page link');
     for (const file of files) {
       const route = routeFor(file);
       const html = await fs.readFile(path.join(dist, file), 'utf8');
@@ -150,6 +152,7 @@ async function run() {
       assert.ok(description && [...description].length <= 160, route + ': description limit (' + [...(description || '')].length + ')');
       assert.deepEqual(data.ogTitles, [title], route + ': Open Graph title');
       assert.deepEqual(data.ogDescriptions, [description], route + ': Open Graph description');
+      assert.deepEqual(data.ogSiteNames, ['Nexcel Solutions'], route + ': Open Graph site name');
       assert.equal(data.hasKeywords, false, route + ': meta keywords');
       assert.doesNotMatch([title, description, data.text, JSON.stringify(data.entities)].join(' '), jargon, route + ': jargon');
       assert.doesNotMatch(html, /⚠|\bTODO\b/, route + ': unpublished notes');
