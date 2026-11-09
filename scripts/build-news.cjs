@@ -12,6 +12,8 @@ const contentDir = path.join(root, 'content', 'news');
 const SITE = 'https://nexcel.kz';
 const serviceTitles = new Map([
   ['avtomatizaciya-excel', 'Автоматизация Excel и Google Sheets'],
+  ['telegram-boty', 'Создание Telegram-ботов для бизнеса'],
+  ['vnedrenie-ii', 'Внедрение ИИ в бизнес'],
   ['seo', 'SEO-аудит и продвижение сайтов']
 ]);
 
