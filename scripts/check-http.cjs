@@ -61,7 +61,14 @@ async function run() {
     checks++;
   }
   for (const route of ['/does-not-exist', '/package.json', '/package-lock.json', '/wrangler.jsonc', '/AI_HANDOFF.md', '/audit%20from%20claude.txt', '/.assetsignore', '/.ignore', '/.git/config', '/.wrangler/state', '/src/input.css', '/scripts/dev-server.cjs', '/node_modules/wrangler/package.json', '/_headers', '/.env', '/.env.production', '/.dev.vars', '/.dev.vars.production', '/.local/preview.json', '/.local-tools/npm.cmd']) {
-    assert.equal((await request(route)).status, 404, `${route}: must not be public`);
+    const response = await request(route);
+    assert.equal(response.status, 404, `${route}: must not be public`);
+    if (cloudflare && route === '/does-not-exist') {
+      const html = await response.text();
+      assert.equal(html, await fs.readFile(path.join(root, 'dist', '404.html'), 'utf8'), 'custom 404 body');
+      assert.match(html, /<meta name="robots" content="noindex"/);
+      checks++;
+    }
     checks++;
   }
   const head = await request('/templates', { method: 'HEAD' });
