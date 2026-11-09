@@ -41,6 +41,46 @@
   ]
 }
   </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "@id": "https://nexcel.kz/templates#template-list",
+  "name": "Шаблоны Google Sheets для учёта",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "item": {
+        "@type": "CreativeWork",
+        "name": "Учет ДДС для малого бизнеса",
+        "url": "https://nexcel.kz/templates#template-dds",
+        "description": "Записывайте поступления и расходы по категориям. Таблица показывает остатки на счетах Kaspi, Halyk и в кассе, а также собирает годовую сводку."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "item": {
+        "@type": "CreativeWork",
+        "name": "Складской учет ТМЦ и остатков",
+        "url": "https://nexcel.kz/templates#template-stock",
+        "description": "Вносите поступления и списания товаров или материалов. Таблица считает текущий остаток и показывает, когда запас опустился ниже заданного минимума."
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "item": {
+        "@type": "CreativeWork",
+        "name": "Калькулятор отпусков и компенсаций",
+        "url": "https://nexcel.kz/templates#template-vacations",
+        "description": "Заполняйте накопленные и использованные дни отпуска. Таблица показывает оставшиеся дни и помогает оценить компенсацию."
+      }
+    }
+  ]
+}
+  </script>
 </head>
 <body class="bg-paper text-textMain flex flex-col min-h-screen">
   <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-emeraldAccent focus:text-white focus:px-4 focus:py-2 focus:rounded focus:text-xs focus:font-sans focus:font-semibold">Перейти к основному содержанию</a>
@@ -68,14 +108,16 @@
         <div class="max-w-2xl space-y-2">
           <h2 class="font-heading font-extrabold text-2xl sm:text-3xl text-darkBg">Как пользоваться шаблоном</h2>
           <p class="text-sm leading-relaxed text-textMuted">Запросите ссылку в WhatsApp, откройте шаблон и сохраните копию в своём Google-аккаунте. Затем заполните таблицу своими данными и при необходимости подстройте её под себя.</p>
+          <p class="text-sm leading-relaxed text-textMuted">Когда получите ссылку, откройте её в том Google-аккаунте, в котором хотите вести учёт. В меню «Файл» выберите «Создать копию», укажите название и папку на Google Диске. Откройте сохранённую таблицу и начните с нескольких операций или записей, результат по которым вам уже известен. Например, внесите поступление и расход, приход и списание товара или данные об отпуске одного сотрудника. Сверьте итог с тем, как считаете его сейчас. Так проще увидеть, какие поля влияют на результат и что нужно подготовить перед переносом остальных данных.</p>
+          <p class="text-sm leading-relaxed text-textMuted">Выбирайте шаблон по вопросу, на который хотите отвечать регулярно. Для денег это поступления, расходы и остатки по счетам. Для склада — движения товаров и текущий запас. Для отпусков — использованные и оставшиеся дни. Если исходные записи разбросаны по нескольким местам, сначала выпишите, что будете переносить: статьи расходов и счета, названия товаров или сведения о днях отпуска. Сохраните одинаковые названия для одних и тех же позиций, чтобы при сверке не искать одну операцию или товар под разными именами. Затем заполните ту часть таблицы, которая нужна для первого отчёта или расчёта.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-          <article data-card-reveal class="motion-card hover:border-emeraldAccent bg-white border border-gridBorder rounded-lg p-5 sm:p-6 space-y-5 flex flex-col justify-between">
+          <article id="template-dds" data-card-reveal class="scroll-mt-28 md:scroll-mt-20 motion-card hover:border-emeraldAccent bg-white border border-gridBorder rounded-lg p-5 sm:p-6 space-y-5 flex flex-col justify-between">
             <div class="space-y-3">
               <span class="inline-flex px-2 py-1 bg-emeraldLight text-emeraldAccent rounded text-xs font-semibold">Финансы</span>
               <h3 class="font-heading font-bold text-lg text-darkBg">Учет ДДС для малого бизнеса</h3>
-              <p class="text-sm text-textMuted leading-relaxed">Записывайте поступления и расходы по категориям. Таблица показывает остатки на счетах Kaspi, Halyk и в кассе, а также собирает годовую сводку.</p>
+              <p class="text-sm text-textMuted leading-relaxed">Записывайте поступления и расходы по категориям. Таблица показывает остатки на счетах Kaspi, Halyk и в кассе, а также собирает годовую сводку. Если хотите увидеть, куда уходят деньги, начните с операций за один период. Отмечайте статью и счёт для каждой записи, затем сверяйте остатки с выписками и кассой. В годовой сводке сравнивайте поступления и расходы по категориям.</p>
               <ul class="text-sm text-textMuted space-y-1.5">
                 <li>• Доходы и расходы по статьям</li>
                 <li>• Остатки по нескольким счетам</li>
@@ -85,11 +127,11 @@
             <button type="button" data-action="request-template" data-action-value="Учет ДДС для малого бизнеса" class="motion-button w-full inline-flex items-center justify-center px-4 py-2.5 rounded bg-paper hover:bg-slate-100 text-darkBg border border-gridBorder text-sm font-semibold transition-colors">Получить шаблон</button>
           </article>
 
-          <article data-card-reveal class="motion-card hover:border-emeraldAccent bg-white border border-gridBorder rounded-lg p-5 sm:p-6 space-y-5 flex flex-col justify-between">
+          <article id="template-stock" data-card-reveal class="scroll-mt-28 md:scroll-mt-20 motion-card hover:border-emeraldAccent bg-white border border-gridBorder rounded-lg p-5 sm:p-6 space-y-5 flex flex-col justify-between">
             <div class="space-y-3">
               <span class="inline-flex px-2 py-1 bg-emeraldLight text-emeraldAccent rounded text-xs font-semibold">Склад</span>
               <h3 class="font-heading font-bold text-lg text-darkBg">Складской учет ТМЦ и остатков</h3>
-              <p class="text-sm text-textMuted leading-relaxed">Вносите поступления и списания товаров или материалов. Таблица считает текущий остаток и показывает, когда запас опустился ниже заданного минимума.</p>
+              <p class="text-sm text-textMuted leading-relaxed">Вносите поступления и списания товаров или материалов. Таблица считает текущий остаток и показывает, когда запас опустился ниже заданного минимума. Шаблон подходит, когда нужно видеть, что поступило, что выдали или списали и сколько осталось. Задайте минимум для нужных позиций и сверяйте расчёт с фактическим запасом. По истории движений можно проверить, из каких поступлений и списаний сложился остаток.</p>
               <ul class="text-sm text-textMuted space-y-1.5">
                 <li>• История движения товаров</li>
                 <li>• Автоматический расчёт остатков</li>
@@ -99,11 +141,11 @@
             <button type="button" data-action="request-template" data-action-value="Складской учет ТМЦ и остатков" class="motion-button w-full inline-flex items-center justify-center px-4 py-2.5 rounded bg-paper hover:bg-slate-100 text-darkBg border border-gridBorder text-sm font-semibold transition-colors">Получить шаблон</button>
           </article>
 
-          <article data-card-reveal class="motion-card hover:border-emeraldAccent bg-white border border-gridBorder rounded-lg p-5 sm:p-6 space-y-5 flex flex-col justify-between">
+          <article id="template-vacations" data-card-reveal class="scroll-mt-28 md:scroll-mt-20 motion-card hover:border-emeraldAccent bg-white border border-gridBorder rounded-lg p-5 sm:p-6 space-y-5 flex flex-col justify-between">
             <div class="space-y-3">
               <span class="inline-flex px-2 py-1 bg-emeraldLight text-emeraldAccent rounded text-xs font-semibold">Кадры</span>
               <h3 class="font-heading font-bold text-lg text-darkBg">Калькулятор отпусков и компенсаций</h3>
-              <p class="text-sm text-textMuted leading-relaxed">Заполняйте накопленные и использованные дни отпуска. Таблица показывает оставшиеся дни и помогает оценить компенсацию.</p>
+              <p class="text-sm text-textMuted leading-relaxed">Заполняйте накопленные и использованные дни отпуска. Таблица показывает оставшиеся дни и помогает оценить компенсацию. Перед планированием отпуска сверьте накопленные и использованные дни по сотруднику с вашими записями, затем внесите их в таблицу. По остатку можно увидеть, сколько дней доступно. Оценка компенсации помогает проверить, какие исходные данные ещё нужно уточнить для расчёта.</p>
               <ul class="text-sm text-textMuted space-y-1.5">
                 <li>• Учёт использованных дней</li>
                 <li>• Расчёт остатка отпуска</li>
@@ -119,6 +161,7 @@
     <section class="py-10 sm:py-14 border-b border-gridBorder bg-white">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
         <h2 class="font-heading font-extrabold text-2xl sm:text-3xl text-darkBg">Нужен учёт под ваш бизнес?</h2>
+        <p class="text-sm sm:text-base leading-relaxed text-textMuted">Готовый шаблон даёт форму ввода и расчёт для одной задачи. Он удобен, когда достаточно вести операции, товары или отпуска по правилам одной таблицы. Если для отчёта приходится открывать несколько файлов, вручную переносить одни и те же строки или отдельно собирать данные от разных сотрудников, стоит описать весь процесс. Для автоматизации под заказ отправная точка — то, как работает ваша команда: кто вносит данные, кто сверяет их и какой итог нужен. Перед обсуждением соберите пример текущей таблицы и отчёта. Покажите, какие шаги приходится повторять и где сотрудники тратят больше всего времени. По этим примерам можно определить, достаточно ли изменить готовую таблицу или нужен учёт под ваш порядок работы.</p>
         <p class="text-sm sm:text-base leading-relaxed text-textMuted">Если готового шаблона не хватает, посмотрите, как мы настраиваем <a href="/avtomatizaciya-excel" class="text-emeraldAccent font-semibold hover:underline">отчёты и учёт в Excel и Google Sheets под задачи команды</a>.</p>
       </div>
     </section>
