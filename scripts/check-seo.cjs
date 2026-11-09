@@ -12,6 +12,7 @@ const site = 'https://nexcel.kz';
 const organizationId = site + '/#organization';
 const organizationRef = { '@id': organizationId };
 const articleOrganization = { ...organizationRef, '@type': 'Organization', name: 'Nexcel Solutions' };
+const namedOrganizationRef = { ...articleOrganization, url: site + '/' };
 const newServices = ['/telegram-boty', '/vnedrenie-ii'];
 const services = ['/avtomatizaciya-excel', ...newServices, '/licensing', '/seo'];
 const faqCounts = new Map([
@@ -140,7 +141,8 @@ async function run() {
         assert.deepEqual(article?.publisher, articleOrganization, route + ': article publisher');
         assert.equal(organizationNodes.length, 2, route + ': organization references');
       } else if (route !== '/') {
-        assert.deepEqual(organizationNodes, [organizationRef], route + ': organization reference');
+        const expected = route === '/licensing' ? [organizationRef, namedOrganizationRef] : [organizationRef];
+        assert.deepEqual(organizationNodes, expected, route + ': organization references');
       }
       assert.equal(data.headings.length, 1, route + ': H1 count');
       assert.ok(data.headings[0], route + ': H1 text');
@@ -193,6 +195,9 @@ async function run() {
       if (services.includes(route)) {
         const service = data.entities.find(entity => entity['@type'] === 'Service');
         assert.deepEqual(service?.provider, organizationRef, route + ': Service provider');
+        if (route === '/licensing') {
+          assert.deepEqual(service.offers?.seller, namedOrganizationRef, route + ': Offer seller');
+        }
         assert.ok(data.ending.some(link => link.href.startsWith('https://wa.me/77711369095') &&
           link.text === 'Обсудить задачу в WhatsApp'), route + ': final WhatsApp CTA');
         const related = data.ending.filter(link => services.includes(link.href));
