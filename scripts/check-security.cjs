@@ -10,9 +10,11 @@ const base = process.argv[2] || 'http://127.0.0.1:8787';
 const siteOrigin = new URL(base).origin;
 const metrikaTag = 'https://mc.yandex.ru/metrika/tag.js';
 const root = path.resolve(__dirname, '..');
-const serviceRoutes = ['/avtomatizaciya-excel', '/seo'];
+const serviceFaqCounts = new Map([
+  ['/avtomatizaciya-excel', 6], ['/telegram-boty', 4], ['/vnedrenie-ii', 4], ['/licensing', 4], ['/seo', 4]
+]);
 const serviceLinks = [
-  '/avtomatizaciya-excel', '/#direction-bots', '/#direction-ai', '/licensing', '/seo', '/#calculator'
+  '/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/licensing', '/seo', '/#calculator'
 ];
 
 async function checkHeader(page, response, width, route) {
@@ -69,7 +71,7 @@ async function checkHeader(page, response, width, route) {
   }
 }
 
-async function checkServicePage(page, route) {
+async function checkServicePage(page, route, expectedQuestions) {
   assert.equal(await page.locator('h1').count(), 1, `${route}: exactly one H1`);
   const canonical = page.locator('link[rel="canonical"]');
   assert.equal(await canonical.count(), 1, `${route}: exactly one canonical`);
@@ -84,7 +86,7 @@ async function checkServicePage(page, route) {
   const faq = entities.find(entity => entity['@type'] === 'FAQPage');
   assert.ok(faq, `${route}: FAQPage schema`);
   const questions = page.locator('#service-faq details');
-  assert.equal(await questions.count(), 4, `${route}: FAQ item count`);
+  assert.equal(await questions.count(), expectedQuestions, `${route}: FAQ item count`);
   for (const [index, item] of faq.mainEntity.entries()) {
     const question = questions.nth(index);
     const summary = question.locator('summary');
@@ -94,7 +96,7 @@ async function checkServicePage(page, route) {
     assert.ok(await answer.isVisible(), `${route}: FAQ answer ${index + 1} is visible`);
     assert.equal((await answer.innerText()).trim(), item.acceptedAnswer.text, `${route}: FAQ answer ${index + 1}`);
   }
-  assert.equal(faq.mainEntity.length, 4, `${route}: FAQ schema item count`);
+  assert.equal(faq.mainEntity.length, expectedQuestions, `${route}: FAQ schema item count`);
 }
 
 async function run() {
@@ -106,7 +108,7 @@ async function run() {
 
   const articles = (await fs.readdir(path.join(root, 'dist', 'news')))
     .filter(file => file.endsWith('.html')).map(file => '/news/' + file.slice(0, -5));
-  const routes = ['/', '/licensing', ...serviceRoutes, '/templates', '/faq', '/news', ...articles];
+  const routes = ['/', ...serviceFaqCounts.keys(), '/templates', '/faq', '/news', ...articles];
   const browser = await chromium.launch({
     headless: true,
     ...(process.env.BROWSER_CHANNEL ? { channel: process.env.BROWSER_CHANNEL } : {})
@@ -153,7 +155,7 @@ async function run() {
         assert.equal(unsafe, false, `${route}: executable inline code`);
         assert.deepEqual(await page.evaluate(() => window.securityViolations), [], `${route}: CSP violations`);
         await page.locator('script[type="application/ld+json"]').evaluateAll(elements => elements.forEach(el => JSON.parse(el.textContent)));
-        if (serviceRoutes.includes(route)) await checkServicePage(page, route);
+        if (serviceFaqCounts.has(route)) await checkServicePage(page, route, serviceFaqCounts.get(route));
 
         await checkHeader(page, response, width, route);
         for (const button of await page.locator('button[data-action]').all()) {

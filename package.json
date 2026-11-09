@@ -16,7 +16,8 @@
     "check:faq": "node scripts/check-faq.cjs",
     "check:navigation": "node scripts/check-navigation.cjs",
     "check:cloudflare": "node scripts/check-http.cjs http://127.0.0.1:8787 --cloudflare",
-    "check:security": "node scripts/check-security.cjs"
+    "check:security": "node scripts/check-security.cjs",
+    "check:seo": "node scripts/check-seo.cjs"
   },
   "keywords": [],
   "author": "",

@@ -6,7 +6,7 @@ const path = require('node:path');
 const base = process.argv[2] || 'http://127.0.0.1:5500';
 const cloudflare = process.argv.includes('--cloudflare');
 const root = path.resolve(__dirname, '..');
-const serviceRoutes = ['/avtomatizaciya-excel', '/seo'];
+const serviceRoutes = ['/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/seo'];
 let checks = 0;
 
 async function request(route, options = {}) {
@@ -77,7 +77,7 @@ async function run() {
   assert.equal((await request('/', { method: 'POST' })).status, 405);
   checks += 2;
   if (cloudflare) {
-    // News and service files are generated in dist; the source preview does not serve them.
+    // Verify the generated news listing and articles served by Cloudflare.
     const newsFiles = ['news.html', ...(await fs.readdir(path.join(root, 'dist', 'news'))).filter(file => file.endsWith('.html')).map(file => `news/${file}`)];
     for (const file of newsFiles) {
       const route = '/' + file.replace(/\.html$/, '');

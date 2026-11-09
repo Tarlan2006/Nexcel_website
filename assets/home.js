@@ -93,7 +93,7 @@ function openWhatsApp(message) {
 }
 
 function openWhatsAppWithCurrentTopic() {
-  const topic = heroContent[currentDirection] ? heroContent[currentDirection].topic : 'оцифровку и автоматизацию бизнеса';
+  const topic = heroContent[currentDirection] ? heroContent[currentDirection].topic : 'автоматизацию бизнеса';
   openWhatsApp('Здравствуйте! Я с вашего сайта nexcel.kz, хочу обсудить проект — ' + topic + '.');
 }
 

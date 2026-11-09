@@ -24,7 +24,7 @@ async function checkClients(browser) {
     assert.equal(await page.locator('.clients-group[aria-hidden] img[alt=""]').count(), 8);
     assert.equal(await section.locator('[tabindex]').count(), 0);
     assert.equal(await section.locator('img[loading="lazy"][decoding="async"]').count(), 16);
-    assert.equal(await originals.locator('img[alt=""]').count(), 3);
+    assert.equal(await originals.locator('img[alt=""]').count(), 0);
     assert.equal(await originals.locator('span').count(), 3);
     assert(await section.locator('h2').evaluate(el => {
       const range = document.createRange();

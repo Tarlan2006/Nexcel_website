@@ -3,18 +3,27 @@
 // Adding a post = adding one JSON file to content/news/ and pushing to main.
 const fs = require('node:fs');
 const path = require('node:path');
+const { spawnSync } = require('node:child_process');
 const { postPage, indexPage } = require('./news-templates.cjs');
 
 const root = path.resolve(__dirname, '..');
 const dist = path.join(root, 'dist');
 const contentDir = path.join(root, 'content', 'news');
 const SITE = 'https://nexcel.kz';
-// Date of the last change to the news listing itself. New articles can supersede it.
-const NEWS_INDEX_LASTMOD = '2026-11-09';
 const serviceTitles = new Map([
-  ['avtomatizaciya-excel', 'Автоматизация Excel'],
-  ['seo', 'SEO-оптимизация и продвижение сайтов']
+  ['avtomatizaciya-excel', 'Автоматизация Excel и Google Sheets'],
+  ['seo', 'SEO-аудит и продвижение сайтов']
 ]);
+
+function gitLastmod(...files) {
+  const result = spawnSync('git', ['log', '-1', '--format=%cs', '--', ...files], {
+    cwd: root, encoding: 'utf8', windowsHide: true
+  });
+  const date = result.stdout?.trim();
+  return result.status === 0 && /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : '';
+}
+
+const lastmodTag = date => date ? '\n    <lastmod>' + date + '</lastmod>' : '';
 
 async function buildNews() {
 
@@ -26,6 +35,11 @@ if (fs.existsSync(contentDir)) {
     const post = JSON.parse(fs.readFileSync(path.join(contentDir, file), 'utf8'));
     for (const key of ['slug', 'date', 'title', 'excerpt', 'body']) {
       if (!post[key] || typeof post[key] !== 'string') throw new Error(`${file}: missing "${key}"`);
+    }
+    for (const key of ['seoTitle', 'seoDescription']) {
+      if (post[key] !== undefined && (typeof post[key] !== 'string' || !post[key].trim())) {
+        throw new Error(`${file}: invalid "${key}"`);
+      }
     }
     if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(post.slug)) throw new Error(`${file}: slug must be latin lowercase with dashes`);
     if (!/^\d{4}-\d{2}-\d{2}$/.test(post.date)) throw new Error(`${file}: date must be YYYY-MM-DD`);
@@ -47,6 +61,7 @@ if (fs.existsSync(contentDir)) {
       if (metadata.width !== 1200 || metadata.height !== 630) throw new Error(`${file}: ogImage must be 1200x630`);
     }
     if (post.draft) continue;
+    post.source = 'content/news/' + file;
     posts.push(post);
   }
 }
@@ -76,24 +91,27 @@ fs.mkdirSync(path.join(dist, 'news'), { recursive: true });
 fs.writeFileSync(path.join(dist, 'news.html'), indexPage(posts));
 for (const p of posts) fs.writeFileSync(path.join(dist, 'news', `${p.slug}.html`), postPage(p));
 
-// sitemap.xml: add /news and every post
+// Read dates from the source files' Git history. A source archive has no Git dates.
 const smPath = path.join(dist, 'sitemap.xml');
 let sm = fs.readFileSync(smPath, 'utf8').replace(/\s*<url>\s*<loc>https:\/\/nexcel\.kz\/news(?:\/[^<]*)?<\/loc>[\s\S]*?<\/url>/g, '');
-const newsLastmod = posts.reduce((latest, post) => {
+sm = sm.replace(/(<loc>https:\/\/nexcel\.kz\/([a-z0-9-]*)<\/loc>)(?:\s*<lastmod>[^<]*<\/lastmod>)?/g,
+  (_, loc, slug) => loc + lastmodTag(gitLastmod((slug || 'index') + '.html')));
+const latestPostDate = posts.reduce((latest, post) => {
   const modified = post.updated || post.date;
   return modified > latest ? modified : latest;
-}, NEWS_INDEX_LASTMOD);
-const urls = [`  <url>\n    <loc>${SITE}/news</loc>\n    <lastmod>${newsLastmod}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`]
-  .concat(posts.map((p) => `  <url>\n    <loc>${SITE}/news/${p.slug}</loc>\n    <lastmod>${p.updated || p.date}</lastmod>\n    <priority>0.6</priority>\n  </url>`));
+}, '');
+const newsLastmod = gitLastmod('scripts/build-news.cjs', 'scripts/news-templates.cjs', ...posts.map(post => post.source)) || latestPostDate;
+const urls = [`  <url>\n    <loc>${SITE}/news</loc>${lastmodTag(newsLastmod)}\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`]
+  .concat(posts.map((p) => `  <url>\n    <loc>${SITE}/news/${p.slug}</loc>${lastmodTag(gitLastmod(p.source) || p.updated || p.date)}\n    <priority>0.6</priority>\n  </url>`));
 sm = sm.replace('</urlset>', urls.join('\n') + '\n</urlset>');
 fs.writeFileSync(smPath, sm);
 
 // llms.txt: short list of the latest posts for AI search
 const llmsPath = path.join(dist, 'llms.txt');
 if (fs.existsSync(llmsPath)) {
-  const base = fs.readFileSync(llmsPath, 'utf8').replace(/\n## Новости и кейсы\n[\s\S]*?(?=\n## |$)/g, '').trimEnd();
+  const base = fs.readFileSync(llmsPath, 'utf8').replace(/\n## (?:Новости и кейсы|Кейсы и статьи)\r?\n[\s\S]*?(?=\n## |$)/g, '').trimEnd();
   const list = posts.slice(0, 10).map((p) => `- [${p.title}](${SITE}/news/${p.slug}): ${p.excerpt}`).join('\n');
-  fs.writeFileSync(llmsPath, base + (posts.length ? `\n\n## Новости и кейсы\n\n${list}\n` : '\n'));
+  fs.writeFileSync(llmsPath, base + (posts.length ? `\n\n## Кейсы и статьи\n\n${list}\n` : '\n'));
 }
 console.log(`News built: ${posts.length} post(s) -> dist/news.html, dist/news/`);
 }

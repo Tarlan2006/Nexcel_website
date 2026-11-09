@@ -2,8 +2,7 @@ const { chromium } = require('@playwright/test');
 const fs = require('node:fs/promises');
 
 const desktopWidth = 1024;
-const serviceAnchors = ['#direction-bots', '#direction-ai', '#calculator'];
-const headerAnchors = [...serviceAnchors, '#cases'];
+const calculatorAnchor = '#calculator';
 
 async function openNavigation(page, width, services = false) {
   const mobile = width < desktopWidth;
@@ -31,7 +30,7 @@ function fitsViewport(element) {
   const widths = [320, 360, 390, 768, 1000, 1024, 1150, 1280, 1440, 1536, 1920];
   try {
     for (const width of widths) {
-      for (const route of ['/', '/licensing', '/avtomatizaciya-excel', '/seo', '/templates', '/faq']) {
+      for (const route of ['/', '/licensing', '/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/seo', '/templates', '/faq']) {
         const page = await context.newPage();
         await page.setViewportSize({ width, height: 900 });
         await page.goto('http://127.0.0.1:5500' + route);
@@ -95,15 +94,12 @@ function fitsViewport(element) {
             const clipped = await page.locator('#inspector-' + key).evaluate(panel => [...panel.querySelectorAll('*')].some(el => {const rect = el.getBoundingClientRect(); return rect.width > 0 && (rect.right > innerWidth + 1 || rect.left < -1);}));
             if (clipped) failures.push(`${width}px: inspector ${key} overflows`);
           }
-          for (const target of headerAnchors) {
-            const services = serviceAnchors.includes(target);
-            const nav = await openNavigation(page, width, services);
-            if (services && !await nav.evaluate(fitsViewport)) failures.push(`${width}px: services panel overflows`);
-            await nav.locator(`a[href="/${target}"]`).click();
-            const position = await page.locator(target).evaluate(el => ({ top: el.getBoundingClientRect().top, header: document.querySelector('header').getBoundingClientRect().bottom }));
-            if (position.top < position.header - 1) failures.push(`${width}px: ${target} behind header`);
-            if (width < desktopWidth && await page.locator('#mobile-menu-toggle').getAttribute('aria-expanded') !== 'false') failures.push(`${width}px: menu stayed open`);
-          }
+          const nav = await openNavigation(page, width, true);
+          if (!await nav.evaluate(fitsViewport)) failures.push(`${width}px: services panel overflows`);
+          await nav.locator(`a[href="/${calculatorAnchor}"]`).click();
+          const position = await page.locator(calculatorAnchor).evaluate(el => ({ top: el.getBoundingClientRect().top, header: document.querySelector('header').getBoundingClientRect().bottom }));
+          if (position.top < position.header - 1) failures.push(`${width}px: calculator behind header`);
+          if (width < desktopWidth && await page.locator('#mobile-menu-toggle').getAttribute('aria-expanded') !== 'false') failures.push(`${width}px: menu stayed open`);
         }
         if (route === '/templates') {
           await page.locator('a[href="#library"]').click();
@@ -146,5 +142,5 @@ function fitsViewport(element) {
   } finally { await browser.close(); }
   await fs.writeFile('.review/responsive/layout.json', JSON.stringify(results, null, 2));
   if (failures.length) { console.error(failures.join('\n')); process.exitCode = 1; }
-  else console.log('PASS:', results.length, 'single-row header layouts,', widths.length * 4, 'inspector panels,', widths.length * headerAnchors.length, 'main navigation anchors,', widths.length, 'library anchors,', results.length - widths.length, 'interpage links and 2 short-screen mobile menu checks.');
+  else console.log('PASS:', results.length, 'single-row header layouts,', widths.length * 4, 'inspector panels,', widths.length, 'calculator anchors,', widths.length, 'library anchors,', results.length - widths.length, 'interpage links and 2 short-screen mobile menu checks.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

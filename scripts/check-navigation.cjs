@@ -2,8 +2,8 @@ const assert = require('node:assert/strict');
 const { chromium, expect } = require('@playwright/test');
 
 const base = 'http://127.0.0.1:5500';
-const services = ['/avtomatizaciya-excel', '/#direction-bots', '/#direction-ai', '/licensing', '/seo', '/#calculator'];
-const sections = ['/#cases', '/templates', '/news', '/faq'];
+const services = ['/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/licensing', '/seo', '/#calculator'];
+const sections = ['/templates', '/news', '/faq'];
 const activeHighlight = /(?:^|\s)text-emeraldAccent(?:\s|$)/;
 
 async function openPage(browser, width) {
@@ -49,7 +49,7 @@ async function checkStaticHeader(page) {
     assert.ok(url.searchParams.get('text'), 'WhatsApp has a prepared message');
   }
   await expect(page.locator('footer a[href="mailto:info@nexcel.kz"]')).toBeAttached();
-  for (const service of ['/avtomatizaciya-excel', '/seo']) {
+  for (const service of ['/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/seo']) {
     await expect(page.locator('#directions a[href="' + service + '"]')).toHaveCount(1);
     await expect(page.locator('footer a[href="' + service + '"]')).toHaveCount(1);
   }
@@ -100,7 +100,7 @@ async function checkDesktopDisclosure(page) {
   await page.keyboard.press('Space');
   await expect(items.first()).toBeFocused();
   await page.keyboard.press('Tab');
-  await expect(page.locator('header a[href="/#cases"]:visible')).toBeFocused();
+  await expect(page.locator('header a[href="/templates"]:visible')).toBeFocused();
   await expect(menu).toBeHidden();
 
   await page.setViewportSize({ width: 1024, height: 270 });
@@ -201,7 +201,8 @@ async function run() {
     await page.locator('#pill-bots').click();
     await page.locator('#inspector-bots').waitFor();
     assert.deepEqual(errors, []);
-    console.log('PASS: static header links, desktop dropdown and mobile accordion interactions, 22 navigation clicks, active states, fetch failure isolation');
+    const clicks = 2 * (services.length + sections.length + 1);
+    console.log('PASS: static header links, desktop dropdown and mobile accordion interactions, ' + clicks + ' navigation clicks, active states, fetch failure isolation');
   } finally {
     await browser.close();
   }

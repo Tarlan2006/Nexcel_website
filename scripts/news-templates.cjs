@@ -9,9 +9,19 @@ function ruDate(iso) {
 }
 const jsonLd = (obj) => JSON.stringify(obj, null, 2).replace(/</g, '\\u003c');
 
-function shell({ title, description, path, ogType, ld, main, image }) {
+function shell({ title, description, path, pageName, ogType, ld, main, image }) {
   const url = SITE + path;
   const imageUrl = SITE + (image || '/assets/og-preview.png');
+  const { '@context': context, ...entity } = ld;
+  const ancestors = [['Главная', '/']];
+  if (path.startsWith('/news/')) ancestors.push(['Кейсы и статьи', '/news']);
+  const breadcrumb = {
+    '@type': 'BreadcrumbList',
+    '@id': url + '#breadcrumbs',
+    itemListElement: [...ancestors, [pageName, path]].map(([name, link], index) => ({
+      '@type': 'ListItem', position: index + 1, name, item: SITE + link
+    }))
+  };
   return `<!DOCTYPE html>
 <html lang="ru" class="scroll-smooth">
 <head>
@@ -37,7 +47,7 @@ function shell({ title, description, path, ogType, ld, main, image }) {
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/styles.css" />
   <script type="application/ld+json">
-${jsonLd(ld)}
+${jsonLd({ '@context': context, '@graph': [entity, breadcrumb] })}
   </script>
   <script src="/assets/metrika.js" defer></script>
 </head>
@@ -106,9 +116,10 @@ ${links}
 
 function postPage(p) {
   const path = `/news/${p.slug}`;
+  const description = p.seoDescription || p.excerpt;
   const main = `    <article class="py-10 sm:py-14 lg:py-20 border-b border-gridBorder bg-paper">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
-        <a href="/news" class="inline-flex items-center gap-1 text-sm font-semibold text-emeraldAccent hover:underline"><span aria-hidden="true">←</span> Все новости</a>
+        <a href="/news" class="inline-flex items-center gap-1 text-sm font-semibold text-emeraldAccent hover:underline"><span aria-hidden="true">←</span> Все кейсы и статьи</a>
         <header class="space-y-3">
           <time datetime="${esc(p.date)}" class="block text-xs font-sans text-textMuted uppercase tracking-wider">${ruDate(p.date)}</time>
           <h1 class="font-heading font-extrabold text-3xl sm:text-4xl text-darkBg">${esc(p.title)}</h1>
@@ -122,9 +133,10 @@ ${relatedSection(p)}
       </div>
     </article>`;
   return shell({
-    title: `${p.title} — Nexcel Solutions`,
-    description: p.excerpt,
+    title: `${p.seoTitle || p.title} | Nexcel`,
+    description,
     path,
+    pageName: p.title,
     ogType: 'article',
     image: p.ogImage || (p.imageWidth === 1200 && p.imageHeight === 630 ? p.image : undefined),
     main,
@@ -133,7 +145,7 @@ ${relatedSection(p)}
       '@type': 'Article',
       '@id': `${SITE}${path}#article`,
       headline: p.title,
-      description: p.excerpt,
+      description,
       datePublished: p.date,
       dateModified: p.updated || p.date,
       inLanguage: 'ru',
@@ -153,13 +165,13 @@ function indexPage(posts) {
             <p class="text-sm font-sans text-textMuted leading-relaxed mt-2">${esc(p.excerpt)}</p>
             <span class="inline-block text-sm font-semibold text-emeraldAccent mt-3">Читать <span aria-hidden="true">→</span></span>
           </a>`).join('\n')
-    : '          <p class="text-sm font-sans text-textMuted">Новости появятся совсем скоро.</p>';
+    : '          <p class="text-sm font-sans text-textMuted">Кейсы и статьи появятся здесь.</p>';
   const main = `    <section class="py-10 sm:py-14 lg:py-20 border-b border-gridBorder bg-paper">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
         <a href="/" class="inline-flex items-center gap-1 text-sm font-semibold text-emeraldAccent hover:underline"><span aria-hidden="true">←</span> Главная</a>
         <div class="space-y-2">
-          <h1 class="font-heading font-extrabold text-3xl sm:text-4xl text-darkBg">Новости и кейсы</h1>
-          <p class="text-sm font-sans text-textMuted">Как мы автоматизируем бизнес-процессы: Excel и Google Таблицы, документы, Telegram-боты и ИИ. Пишем коротко и по делу.</p>
+          <h1 class="font-heading font-extrabold text-3xl sm:text-4xl text-darkBg">Кейсы и статьи об автоматизации бизнеса</h1>
+          <p class="text-sm font-sans text-textMuted">Кейсы и статьи об автоматизации бизнеса в Казахстане. Рассказываем, как собираем учёт и отчёты в таблицах и упрощаем работу с документами.</p>
         </div>
         <div class="space-y-3 font-sans">
 ${cards}
@@ -167,16 +179,17 @@ ${cards}
       </div>
     </section>`;
   return shell({
-    title: 'Новости и кейсы — Nexcel Solutions',
-    description: 'Кейсы и новости Nexcel Solutions: автоматизация Excel и Google Таблиц, документооборот, Telegram-боты и внедрение ИИ для бизнеса в Казахстане.',
+    title: 'Кейсы и статьи об автоматизации Excel и учёта | Nexcel',
+    description: 'Реальные проекты Nexcel: как мы переносили учёт из Excel в единые системы, автоматизировали документы и отчётность. Кейсы и разборы для бизнеса в Казахстане.',
     path: '/news',
+    pageName: 'Кейсы и статьи',
     ogType: 'website',
     main,
     ld: {
       '@context': 'https://schema.org',
       '@type': 'CollectionPage',
       '@id': `${SITE}/news#page`,
-      name: 'Новости и кейсы Nexcel Solutions',
+      name: 'Кейсы и статьи Nexcel Solutions',
       url: `${SITE}/news`,
       inLanguage: 'ru'
     }
