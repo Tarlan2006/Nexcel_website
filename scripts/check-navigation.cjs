@@ -3,7 +3,7 @@ const { chromium, expect } = require('@playwright/test');
 
 const base = 'http://127.0.0.1:5500';
 const services = ['/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/licensing', '/seo', '/#calculator'];
-const sections = ['/templates', '/news', '/faq'];
+const sections = ['/templates', '/news', '/o-kompanii', '/faq'];
 const activeHighlight = /(?:^|\s)text-emeraldAccent(?:\s|$)/;
 
 async function openPage(browser, width) {
@@ -170,7 +170,6 @@ async function checkLinks(page, mobile) {
   await page.locator('#site-brand').click();
   await page.waitForURL(base + '/');
   await page.locator('#site-header-row').waitFor();
-  await expect(nav.locator('a[href="/o-kompanii"]')).toHaveCount(0);
   await page.locator('#site-footer nav[aria-label="Компания"] a[href="/o-kompanii"]').click();
   await page.waitForURL(base + '/o-kompanii');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('О компании Nexcel Solutions');
