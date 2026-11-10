@@ -71,7 +71,7 @@ ${main}
 `;
 }
 
-// Mini-markdown: "## heading", "- list item", blank-line paragraphs, **bold**, [text](https://url)
+// Mini-markdown: "## heading", "- list item", "1. list item", blank-line paragraphs, **bold**, [text](https://url)
 function inline(text) {
   return esc(text)
     .replace(/\*\*([^*]+)\*\*/g, '<strong class="font-semibold text-darkBg">$1</strong>')
@@ -79,18 +79,29 @@ function inline(text) {
 }
 function renderBody(body) {
   const lines = String(body).replace(/\r\n/g, '\n').trim().split('\n');
+  const heading = /^##\s+/;
+  const unorderedItem = /^-\s+/;
+  const orderedItem = /^(\d{1,9})\.\s+/;
   const html = [];
   for (let i = 0; i < lines.length;) {
     if (!lines[i].trim()) { i++; continue; }
-    if (/^##\s+/.test(lines[i])) {
-      html.push(`<h2 class="font-heading font-bold text-xl sm:text-2xl text-darkBg pt-3">${inline(lines[i++].replace(/^##\s+/, ''))}</h2>`);
-    } else if (/^-\s+/.test(lines[i])) {
+    if (heading.test(lines[i])) {
+      html.push(`<h2 class="font-heading font-bold text-xl sm:text-2xl text-darkBg pt-3">${inline(lines[i++].replace(heading, ''))}</h2>`);
+    } else if (unorderedItem.test(lines[i]) || orderedItem.test(lines[i])) {
+      const ordered = lines[i].match(orderedItem);
+      const marker = ordered ? orderedItem : unorderedItem;
+      const tag = ordered ? 'ol' : 'ul';
+      const style = ordered ? 'list-decimal' : 'list-disc';
+      const start = ordered && Number(ordered[1]) !== 1 ? ` start="${Number(ordered[1])}"` : '';
       const items = [];
-      while (i < lines.length && /^-\s+/.test(lines[i])) items.push(`<li>${inline(lines[i++].replace(/^-\s+/, ''))}</li>`);
-      html.push(`<ul class="list-disc pl-5 space-y-1.5 text-sm sm:text-base text-textMain leading-relaxed">${items.join('')}</ul>`);
+      while (i < lines.length && marker.test(lines[i])) items.push(`<li>${inline(lines[i++].replace(marker, ''))}</li>`);
+      html.push(`<${tag}${start} class="${style} pl-5 space-y-1.5 text-sm sm:text-base text-textMain leading-relaxed">${items.join('')}</${tag}>`);
     } else {
       const paragraph = [];
-      while (i < lines.length && lines[i].trim() && !/^(##|-)\s+/.test(lines[i])) paragraph.push(lines[i++]);
+      while (i < lines.length && lines[i].trim()
+        && !heading.test(lines[i]) && !unorderedItem.test(lines[i]) && !orderedItem.test(lines[i])) {
+        paragraph.push(lines[i++]);
+      }
       html.push(`<p class="text-sm sm:text-base text-textMain leading-relaxed">${inline(paragraph.join(' '))}</p>`);
     }
   }
