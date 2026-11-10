@@ -5,7 +5,7 @@ const os = require('node:os');
 const path = require('node:path');
 
 async function checkClients(browser) {
-  const clientCount = 6;
+  const clientCount = 8;
   const screenshots = await fs.mkdtemp(path.join(os.tmpdir(), 'nexcel-clients-'));
   console.log('Screenshots: ' + screenshots);
   for (const width of [360, 390, 768, 1024, 1440]) {
@@ -26,7 +26,7 @@ async function checkClients(browser) {
     assert.equal(await section.locator('[tabindex]').count(), 0);
     assert.equal(await section.locator('img[loading="lazy"][decoding="async"]').count(), clientCount * 2);
     assert.equal(await originals.locator('img[alt=""]').count(), 0);
-    assert.equal(await originals.locator('span').count(), 2);
+    assert.equal(await originals.locator('span').count(), 3);
     assert(await section.locator('h2').evaluate(el => {
       const range = document.createRange();
       range.selectNodeContents(el);
@@ -35,7 +35,7 @@ async function checkClients(browser) {
     }));
     assert(await originals.locator('span').evaluateAll(labels => labels.every(el => getComputedStyle(el).whiteSpace === 'nowrap' && el.scrollWidth <= el.clientWidth)));
     assert.equal(await section.locator('h2').textContent(), 'Нам доверяют компании и университеты');
-    assert.deepEqual(await originals.locator('span').allTextContents(), ['КазНУ им. аль-Фараби', 'Nazarbayev University']);
+    assert.deepEqual(await originals.locator('span').allTextContents(), ['Правительство для граждан', 'КазНУ им. аль-Фараби', 'Nazarbayev University']);
     assert(await section.locator('img').evaluateAll(async images => {
       // Measure each source without waiting for its offscreen lazy copies to enter the carousel viewport.
       const sources = new Map();
@@ -53,7 +53,7 @@ async function checkClients(browser) {
     }));
     await page.mouse.move(0, 0);
     await page.waitForTimeout(260);
-    assert(await originals.locator('img.clients-logo-fine').evaluateAll(images => images.length === 1 && images.every(el => {
+    assert(await originals.locator('img.clients-logo-fine').evaluateAll(images => images.length === 2 && images.every(el => {
       const style = getComputedStyle(el);
       return style.opacity === '0.9' && style.filter === 'grayscale(1) contrast(1.2)';
     })));
