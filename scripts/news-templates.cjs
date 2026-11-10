@@ -72,10 +72,15 @@ ${main}
 }
 
 // Mini-markdown: "## heading", "- list item", "1. list item", blank-line paragraphs, **bold**, [text](https://url)
+// Append {target=_blank} to a link to open it in a new tab.
 function inline(text) {
   return esc(text)
     .replace(/\*\*([^*]+)\*\*/g, '<strong class="font-semibold text-darkBg">$1</strong>')
-    .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+|\/[^)\s]*)\)/g, '<a href="$2" class="text-emeraldAccent font-semibold hover:underline">$1</a>');
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+|\/[^)\s]*)\)(\{target=_blank\})?/g,
+      (_match, label, href, newTab) => {
+        const attributes = newTab ? ' target="_blank" rel="noopener"' : '';
+        return `<a href="${href}"${attributes} class="text-emeraldAccent font-semibold hover:underline">${label}</a>`;
+      });
 }
 function renderBody(body) {
   const lines = String(body).replace(/\r\n/g, '\n').trim().split('\n');
