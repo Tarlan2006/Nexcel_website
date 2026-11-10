@@ -16,7 +16,8 @@ const organizationPages = new Set(['/', '/o-kompanii']);
 const newServices = ['/telegram-boty', '/vnedrenie-ii'];
 const services = ['/avtomatizaciya-excel', ...newServices, '/licensing', '/seo'];
 const faqCounts = new Map([
-  ['/', 5], ['/faq', 12], ['/o-kompanii', 3], ['/avtomatizaciya-excel', 6], ...services.slice(1).map(route => [route, 4])
+  ['/', 5], ['/faq', 12], ['/o-kompanii', 3], ['/avtomatizaciya-excel', 6],
+  ...newServices.map(route => [route, 4]), ['/licensing', 4], ['/seo', 7]
 ]);
 const jargon = /оцифров[\p{L}]*|mini[\p{Pd}\s]erp|инспектор\s+направлений|доказательн[\p{L}]*\s+баз[\p{L}]*/iu;
 
