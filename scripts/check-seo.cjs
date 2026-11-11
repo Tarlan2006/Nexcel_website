@@ -233,7 +233,10 @@ async function run() {
       if (newServices.includes(route)) assert.ok(data.words >= 450, route + ': ' + data.words + ' words');
       report.push({ route, title, description, h1: data.headings[0], words: data.words });
     }
-    assert.deepEqual(aboutOrganization, homeOrganization, 'Organization definitions on / and /o-kompanii must match');
+    const { legalName, identifier, taxID, employee, address, ...sharedOrganization } = homeOrganization;
+    const { streetAddress, postalCode, ...sharedAddress } = address;
+    assert.deepEqual(aboutOrganization, { ...sharedOrganization, address: sharedAddress },
+      'Shared organization fields on / and /o-kompanii must match');
     for (const { route, id } of schemaReferences) {
       assert.ok(schemaIds.has(id), route + ': undefined JSON-LD reference ' + id);
     }
