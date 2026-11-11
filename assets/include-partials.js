@@ -195,11 +195,11 @@
         if (!response.ok) throw new Error('HTTP ' + response.status);
         container.innerHTML = await response.text();
       }
-      if (initialize) initialize();
+      if (initialize) await initialize();
     } catch (error) {
       console.warn('Could not load ' + url + ':', error);
     }
   }
   include('site-header', '/partials/header.html', initHeader);
-  include('site-footer', '/partials/footer.html');
+  include('site-footer', '/partials/footer.html', () => import('/assets/cookie-notice.js'));
 })();

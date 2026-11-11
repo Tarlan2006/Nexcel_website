@@ -102,11 +102,23 @@
 
       <div class="pt-6 border-t border-slate-800 space-y-2 text-[11px] text-slate-400">
         <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
-        <span>© 2026 Nexcel Solutions. Все права защищены.</span>
-        <span>Работа по договору • Расчеты в тенге (KZT) • ЭСФ и АВР через ИС ЭСФ</span>
+          <div class="flex flex-wrap justify-center sm:justify-start gap-x-4 gap-y-2">
+            <span>© 2026 Nexcel Solutions. Все права защищены.</span>
+            <a href="/privacy" class="underline underline-offset-4 hover:text-emeraldOnDark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emeraldOnDark">Политика конфиденциальности</a>
+          </div>
+          <span>Работа по договору • Расчеты в тенге (KZT) • ЭСФ и АВР через ИС ЭСФ</span>
         </div>
         <p class="text-[11px] text-slate-400">Логотипы принадлежат их правообладателям.</p>
       </div>
 
     </div>
   </footer>
+
+<aside id="cookie-notice" aria-label="Уведомление о cookie" class="pointer-events-none fixed bottom-0 left-0 right-0 z-10 px-3 pb-3 sm:px-6" hidden>
+  <div class="pointer-events-auto mx-auto flex max-w-3xl items-center gap-3 rounded-lg border border-gridBorder bg-white p-3 shadow-sm sm:p-4">
+    <p class="text-xs leading-relaxed text-textMain sm:text-sm">
+      Мы используем cookie и Яндекс Метрику, чтобы понимать, как работает сайт. Подробнее в <a href="/privacy" class="text-emeraldAccent underline underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">политике конфиденциальности</a>.
+    </p>
+    <button type="button" id="cookie-notice-dismiss" aria-label="Понятно, закрыть уведомление о cookie" class="min-h-11 shrink-0 rounded bg-emeraldAccent px-3 text-sm font-semibold text-white hover:bg-emeraldHover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">Понятно</button>
+  </div>
+</aside>
