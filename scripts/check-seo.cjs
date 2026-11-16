@@ -75,8 +75,11 @@ async function inspectHtml(page, html) {
       descriptions: attrs('meta[name="description"]', 'content'),
       ogTitles: attrs('meta[property="og:title"]', 'content'),
       ogDescriptions: attrs('meta[property="og:description"]', 'content'),
+      twitterTitles: attrs('meta[name="twitter:title"]', 'content'),
+      twitterDescriptions: attrs('meta[name="twitter:description"]', 'content'),
       ogSiteNames: attrs('meta[property="og:site_name"]', 'content'),
       canonicals: attrs('link[rel="canonical"]', 'href'),
+      robots: attrs('meta[name="robots"]', 'content'),
       hasKeywords: Boolean(doc.querySelector('meta[name="keywords" i]')),
       headings: [...doc.querySelectorAll('h1')].map(el => clean(el.textContent)),
       text: clean(doc.body.textContent),
@@ -85,6 +88,7 @@ async function inspectHtml(page, html) {
       schemas,
       links: attrs('a[href]', 'href'),
       mainLinks: attrs('main a[href]', 'href'),
+      ids: attrs('[id]', 'id'),
       nav: ['#desktop-services-menu', '#mobile-services-menu', '#site-footer'].map(selector => attrs(selector + ' a[href]', 'href')),
       ending: [...(main.lastElementChild?.querySelectorAll('a[href]') || [])].map(link => ({
         href: link.getAttribute('href'), text: clean(link.textContent)
@@ -107,6 +111,8 @@ async function run() {
   const report = [];
   const schemaIds = new Set();
   const schemaReferences = [];
+  const seenTitles = new Set();
+  const seenDescriptions = new Set();
   let homeOrganization;
   let aboutOrganization;
   try {
@@ -124,10 +130,17 @@ async function run() {
     assert.deepEqual([...sitemap.keys()].sort(), files.map(routeFor).filter(route => route !== '/404').map(route => site + route).sort(), 'sitemap covers the indexable pages');
     assert.doesNotMatch(llms, jargon, 'llms.txt: jargon');
     assert.ok(llms.includes('[О компании Nexcel Solutions](' + site + '/o-kompanii)'), 'llms.txt: company page link');
+    const pagesByRoute = new Map();
+    const publicLinks = [];
     for (const file of files) {
       const route = routeFor(file);
       const html = await fs.readFile(path.join(dist, file), 'utf8');
       const data = await inspectHtml(page, html);
+      pagesByRoute.set(route, new Set(data.ids));
+      for (const href of data.links) {
+        const url = new URL(href, site + route);
+        if (url.origin === site) publicLinks.push({ route, href, url });
+      }
       const entities = data.schemas.flatMap(schema => schema['@graph'] || schema);
       const organizationNodes = [];
       for (const node of schemaNodes(data.schemas)) {
@@ -162,18 +175,30 @@ async function run() {
       assert.equal(data.descriptions.length, 1, route + ': description count');
       const [title] = data.titles;
       const [description] = data.descriptions;
-      assert.ok(title.endsWith(' | Nexcel') && [...title].length <= 60, route + ': title limit (' + [...title].length + ')');
-      assert.ok(description && [...description].length <= 160, route + ': description limit (' + [...(description || '')].length + ')');
+      assert.match(title, /^[^|]+ \| Nexcel Solutions$/, route + ': title format');
+      assert.doesNotMatch(title, /^(?:главная|home|добро пожаловать)(?:[\s:|]|$)/iu, route + ': title introduction');
+      if (route === '/') assert.equal(title, 'Автоматизация бизнеса, ИИ-решения и Telegram-боты в Астане | Nexcel Solutions');
+      assert.ok(!seenTitles.has(title), route + ': duplicate title');
+      seenTitles.add(title);
+      assert.ok(description && [...description].length >= 140 && [...description].length <= 160, route + ': description length (' + [...(description || '')].length + ')');
+      assert.ok(!seenDescriptions.has(description), route + ': duplicate description');
+      seenDescriptions.add(description);
       assert.deepEqual(data.ogTitles, [title], route + ': Open Graph title');
       assert.deepEqual(data.ogDescriptions, [description], route + ': Open Graph description');
+      if (route !== '/404') {
+        assert.deepEqual(data.twitterTitles, [title], route + ': Twitter title');
+        assert.deepEqual(data.twitterDescriptions, [description], route + ': Twitter description');
+      }
       assert.deepEqual(data.ogSiteNames, ['Nexcel Solutions'], route + ': Open Graph site name');
       assert.equal(data.hasKeywords, false, route + ': meta keywords');
       assert.doesNotMatch([title, description, data.text, JSON.stringify(entities)].join(' '), jargon, route + ': jargon');
-      assert.doesNotMatch(html, /⚠|\bTODO\b/, route + ': unpublished notes');
+      assert.doesNotMatch(html, /⚠|\bTODO\b|lorem\s+ipsum|example\.invalid/i, route + ': unpublished notes');
+      assert.ok(!data.links.some(link => /^(?:#|javascript:.*)?$/i.test(link.trim())), route + ': empty or placeholder links');
+      assert.deepEqual(data.canonicals, [site + route], route + ': canonical');
+      if (route === '/404') assert.deepEqual(data.robots, ['noindex'], route + ': noindex');
       assert.ok(!data.links.some(link => ['/#direction-bots', '/#direction-ai', '/sozdanie-sajtov'].includes(link)), route + ': stale or unconfirmed links');
 
       if (route !== '/404') {
-        assert.deepEqual(data.canonicals, [site + route], route + ': canonical');
         if (route !== '/') {
           const crumb = entities.find(entity => entity['@type'] === 'BreadcrumbList');
           assert.ok(crumb, route + ': BreadcrumbList');
@@ -232,6 +257,12 @@ async function run() {
       }
       if (newServices.includes(route)) assert.ok(data.words >= 450, route + ': ' + data.words + ' words');
       report.push({ route, title, description, h1: data.headings[0], words: data.words });
+    }
+    for (const { route, href, url } of publicLinks) {
+      const target = url.pathname.replace(/\/$/, '') || '/';
+      const ids = pagesByRoute.get(target);
+      assert.ok(ids || (await fs.stat(path.join(dist, target)).catch(() => null))?.isFile(), route + ': missing link target ' + href);
+      if (ids && url.hash) assert.ok(ids.has(decodeURIComponent(url.hash.slice(1))), route + ': missing anchor ' + href);
     }
     const { legalName, identifier, taxID, employee, address, ...sharedOrganization } = homeOrganization;
     const { streetAddress, postalCode, ...sharedAddress } = address;
