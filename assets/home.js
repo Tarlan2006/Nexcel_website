@@ -3,10 +3,10 @@
 
 // ---------- Hero interactive inspector ----------
 const heroContent = {
-  tables: { filename: 'Nexcel_Engine_v4.gs', tag: 'LIVE SIMULATOR', topic: 'анализ данных и учет в Google Таблицах' },
-  bots: { filename: 'telegram_bot.py', tag: 'BOT ONLINE', topic: 'разработку Telegram-бота с ИИ' },
-  ai: { filename: 'ocr_scanner.py', tag: 'AI VISION', topic: 'внедрение ИИ и распознавание документов' },
-  saas: { filename: 'licensing_portal.ts', tag: 'B2B PORTAL', topic: 'лицензии ПО и подписки на ИИ' }
+  tables: { label: 'Таблицы и отчёты', topic: 'анализ данных и учет в Google Таблицах' },
+  bots: { label: 'Telegram-бот', topic: 'разработку Telegram-бота с ИИ' },
+  ai: { label: 'Обработка документов', topic: 'внедрение ИИ и распознавание документов' },
+  saas: { label: 'Лицензии для бизнеса', topic: 'лицензии ПО и подписки на ИИ' }
 };
 
 let currentDirection = 'tables';
@@ -50,10 +50,8 @@ function setHeroInspector(key) {
   });
 
   const data = heroContent[key];
-  const filenameEl = document.getElementById('hero-window-filename');
-  const tagEl = document.getElementById('hero-window-tag');
-  if (filenameEl) filenameEl.textContent = data.filename;
-  if (tagEl) tagEl.textContent = data.tag;
+  const label = document.getElementById('hero-window-filename');
+  if (label) label.textContent = data.label;
   const panel = document.getElementById('inspector-' + key);
   if (changed && !heroMotion.matches && panel.animate && !panel.contains(document.activeElement)) {
     heroAnimation = panel.animate([
@@ -72,7 +70,6 @@ function updateHeroCalc() {
   const ordersEl = document.getElementById('hero-orders');
   const checkEl = document.getElementById('hero-check');
   const revEl = document.getElementById('hero-total-rev');
-  const timeEl = document.getElementById('hero-time-saved');
   if (!ordersEl || !checkEl || !revEl) return;
 
   const orders = parseFloat(ordersEl.value) || 0;
@@ -80,11 +77,6 @@ function updateHeroCalc() {
   const total = orders * check;
 
   revEl.textContent = formatTenge(total);
-
-  if (timeEl) {
-    const hours = Math.max(4, Math.round(orders * 0.135));
-    timeEl.textContent = '~' + hours + ' часов в месяц';
-  }
 }
 
 // ---------- WhatsApp helper ----------
