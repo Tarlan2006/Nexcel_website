@@ -22,10 +22,10 @@ function checkSecurityHeaders(response) {
   const csp = (response.headers.get('content-security-policy') || '').split(';').map(value => value.trim());
   const requiredDirectives = [
     "default-src 'none'",
-    "script-src 'self' https://mc.yandex.ru https://yastatic.net",
+    "script-src 'self' https://mc.yandex.ru https://yastatic.net https://static.cloudflareinsights.com",
     "script-src-attr 'none'",
-    "img-src 'self' data: https://mc.yandex.ru",
-    "connect-src 'self' https://mc.yandex.ru https://mc.yandex.md/cc",
+    "img-src 'self' data: https://mc.yandex.ru https://yandex.ru",
+    "connect-src 'self' https://mc.yandex.ru https://mc.yandex.md/cc https://cloudflareinsights.com",
     'frame-src blob: https://mc.yandex.ru https://mc.yandex.md/metrika/zzlc.html',
     "object-src 'none'",
     "base-uri 'none'",
