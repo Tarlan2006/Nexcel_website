@@ -154,7 +154,7 @@ ${relatedSection(p)}
       </div>
     </article>`;
   return shell({
-    title: `${p.seoTitle || p.title} | Nexcel`,
+    title: `${p.seoTitle || p.title} | ${BRAND}`,
     description,
     path,
     pageName: p.title,
@@ -186,7 +186,7 @@ function indexPage(posts) {
             <p class="text-sm font-sans text-textMuted leading-relaxed mt-2">${esc(p.excerpt)}</p>
             <span class="inline-block text-sm font-semibold text-emeraldAccent mt-3">Читать <span aria-hidden="true">→</span></span>
           </a>`).join('\n')
-    : '          <p class="text-sm font-sans text-textMuted">Кейсы и статьи появятся здесь.</p>';
+    : '          <p class="text-sm font-sans text-textMuted">Подборка пока пуста. <a href="/o-kompanii" class="text-emeraldAccent font-semibold underline">Посмотреть услуги и контакты</a>.</p>';
   const main = `    <section class="py-10 sm:py-14 lg:py-20 border-b border-gridBorder bg-paper">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
         <a href="/" class="inline-flex items-center gap-1 text-sm font-semibold text-emeraldAccent hover:underline"><span aria-hidden="true">←</span> Главная</a>
@@ -200,8 +200,8 @@ ${cards}
       </div>
     </section>`;
   return shell({
-    title: 'Кейсы и статьи об автоматизации Excel и учёта | Nexcel',
-    description: 'Реальные проекты Nexcel: как мы переносили учёт из Excel в единые системы, автоматизировали документы и отчётность. Кейсы и разборы для бизнеса в Казахстане.',
+    title: `Кейсы автоматизации бизнеса и внедрения ИИ в Астане | ${BRAND}`,
+    description: 'Кейсы Nexcel Solutions об автоматизации учёта, отчётности и документов. Показываем, как используем Excel, Google Таблицы, Telegram-ботов и ИИ в проектах.',
     path: '/news',
     pageName: 'Кейсы и статьи',
     ogType: 'website',
