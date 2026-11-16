@@ -14,6 +14,7 @@ const serviceTitles = new Map([
   ['avtomatizaciya-excel', 'Автоматизация Excel и Google Sheets'],
   ['telegram-boty', 'Создание Telegram-ботов для бизнеса'],
   ['vnedrenie-ii', 'Внедрение ИИ в бизнес'],
+  ['sozdanie-saitov', 'Создание сайтов'],
   ['seo', 'GEO-аудит и продвижение сайтов']
 ]);
 

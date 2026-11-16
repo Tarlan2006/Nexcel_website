@@ -36,6 +36,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://nexcel.kz/sozdanie-saitov</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://nexcel.kz/seo</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

@@ -14,10 +14,12 @@ const articleOrganization = { '@id': organizationId, '@type': 'Organization', na
 const organizationRef = { ...articleOrganization, url: site + '/' };
 const organizationPages = new Set(['/', '/o-kompanii']);
 const newServices = ['/telegram-boty', '/vnedrenie-ii'];
-const services = ['/avtomatizaciya-excel', ...newServices, '/licensing', '/seo'];
+const websiteService = '/sozdanie-saitov';
+const companyServices = ['/avtomatizaciya-excel', ...newServices, '/licensing', '/seo'];
+const services = [...companyServices, websiteService];
 const faqCounts = new Map([
   ['/', 5], ['/faq', 12], ['/o-kompanii', 3], ['/avtomatizaciya-excel', 6],
-  ...newServices.map(route => [route, 4]), ['/licensing', 4], ['/seo', 7]
+  ...newServices.map(route => [route, 4]), ['/licensing', 4], ['/seo', 7], [websiteService, 7]
 ]);
 const jargon = /оцифров[\p{L}]*|mini[\p{Pd}\s]erp|инспектор\s+направлений|доказательн[\p{L}]*\s+баз[\p{L}]*/iu;
 
@@ -228,7 +230,7 @@ async function run() {
         aboutOrganization = about?.mainEntity;
         assert.deepEqual(organizationNodes, [aboutOrganization], route + ': AboutPage main entity');
         assert.ok(data.words >= 350 && data.words <= 500, route + ': ' + data.words + ' words');
-        assert.ok([...services, '/news'].every(link => data.mainLinks.includes(link)), route + ': service and case links');
+        assert.ok([...companyServices, '/news'].every(link => data.mainLinks.includes(link)), route + ': service and case links');
       }
       if (services.includes(route)) {
         const service = entities.find(entity => entity['@type'] === 'Service');
@@ -238,10 +240,14 @@ async function run() {
         }
         assert.ok(data.ending.some(link => link.href.startsWith('https://wa.me/77711369095') &&
           link.text === 'Обсудить задачу в WhatsApp'), route + ': final WhatsApp CTA');
-        const related = data.ending.filter(link => services.includes(link.href));
-        const cases = data.ending.filter(link => link.href.startsWith('/news/') || link.href === '/#case-marathons');
-        assert.ok(related.length >= 1 && related.length <= 2, route + ': 1–2 related services');
-        assert.ok(cases.length >= 1 && cases.length <= 2, route + ': 1–2 case links');
+        if (route === websiteService) {
+          assert.ok(data.mainLinks.includes('/seo'), route + ': link to the SEO service');
+        } else {
+          const related = data.ending.filter(link => services.includes(link.href));
+          const cases = data.ending.filter(link => link.href.startsWith('/news/') || link.href === '/#case-marathons');
+          assert.ok(related.length >= 1 && related.length <= 2, route + ': 1–2 related services');
+          assert.ok(cases.length >= 1 && cases.length <= 2, route + ': 1–2 case links');
+        }
       }
       if (route === '/') {
         const org = entities.find(entity => entity['@type'] === 'ProfessionalService');
@@ -250,7 +256,7 @@ async function run() {
         homeOrganization = org;
         const offers = org.hasOfferCatalog.itemListElement.map(offer => offer.itemOffered.url).sort();
         assert.deepEqual(offers, services.map(service => site + service).sort(), 'OfferCatalog service URLs');
-        for (const service of newServices) {
+        for (const service of [...newServices, websiteService]) {
           assert.ok(data.nav.every(links => links.includes(service)), service + ': header, mobile and footer');
           assert.ok(llms.includes('(' + site + service + ')'), service + ': llms.txt link');
         }
@@ -264,9 +270,13 @@ async function run() {
       assert.ok(ids || (await fs.stat(path.join(dist, target)).catch(() => null))?.isFile(), route + ': missing link target ' + href);
       if (ids && url.hash) assert.ok(ids.has(decodeURIComponent(url.hash.slice(1))), route + ': missing anchor ' + href);
     }
-    const { legalName, identifier, taxID, employee, address, ...sharedOrganization } = homeOrganization;
+    const { legalName, identifier, taxID, employee, address, hasOfferCatalog, ...sharedOrganization } = homeOrganization;
     const { streetAddress, postalCode, ...sharedAddress } = address;
-    assert.deepEqual(aboutOrganization, { ...sharedOrganization, address: sharedAddress },
+    const companyOfferCatalog = {
+      ...hasOfferCatalog,
+      itemListElement: hasOfferCatalog.itemListElement.filter(offer => offer.itemOffered.url !== site + websiteService)
+    };
+    assert.deepEqual(aboutOrganization, { ...sharedOrganization, address: sharedAddress, hasOfferCatalog: companyOfferCatalog },
       'Shared organization fields on / and /o-kompanii must match');
     for (const { route, id } of schemaReferences) {
       assert.ok(schemaIds.has(id), route + ': undefined JSON-LD reference ' + id);

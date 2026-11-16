@@ -2,7 +2,7 @@ const assert = require('node:assert/strict');
 const { chromium, expect } = require('@playwright/test');
 
 const base = 'http://127.0.0.1:5500';
-const services = ['/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/licensing', '/seo', '/#calculator'];
+const services = ['/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/licensing', '/sozdanie-saitov', '/seo', '/#calculator'];
 const sections = ['/templates', '/news', '/o-kompanii', '/faq'];
 const activeHighlight = /(?:^|\s)text-emeraldAccent(?:\s|$)/;
 
@@ -49,7 +49,7 @@ async function checkStaticHeader(page) {
     assert.ok(url.searchParams.get('text'), 'WhatsApp has a prepared message');
   }
   await expect(page.locator('footer a[href="mailto:info@nexcel.kz"]')).toBeAttached();
-  for (const service of ['/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/seo']) {
+  for (const service of ['/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/sozdanie-saitov', '/seo']) {
     await expect(page.locator('#directions a[href="' + service + '"]')).toHaveCount(1);
     await expect(page.locator('footer a[href="' + service + '"]')).toHaveCount(1);
   }
