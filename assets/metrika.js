@@ -4,6 +4,11 @@
     ['https://wa.me', 'contact_whatsapp'],
     ['https://t.me', 'contact_telegram']
   ]);
+  const protocolGoals = new Map([
+    ['tel:', 'contact_phone'],
+    ['mailto:', 'contact_email']
+  ]);
+  const whatsAppActions = new Set(['whatsapp-topic', 'whatsapp-message', 'request-template', 'send-roi']);
 
   window.ym = window.ym || function () {
     (window.ym.a = window.ym.a || []).push(arguments);
@@ -26,10 +31,12 @@
   });
 
   document.addEventListener('click', event => {
-    const link = event.target instanceof Element && event.target.closest('a[href]');
-    if (!(link instanceof HTMLAnchorElement)) return;
-
-    const goal = link.protocol === 'mailto:' ? 'contact_email' : contactGoals.get(link.origin);
+    if (!(event.target instanceof Element)) return;
+    const control = event.target.closest('a[href], button[data-action]');
+    if (!control) return;
+    const goal = control instanceof HTMLAnchorElement
+      ? protocolGoals.get(control.protocol) || contactGoals.get(control.origin)
+      : whatsAppActions.has(control.dataset.action) && 'contact_whatsapp';
     if (goal) window.ym(counterId, 'reachGoal', goal);
   });
 })();
