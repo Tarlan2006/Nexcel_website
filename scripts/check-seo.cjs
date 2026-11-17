@@ -179,7 +179,7 @@ async function run() {
       const [description] = data.descriptions;
       assert.match(title, /^[^|]+ \| Nexcel Solutions$/, route + ': title format');
       assert.doesNotMatch(title, /^(?:главная|home|добро пожаловать)(?:[\s:|]|$)/iu, route + ': title introduction');
-      if (route === '/') assert.equal(title, 'Автоматизация бизнеса, ИИ-решения и Telegram-боты в Астане | Nexcel Solutions');
+      if (route === '/') assert.equal(title, 'Автоматизация бизнеса и лицензии ПО в Казахстане | Nexcel Solutions');
       assert.ok(!seenTitles.has(title), route + ': duplicate title');
       seenTitles.add(title);
       assert.ok(description && [...description].length >= 140 && [...description].length <= 160, route + ': description length (' + [...(description || '')].length + ')');
@@ -270,13 +270,12 @@ async function run() {
       assert.ok(ids || (await fs.stat(path.join(dist, target)).catch(() => null))?.isFile(), route + ': missing link target ' + href);
       if (ids && url.hash) assert.ok(ids.has(decodeURIComponent(url.hash.slice(1))), route + ': missing anchor ' + href);
     }
-    const { legalName, identifier, taxID, employee, address, hasOfferCatalog, ...sharedOrganization } = homeOrganization;
-    const { streetAddress, postalCode, ...sharedAddress } = address;
+    const { legalName, identifier, taxID, hasOfferCatalog, ...sharedOrganization } = homeOrganization;
     const companyOfferCatalog = {
       ...hasOfferCatalog,
       itemListElement: hasOfferCatalog.itemListElement.filter(offer => offer.itemOffered.url !== site + websiteService)
     };
-    assert.deepEqual(aboutOrganization, { ...sharedOrganization, address: sharedAddress, hasOfferCatalog: companyOfferCatalog },
+    assert.deepEqual(aboutOrganization, { ...sharedOrganization, hasOfferCatalog: companyOfferCatalog },
       'Shared organization fields on / and /o-kompanii must match');
     for (const { route, id } of schemaReferences) {
       assert.ok(schemaIds.has(id), route + ': undefined JSON-LD reference ' + id);

@@ -1,8 +1,9 @@
 const { chromium } = require('@playwright/test');
 const assert = require('node:assert/strict');
+const base = process.argv[2] || 'http://127.0.0.1:5500';
 
 (async () => {
-  const browser = await chromium.launch({ channel: 'chrome' });
+  const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || 'chrome' });
   try {
     for (const width of [320, 390, 768, 1440]) {
       const context = await browser.newContext({ viewport: { width, height: 900 }, reducedMotion: 'no-preference' });
@@ -18,11 +19,11 @@ const assert = require('node:assert/strict');
       const page = await context.newPage();
       const errors = [];
       page.on('pageerror', error => errors.push(error.message));
-      await page.goto('http://127.0.0.1:5500');
+      await page.goto(base);
       assert.equal(await page.evaluate(() => heroAnimationCalls), 1);
       const initialHeight = await page.locator('#hero-panels').evaluate(el => el.getBoundingClientRect().height);
       await page.locator('#hero-orders').fill('500');
-      for (const key of ['bots', 'ai', 'saas', 'tables']) {
+      for (const key of ['bots', 'ai', 'web', 'saas', 'tables']) {
         await page.locator('#pill-' + key).click();
         const middle = await page.locator('#inspector-' + key).evaluate(el => {
           const animation = el.getAnimations()[0];
@@ -44,6 +45,11 @@ const assert = require('node:assert/strict');
         assert(state.hiddenInert);
         assert(Math.abs(state.height - initialHeight) < 1);
         assert(state.scrollWidth <= width);
+        if (key === 'web') {
+          const link = page.locator('#inspector-web a');
+          assert(await link.isVisible());
+          assert.equal(await link.getAttribute('href'), '/sozdanie-saitov');
+        }
       }
       assert.equal(await page.locator('#hero-orders').inputValue(), '500');
       assert.equal(await page.locator('#hero-total-rev').textContent(), '25\u00a0000\u00a0000 ₸');
