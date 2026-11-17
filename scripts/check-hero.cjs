@@ -53,6 +53,13 @@ const base = process.argv[2] || 'http://127.0.0.1:5500';
       }
       assert.equal(await page.locator('#hero-orders').inputValue(), '500');
       assert.equal(await page.locator('#hero-total-rev').textContent(), '25\u00a0000\u00a0000 ₸');
+      for (const invalidOrders of ['-1', '1.5', '', '1e308']) {
+        await page.locator('#hero-orders').fill(invalidOrders);
+        assert.equal(await page.locator('#hero-total-rev').textContent(), '—');
+      }
+      await page.locator('#hero-orders').fill('500');
+      await page.locator('#hero-check').fill('10.5');
+      assert.equal(await page.locator('#hero-total-rev').textContent(), '5\u00a0250 ₸');
       const before = await page.evaluate(() => heroAnimationCalls);
       await page.locator('#pill-tables').click();
       assert.equal(await page.evaluate(() => heroAnimationCalls), before);

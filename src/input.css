@@ -71,6 +71,10 @@ body {
 /* Leave space for the fixed header when following section links. */
 :where([id]) { scroll-margin-top: 5rem; }
 
+/* Keep the end of the page reachable while the fixed notice is visible. */
+html { scroll-padding-bottom: var(--cookie-notice-height, 0px); }
+body { padding-bottom: var(--cookie-notice-height, 0px); }
+
 /* Reserve the tallest panel's space so switching does not move the hero/footer. */
 .hero-panels { display: grid; }
 .hero-panels > .inspector-panel { grid-area: 1 / 1; min-width: 0; align-self: start; }

@@ -7,7 +7,7 @@
   "relatedService": "sozdanie-saitov",
   "date": "2026-11-17",
   "title": "Как мы сделали сайт для Nexcel Solutions: реальный кейс с цифрами",
-  "excerpt": "Сделали сайт компании с помощью AI-инструментов: макет в Gemini Canvas, страницы и формы в Claude, правки через Codex, размещение на Cloudflare, деплой через GitHub. Домен на год около 10 000 тенге, остальное 0 тенге.",
+  "excerpt": "Как мы сделали сайт Nexcel Solutions с Gemini, Claude и Codex, разместили на Cloudflare и настроили деплой из GitHub. Домен стоит около 10 000 ₸ в год.",
   "draft": false,
   "image": "/assets/news/kak-my-sdelali-sajt-dlya-nexcel-solutions/nexcel-sait-cover.webp",
   "ogImage": "/assets/news/kak-my-sdelali-sajt-dlya-nexcel-solutions/og-nexcel-sait.png",

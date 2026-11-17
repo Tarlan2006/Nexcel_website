@@ -293,13 +293,13 @@
                       <tr>
                         <td class="p-1.5 sm:p-2 border-r border-gridBorder">Заявок в месяц (шт)</td>
                         <td class="p-1.5 text-right">
-                          <input type="number" id="hero-orders" value="280" aria-label="Заявок в месяц, штук" class="w-20 text-right px-2 py-1 border border-gridBorder rounded bg-slate-50 font-mono font-bold text-emeraldAccent focus:outline-emeraldAccent focus:bg-white" />
+                          <input type="number" id="hero-orders" value="280" min="0" required aria-label="Заявок в месяц, штук" class="w-20 text-right px-2 py-1 border border-gridBorder rounded bg-slate-50 font-mono font-bold text-emeraldAccent focus:outline-emeraldAccent focus:bg-white" />
                         </td>
                       </tr>
                       <tr>
                         <td class="p-1.5 sm:p-2 border-r border-gridBorder">Средний чек (₸)</td>
                         <td class="p-1.5 text-right">
-                          <input type="number" id="hero-check" value="50000" step="5000" aria-label="Средний чек, тенге" class="w-24 text-right px-2 py-1 border border-gridBorder rounded bg-slate-50 font-mono font-bold text-emeraldAccent focus:outline-emeraldAccent focus:bg-white" />
+                          <input type="number" id="hero-check" value="50000" min="0" step="any" required aria-label="Средний чек, тенге" class="w-24 text-right px-2 py-1 border border-gridBorder rounded bg-slate-50 font-mono font-bold text-emeraldAccent focus:outline-emeraldAccent focus:bg-white" />
                         </td>
                       </tr>
                       <tr class="bg-emeraldLight/60 font-bold">
@@ -437,60 +437,60 @@
           <div class="clients-track">
             <div class="clients-group">
               <div class="clients-item inline-flex items-center gap-3">
-                <img src="/assets/clients/government-for-citizens.png" alt="Правительство для граждан" width="96" height="96" loading="lazy" decoding="async" draggable="false" class="h-10 w-auto object-contain" />
+                <img src="/assets/clients/government-for-citizens.webp" alt="Правительство для граждан" width="96" height="96" loading="lazy" decoding="async" draggable="false" class="h-10 w-auto object-contain" />
                 <span class="font-sans text-sm font-medium text-textMuted whitespace-nowrap">Правительство для граждан</span>
               </div>
               <div class="clients-item inline-flex items-center gap-3">
-                <img src="/assets/clients/sanofi.png" alt="Sanofi" width="373" height="96" loading="lazy" decoding="async" draggable="false" class="h-7 w-auto object-contain" />
+                <img src="/assets/clients/sanofi.webp" alt="Sanofi" width="373" height="96" loading="lazy" decoding="async" draggable="false" class="h-7 w-auto object-contain" />
               </div>
               <div class="clients-item inline-flex items-center gap-3">
-                <img src="/assets/clients/kaznu.png" alt="КазНУ им. аль-Фараби" width="86" height="96" loading="lazy" decoding="async" draggable="false" class="h-10 w-auto object-contain" />
+                <img src="/assets/clients/kaznu.webp" alt="КазНУ им. аль-Фараби" width="86" height="96" loading="lazy" decoding="async" draggable="false" class="h-10 w-auto object-contain" />
                 <span class="font-sans text-sm font-medium text-textMuted whitespace-nowrap">КазНУ им. аль-Фараби</span>
               </div>
               <div class="clients-item inline-flex items-center gap-3">
-                <img src="/assets/clients/development-bank-kazakhstan.png" alt="Банк Развития Казахстана" width="278" height="96" loading="lazy" decoding="async" draggable="false" class="clients-logo-fine h-12 w-auto object-contain" />
+                <img src="/assets/clients/development-bank-kazakhstan.webp" alt="Банк Развития Казахстана" width="278" height="96" loading="lazy" decoding="async" draggable="false" class="clients-logo-fine h-12 w-auto object-contain" />
               </div>
               <div class="clients-item inline-flex items-center gap-3">
-                <img src="/assets/clients/sms-group.png" alt="SMS group" width="520" height="76" loading="lazy" decoding="async" draggable="false" class="h-6 w-auto object-contain" />
+                <img src="/assets/clients/sms-group.webp" alt="SMS group" width="520" height="76" loading="lazy" decoding="async" draggable="false" class="h-6 w-auto object-contain" />
               </div>
               <div class="clients-item inline-flex items-center gap-3">
-                <img src="/assets/clients/nazarbayev-university.png" alt="Nazarbayev University" width="64" height="96" loading="lazy" decoding="async" draggable="false" class="h-10 w-auto object-contain" />
+                <img src="/assets/clients/nazarbayev-university.webp" alt="Nazarbayev University" width="64" height="96" loading="lazy" decoding="async" draggable="false" class="h-10 w-auto object-contain" />
                 <span class="font-sans text-sm font-medium text-textMuted whitespace-nowrap">Nazarbayev University</span>
               </div>
               <div class="clients-item inline-flex items-center gap-3">
-                <img src="/assets/clients/khrom-kz.png" alt="ТОО «ХРОМ-KZ»" width="80" height="96" loading="lazy" decoding="async" draggable="false" class="h-14 w-auto object-contain" />
+                <img src="/assets/clients/khrom-kz.webp" alt="ТОО «ХРОМ-KZ»" width="80" height="96" loading="lazy" decoding="async" draggable="false" class="h-14 w-auto object-contain" />
               </div>
               <div class="clients-item inline-flex items-center gap-3">
-                <img src="/assets/clients/star-media.png" alt="Star Media" width="180" height="96" loading="lazy" decoding="async" draggable="false" class="clients-logo-fine h-10 w-auto object-contain" />
+                <img src="/assets/clients/star-media.webp" alt="Star Media" width="180" height="96" loading="lazy" decoding="async" draggable="false" class="clients-logo-fine h-10 w-auto object-contain" />
               </div>
             </div>
             <div class="clients-group" aria-hidden="true">
               <div class="clients-item inline-flex items-center gap-3">
-                <img src="/assets/clients/government-for-citizens.png" alt="" width="96" height="96" loading="lazy" decoding="async" draggable="false" class="h-10 w-auto object-contain" />
+                <img src="/assets/clients/government-for-citizens.webp" alt="" width="96" height="96" loading="lazy" decoding="async" draggable="false" class="h-10 w-auto object-contain" />
                 <span class="font-sans text-sm font-medium text-textMuted whitespace-nowrap">Правительство для граждан</span>
               </div>
               <div class="clients-item inline-flex items-center gap-3">
-                <img src="/assets/clients/sanofi.png" alt="" width="373" height="96" loading="lazy" decoding="async" draggable="false" class="h-7 w-auto object-contain" />
+                <img src="/assets/clients/sanofi.webp" alt="" width="373" height="96" loading="lazy" decoding="async" draggable="false" class="h-7 w-auto object-contain" />
               </div>
               <div class="clients-item inline-flex items-center gap-3">
-                <img src="/assets/clients/kaznu.png" alt="" width="86" height="96" loading="lazy" decoding="async" draggable="false" class="h-10 w-auto object-contain" />
+                <img src="/assets/clients/kaznu.webp" alt="" width="86" height="96" loading="lazy" decoding="async" draggable="false" class="h-10 w-auto object-contain" />
                 <span class="font-sans text-sm font-medium text-textMuted whitespace-nowrap">КазНУ им. аль-Фараби</span>
               </div>
               <div class="clients-item inline-flex items-center gap-3">
-                <img src="/assets/clients/development-bank-kazakhstan.png" alt="" width="278" height="96" loading="lazy" decoding="async" draggable="false" class="clients-logo-fine h-12 w-auto object-contain" />
+                <img src="/assets/clients/development-bank-kazakhstan.webp" alt="" width="278" height="96" loading="lazy" decoding="async" draggable="false" class="clients-logo-fine h-12 w-auto object-contain" />
               </div>
               <div class="clients-item inline-flex items-center gap-3">
-                <img src="/assets/clients/sms-group.png" alt="" width="520" height="76" loading="lazy" decoding="async" draggable="false" class="h-6 w-auto object-contain" />
+                <img src="/assets/clients/sms-group.webp" alt="" width="520" height="76" loading="lazy" decoding="async" draggable="false" class="h-6 w-auto object-contain" />
               </div>
               <div class="clients-item inline-flex items-center gap-3">
-                <img src="/assets/clients/nazarbayev-university.png" alt="" width="64" height="96" loading="lazy" decoding="async" draggable="false" class="h-10 w-auto object-contain" />
+                <img src="/assets/clients/nazarbayev-university.webp" alt="" width="64" height="96" loading="lazy" decoding="async" draggable="false" class="h-10 w-auto object-contain" />
                 <span class="font-sans text-sm font-medium text-textMuted whitespace-nowrap">Nazarbayev University</span>
               </div>
               <div class="clients-item inline-flex items-center gap-3">
-                <img src="/assets/clients/khrom-kz.png" alt="" width="80" height="96" loading="lazy" decoding="async" draggable="false" class="h-14 w-auto object-contain" />
+                <img src="/assets/clients/khrom-kz.webp" alt="" width="80" height="96" loading="lazy" decoding="async" draggable="false" class="h-14 w-auto object-contain" />
               </div>
               <div class="clients-item inline-flex items-center gap-3">
-                <img src="/assets/clients/star-media.png" alt="" width="180" height="96" loading="lazy" decoding="async" draggable="false" class="clients-logo-fine h-10 w-auto object-contain" />
+                <img src="/assets/clients/star-media.webp" alt="" width="180" height="96" loading="lazy" decoding="async" draggable="false" class="clients-logo-fine h-10 w-auto object-contain" />
               </div>
             </div>
           </div>
@@ -681,7 +681,7 @@
             <div class="space-y-4">
               <p class="text-xs font-mono text-textMuted">Лендинги, корпоративные сайты и каталоги</p>
               <h3 class="font-heading font-extrabold text-xl text-darkBg">
-                <a href="/sozdanie-saitov" class="underline decoration-gridBorder underline-offset-4 hover:text-emeraldAccent hover:decoration-emeraldAccent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emeraldAccent">Создание сайтов</a>
+                Создание сайтов
               </h3>
               <p class="text-xs sm:text-sm text-textMuted leading-relaxed">Разрабатываем сайты, на которых клиент может изучить услуги, посмотреть проекты и связаться с вами.</p>
               <div class="space-y-2 pt-2 border-t border-gridBorder text-xs font-sans">
@@ -702,7 +702,7 @@
             <div class="space-y-4">
               <p class="text-xs font-mono text-textMuted">Поисковые системы и ответы ИИ</p>
               <h3 class="font-heading font-extrabold text-xl text-darkBg">
-                <a href="/seo" class="underline decoration-gridBorder underline-offset-4 hover:text-emeraldAccent hover:decoration-emeraldAccent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emeraldAccent">GEO-аудит и продвижение сайтов</a>
+                GEO-аудит и продвижение сайтов
               </h3>
               <p class="text-xs sm:text-sm text-textMuted leading-relaxed">Проверяем, как ваш сайт виден в Google, Яндексе и ответах ИИ. Объясняем, какие страницы стоит улучшить в первую очередь.</p>
               <div class="space-y-2 pt-2 border-t border-gridBorder text-xs font-sans">
@@ -793,7 +793,7 @@
               </li>
               <li class="partner-logo shrink-0 gap-3">
                 <!-- Adobe Business: https://business.adobe.com/support/adobe-partners.html — https://business.adobe.com/assets/icons/products/creative-cloud/icon-adobe.svg -->
-                <img class="!w-10 shrink-0" src="/assets/partners/adobe.svg" alt="Adobe" width="41" height="40" loading="lazy" decoding="async" draggable="false" />
+                <img class="!w-10 shrink-0" src="/assets/partners/adobe.svg" alt="" width="41" height="40" loading="lazy" decoding="async" draggable="false" />
                 <span class="font-heading font-extrabold text-2xl text-darkBg">Adobe</span>
               </li>
               <li class="partner-logo partner-logo--jivo shrink-0">

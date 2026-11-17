@@ -73,11 +73,9 @@ function updateHeroCalc() {
   const revEl = document.getElementById('hero-total-rev');
   if (!ordersEl || !checkEl || !revEl) return;
 
-  const orders = parseFloat(ordersEl.value) || 0;
-  const check = parseFloat(checkEl.value) || 0;
-  const total = orders * check;
-
-  revEl.textContent = formatTenge(total);
+  const total = ordersEl.valueAsNumber * checkEl.valueAsNumber;
+  const valid = ordersEl.validity.valid && checkEl.validity.valid && Number.isSafeInteger(Math.round(total));
+  revEl.textContent = valid ? formatTenge(total) : '—';
 }
 
 // ---------- WhatsApp helper ----------

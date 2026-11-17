@@ -126,7 +126,9 @@ async function checkClients(browser) {
       const errors = [];
       page.on('pageerror', error => errors.push(error.message));
       await page.goto('http://127.0.0.1:5500');
-      assert.equal(await page.locator('[data-card-reveal]').count(), 13);
+      const cards = page.locator('[data-card-reveal]');
+      const cardCount = await cards.count();
+      assert.equal(cardCount, 15);
       assert.equal(await page.evaluate(() => revealCalls.length), 0);
       await page.locator('#direction-tables').evaluate(el => { document.documentElement.style.scrollBehavior = 'auto'; window.scrollTo(0, el.offsetTop - 100); });
       await page.waitForFunction(() => document.querySelector('#direction-tables').getAnimations().length > 0);
@@ -138,19 +140,19 @@ async function checkClients(browser) {
       assert(middle.opacity > 0 && middle.opacity < 1);
       assert.notEqual(middle.transform, 'none');
       await page.locator('#direction-tables').evaluate(el => el.getAnimations().forEach(a => a.finish()));
-      // Reveal all thirteen cards, then ensure scrolling back does not replay them.
-      for (const card of await page.locator('[data-card-reveal]').all()) {
+      // Reveal every card, then ensure scrolling back does not replay them.
+      for (const card of await cards.all()) {
         await card.scrollIntoViewIfNeeded();
         await page.waitForTimeout(650);
         assert.equal(await card.evaluate(el => getComputedStyle(el).opacity), '1');
       }
       const calls = await page.evaluate(() => revealCalls);
-      assert.equal(calls.length, 13);
+      assert.equal(calls.length, cardCount);
       if (width === 1440) assert(calls.some(call => call.delay === 70));
       else assert(calls.every(call => call.delay === 0));
       await page.locator('#direction-tables').evaluate(el => { document.documentElement.style.scrollBehavior = 'auto'; window.scrollTo(0, el.offsetTop - 100); });
       await page.waitForTimeout(100);
-      assert.equal(await page.evaluate(() => revealCalls.length), 13);
+      assert.equal(await page.evaluate(() => revealCalls.length), cardCount);
       await page.evaluate(() => { document.documentElement.style.scrollBehavior = 'auto'; window.scrollTo(0, 0); });
       await page.reload();
       await page.locator('#direction-tables').evaluate(el => { document.documentElement.style.scrollBehavior = 'auto'; window.scrollTo(0, el.offsetTop - 100); });
@@ -174,7 +176,7 @@ async function checkClients(browser) {
       assert(!await page.evaluate(() => revealCalls.some(call => call.id === 'direction-ai')));
       assert.deepEqual(errors, []);
       await context.close();
-      console.log(`PASS ${width}px: thirteen cards, stagger, single playback, keyboard, hash and reduced motion.`);
+      console.log(`PASS ${width}px: ${cardCount} cards, stagger, single playback, keyboard, hash and reduced motion.`);
     }
     for (const mode of ['no-js', 'no-observer']) {
       const context = await browser.newContext({ javaScriptEnabled: mode !== 'no-js' });
