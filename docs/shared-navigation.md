@@ -46,4 +46,12 @@ Workflow фильтрует push в main/master по JSON, данным, мак�
 
 Проверки реальных телефонов здесь не заявляются. Снимки локального preview и подробные логи находятся в игнорируемой `.review/`.
 
-Проверка публичного URL и результат CI будут добавлены после push.
+Публичный URL проверен 18.11.2026: HTTP 200, JSON UTF-8, `Cache-Control: public, max-age=300`, `Access-Control-Allow-Origin: https://photo.nexcel.kz`. Содержимое совпало с общим источником: 12 ссылок верхнего меню и 7 услуг футера. В HTML главной присутствуют все три новые ссылки photo — desktop, mobile, footer. Публичный CSS совпал с неизменённым исходным файлом.
+
+Код опубликован коммитом [5438f28](https://github.com/Tarlan2006/Nexcel_website/commit/5438f289c2f30ae5a2e3b4949fd9b9ad536899b0). [GitHub Actions run 44335141740](https://github.com/Tarlan2006/Nexcel_website/actions/runs/44335141740) завершился успешно: npm ci, npm test, build и проверка актуальности generated files. Шаг POST — skipped, шаг «No deploy hook configured» — success: отсутствие PHOTO_DEPLOY_HOOK не вызвало ошибку.
+
+Фотосервис подключён к получению справочника при сборке через `scripts/sync-shared-nav.js` в `Tarlan2006/photo-nexcel`; браузер читает готовый локальный снимок. Пользовательские фото при этом не передаются. Прежние KZ-переводы остаются запасным вариантом для известных полей с пустым `kk`; новые услуги без перевода показываются на RU.
+
+Подключение фото опубликовано коммитом [03baf0b](https://github.com/Tarlan2006/photo-nexcel/commit/03baf0bbc4a6748e4edc25c32d99b3745599271e) в master. Проверены полный npm test (116 + 54 + 43), build, 16 вариантов ширины/языка, совпадение 33/33 публичных файлов и 4/4 сценария меню/футера на публичном сайте. Cloudflare Pages подтвердил успешный деплой; проверенный Pages-проект photo-nexcel указан ссылкой в README для создания hook. Реальный POST не выполнялся без секрета, его пропуск подтверждён CI.
+
+Lighthouse mobile фотосервиса после публикации: обе страницы `/` и `/signature/` — 99/100/100/100 (Performance / Accessibility / Best Practices / SEO). Это лабораторная эмуляция, не физический телефон.

@@ -44,11 +44,13 @@ curl -i -H "Origin: https://photo.nexcel.kz" https://nexcel.kz/shared/nav.json
 
 ## Что настроить вручную
 
-1. В Cloudflare откройте Pages-проект **photo-nexcel** → Settings → Builds & deployments → Deploy hooks. Создайте hook для ветки **master**. [Официальная инструкция Cloudflare](https://developers.cloudflare.com/pages/configuration/deploy-hooks/).
+1. Откройте проверенный [Cloudflare Pages-проект photo-nexcel](https://dash.cloudflare.com/a947507fcdc5eee5d2165a42f17037ff/pages/view/photo-nexcel), обслуживающий **photo.nexcel.kz** и репозиторий **Tarlan2006/photo-nexcel**. В Settings → Builds & deployments → Deploy hooks создайте hook для ветки **master**. [Официальная инструкция](https://developers.cloudflare.com/pages/configuration/deploy-hooks/). Используйте этот проект, а не отдельный одноимённый Worker.
 2. В GitHub-репозитории **Tarlan2006/Nexcel_website** откройте Settings → Secrets and variables → Actions → New repository secret. Имя — **PHOTO_DEPLOY_HOOK**, значение — URL созданного hook. Не помещайте этот URL в код или документацию. [Инструкция GitHub](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets).
 3. Для проверки откройте Actions → **Validate shared navigation and notify subsites** → Run workflow для main. Успешное уведомление запускает сборку photo; её завершение проверяется в Cloudflare.
 
 Workflow `.github/workflows/notify-subsites.yml` запускается при изменении справочника или его исходников в main/master, а проверка — также в pull request. Сначала проходят `npm test` и build. При наличии секрета workflow ждёт, пока публичный JSON совпадёт с новым файлом, затем выполняет один POST. При отсутствии секрета шаг пропускается без ошибки; секрет не выводится в лог. Сам URL hook не является гарантией завершённого деплоя поддомена.
+
+В photo-nexcel получение справочника подключено перед build и dev: в браузер входят готовые локальные данные, внешний запрос выполняется только при сборке. Для известных KZ-подписей сохраняются существующие переводы; новые подписи без `kk` показываются на RU. Настройка hook соединяет эту сборку с изменениями общего источника.
 
 Повторы внутри списков запрещены; повтор между меню и футером намеренный. CORS разрешён только для photo.nexcel.kz. Значение `https://*.nexcel.kz` браузеры не поддерживают как origin; для других поддоменов понадобится согласованный список origins в серверной обработке. [Правила заголовков Cloudflare](https://developers.cloudflare.com/workers/static-assets/headers/).
 
