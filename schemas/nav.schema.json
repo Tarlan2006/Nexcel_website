@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nexcel.kz/shared/nav.schema.json",
+  "title": "NEXCEL shared navigation v1",
+  "type": "object",
+  "required": ["version", "updatedAt", "logo", "nav", "cta", "footer"],
+  "additionalProperties": false,
+  "properties": {
+    "version": {"const": 1},
+    "updatedAt": {"type": "string", "format": "date-time", "pattern": "Z$"},
+    "logo": {
+      "type": "object", "required": ["href", "src", "alt"], "additionalProperties": false,
+      "properties": {"href": {"$ref": "#/$defs/https"}, "src": {"$ref": "#/$defs/https"}, "alt": {"type": "string", "minLength": 1}}
+    },
+    "nav": {"$ref": "#/$defs/links"},
+    "cta": {"$ref": "#/$defs/link"},
+    "footer": {
+      "type": "object",
+      "required": ["columns", "contacts", "social", "legal", "description", "about", "badges", "socialTitle", "copyright", "privacy", "paymentTerms", "logoRights"],
+      "additionalProperties": false,
+      "properties": {
+        "columns": {
+          "type": "array", "minItems": 1,
+          "items": {"type": "object", "required": ["title", "links"], "additionalProperties": false,
+            "properties": {"title": {"$ref": "#/$defs/label"}, "links": {"$ref": "#/$defs/links"}}}
+        },
+        "contacts": {
+          "type": "object", "required": ["title", "location", "email", "phone", "whatsapp"], "additionalProperties": false,
+          "properties": {
+            "title": {"$ref": "#/$defs/label"}, "location": {"$ref": "#/$defs/label"},
+            "email": {"type": "string", "format": "email"}, "phone": {"type": "string", "minLength": 1},
+            "whatsapp": {"$ref": "#/$defs/link"}, "map": {"$ref": "#/$defs/link"}
+          }
+        },
+        "social": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "object", "required": ["id", "label", "title", "href"], "additionalProperties": false,
+            "properties": {"id": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"},
+              "label": {"$ref": "#/$defs/label"}, "title": {"$ref": "#/$defs/label"}, "href": {"$ref": "#/$defs/https"}}}
+        },
+        "legal": {"type": "string", "minLength": 1},
+        "description": {"$ref": "#/$defs/label"}, "about": {"$ref": "#/$defs/link"},
+        "badges": {"type": "array", "items": {"$ref": "#/$defs/label"}},
+        "socialTitle": {"$ref": "#/$defs/label"}, "copyright": {"$ref": "#/$defs/label"},
+        "privacy": {"$ref": "#/$defs/link"}, "paymentTerms": {"$ref": "#/$defs/label"}, "logoRights": {"$ref": "#/$defs/label"}
+      }
+    }
+  },
+  "$defs": {
+    "https": {"type": "string", "format": "uri", "pattern": "^https://"},
+    "label": {"type": "object", "required": ["ru", "kk"], "additionalProperties": false,
+      "properties": {"ru": {"type": "string", "minLength": 1, "pattern": "\\S"}, "kk": {"type": "string"}}},
+    "link": {"type": "object", "required": ["label", "href"], "additionalProperties": false,
+      "properties": {"label": {"$ref": "#/$defs/label"}, "href": {"$ref": "#/$defs/https"}}},
+    "links": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/link"}}
+  }
+}

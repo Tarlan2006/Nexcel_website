@@ -1,0 +1,336 @@
+{
+  "version": 1,
+  "updatedAt": "2026-11-18T15:10:50.391Z",
+  "logo": {
+    "href": "https://nexcel.kz/",
+    "src": "https://nexcel.kz/assets/logo.svg",
+    "alt": "Nexcel Solutions"
+  },
+  "nav": [
+    {
+      "label": {
+        "ru": "Автоматизация Excel и Google Sheets",
+        "kk": ""
+      },
+      "href": "https://nexcel.kz/avtomatizaciya-excel"
+    },
+    {
+      "label": {
+        "ru": "Telegram + ИИ",
+        "kk": ""
+      },
+      "href": "https://nexcel.kz/telegram-boty"
+    },
+    {
+      "label": {
+        "ru": "Внедрение ИИ",
+        "kk": ""
+      },
+      "href": "https://nexcel.kz/vnedrenie-ii"
+    },
+    {
+      "label": {
+        "ru": "Лицензии ПО",
+        "kk": ""
+      },
+      "href": "https://nexcel.kz/licensing"
+    },
+    {
+      "label": {
+        "ru": "Создание сайтов",
+        "kk": ""
+      },
+      "href": "https://nexcel.kz/sozdanie-saitov"
+    },
+    {
+      "label": {
+        "ru": "GEO-оптимизация",
+        "kk": ""
+      },
+      "href": "https://nexcel.kz/seo"
+    },
+    {
+      "label": {
+        "ru": "Фото на документы",
+        "kk": ""
+      },
+      "href": "https://photo.nexcel.kz/"
+    },
+    {
+      "label": {
+        "ru": "Калькулятор окупаемости",
+        "kk": ""
+      },
+      "href": "https://nexcel.kz/#calculator"
+    },
+    {
+      "label": {
+        "ru": "Шаблоны",
+        "kk": ""
+      },
+      "href": "https://nexcel.kz/templates"
+    },
+    {
+      "label": {
+        "ru": "Кейсы и статьи",
+        "kk": ""
+      },
+      "href": "https://nexcel.kz/news"
+    },
+    {
+      "label": {
+        "ru": "О компании",
+        "kk": ""
+      },
+      "href": "https://nexcel.kz/o-kompanii"
+    },
+    {
+      "label": {
+        "ru": "FAQ",
+        "kk": ""
+      },
+      "href": "https://nexcel.kz/faq"
+    }
+  ],
+  "cta": {
+    "label": {
+      "ru": "Написать в WhatsApp",
+      "kk": ""
+    },
+    "href": "https://wa.me/77711369095?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%AF%20%D1%81%20%D0%B2%D0%B0%D1%88%D0%B5%D0%B3%D0%BE%20%D1%81%D0%B0%D0%B9%D1%82%D0%B0%20nexcel.kz%2C%20%D1%85%D0%BE%D1%87%D1%83%20%D1%83%D0%B7%D0%BD%D0%B0%D1%82%D1%8C%20%D0%BF%D0%BE%D0%B4%D1%80%D0%BE%D0%B1%D0%BD%D0%B5%D0%B5%20%D0%BF%D1%80%D0%BE%20%D0%B0%D0%B2%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8E%20%D0%B1%D0%B8%D0%B7%D0%BD%D0%B5%D1%81%D0%B0."
+  },
+  "footer": {
+    "columns": [
+      {
+        "title": {
+          "ru": "Услуги",
+          "kk": ""
+        },
+        "links": [
+          {
+            "label": {
+              "ru": "Автоматизация Excel",
+              "kk": ""
+            },
+            "href": "https://nexcel.kz/avtomatizaciya-excel"
+          },
+          {
+            "label": {
+              "ru": "Telegram-боты",
+              "kk": ""
+            },
+            "href": "https://nexcel.kz/telegram-boty"
+          },
+          {
+            "label": {
+              "ru": "Внедрение ИИ",
+              "kk": ""
+            },
+            "href": "https://nexcel.kz/vnedrenie-ii"
+          },
+          {
+            "label": {
+              "ru": "Лицензии ПО & SaaS",
+              "kk": ""
+            },
+            "href": "https://nexcel.kz/licensing"
+          },
+          {
+            "label": {
+              "ru": "Создание сайтов",
+              "kk": ""
+            },
+            "href": "https://nexcel.kz/sozdanie-saitov"
+          },
+          {
+            "label": {
+              "ru": "GEO-оптимизация",
+              "kk": ""
+            },
+            "href": "https://nexcel.kz/seo"
+          },
+          {
+            "label": {
+              "ru": "Фото на документы",
+              "kk": ""
+            },
+            "href": "https://photo.nexcel.kz/"
+          }
+        ]
+      },
+      {
+        "title": {
+          "ru": "Компания",
+          "kk": ""
+        },
+        "links": [
+          {
+            "label": {
+              "ru": "О компании",
+              "kk": ""
+            },
+            "href": "https://nexcel.kz/o-kompanii"
+          },
+          {
+            "label": {
+              "ru": "Кейсы и статьи",
+              "kk": ""
+            },
+            "href": "https://nexcel.kz/news"
+          },
+          {
+            "label": {
+              "ru": "Шаблоны",
+              "kk": ""
+            },
+            "href": "https://nexcel.kz/templates"
+          },
+          {
+            "label": {
+              "ru": "С какими продуктами работаем",
+              "kk": ""
+            },
+            "href": "https://nexcel.kz/licensing#partners"
+          },
+          {
+            "label": {
+              "ru": "FAQ",
+              "kk": ""
+            },
+            "href": "https://nexcel.kz/faq"
+          }
+        ]
+      }
+    ],
+    "contacts": {
+      "title": {
+        "ru": "Контакты",
+        "kk": ""
+      },
+      "location": {
+        "ru": "Астана",
+        "kk": ""
+      },
+      "email": "info@nexcel.kz",
+      "phone": "+7 771 136-90-95",
+      "whatsapp": {
+        "label": {
+          "ru": "+7 771 136-90-95",
+          "kk": ""
+        },
+        "href": "https://wa.me/77711369095"
+      }
+    },
+    "social": [
+      {
+        "id": "telegram",
+        "label": {
+          "ru": "Nexcel Solutions в Telegram",
+          "kk": ""
+        },
+        "title": {
+          "ru": "Telegram-канал",
+          "kk": ""
+        },
+        "href": "https://t.me/nexcel_kz"
+      },
+      {
+        "id": "linkedin",
+        "label": {
+          "ru": "Nexcel Solutions в LinkedIn",
+          "kk": ""
+        },
+        "title": {
+          "ru": "LinkedIn",
+          "kk": ""
+        },
+        "href": "https://www.linkedin.com/company/nexcel-solutions-kz/"
+      },
+      {
+        "id": "instagram",
+        "label": {
+          "ru": "Nexcel Solutions в Instagram",
+          "kk": ""
+        },
+        "title": {
+          "ru": "Instagram",
+          "kk": ""
+        },
+        "href": "https://www.instagram.com/nexcel.solutions/"
+      },
+      {
+        "id": "facebook",
+        "label": {
+          "ru": "Nexcel Solutions в Facebook",
+          "kk": ""
+        },
+        "title": {
+          "ru": "Facebook",
+          "kk": ""
+        },
+        "href": "https://www.facebook.com/nexcelsolutionskz/"
+      },
+      {
+        "id": "threads",
+        "label": {
+          "ru": "Nexcel Solutions в Threads",
+          "kk": ""
+        },
+        "title": {
+          "ru": "Threads",
+          "kk": ""
+        },
+        "href": "https://www.threads.com/@nexcel.solutions"
+      }
+    ],
+    "legal": "Товарищество с ограниченной ответственностью «Nexcel Solutions» БИН: 260940035710",
+    "description": {
+      "ru": "Автоматизируем отчёты, учёт и заявки для бизнеса в Казахстане. Разрабатываем Telegram-ботов, внедряем ИИ и поставляем лицензии на ПО.",
+      "kk": ""
+    },
+    "about": {
+      "label": {
+        "ru": "Подробнее о компании",
+        "kk": ""
+      },
+      "href": "https://nexcel.kz/o-kompanii"
+    },
+    "badges": [
+      {
+        "ru": "ЭСФ / АВР",
+        "kk": ""
+      },
+      {
+        "ru": "B2B",
+        "kk": ""
+      },
+      {
+        "ru": "Оплата в ₸",
+        "kk": ""
+      }
+    ],
+    "socialTitle": {
+      "ru": "Мы в соцсетях",
+      "kk": ""
+    },
+    "copyright": {
+      "ru": "© 2026 Nexcel Solutions. Все права защищены.",
+      "kk": ""
+    },
+    "privacy": {
+      "label": {
+        "ru": "Политика конфиденциальности",
+        "kk": ""
+      },
+      "href": "https://nexcel.kz/privacy"
+    },
+    "paymentTerms": {
+      "ru": "Работа по договору • Расчеты в тенге (KZT) • ЭСФ и АВР через ИС ЭСФ",
+      "kk": ""
+    },
+    "logoRights": {
+      "ru": "Логотипы принадлежат их правообладателям.",
+      "kk": ""
+    }
+  }
+}

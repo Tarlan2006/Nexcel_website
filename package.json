@@ -5,7 +5,11 @@
   "private": true,
   "scripts": {
     "build:css": "tailwindcss -i ./src/input.css -o ./assets/styles.css --minify",
-    "build": "npm run build:css && node scripts/build-site.cjs && node scripts/build-news.cjs && node scripts/build-site.cjs --inline-partials",
+    "generate:nav": "node scripts/generate-navigation.cjs",
+    "check:nav": "node scripts/generate-navigation.cjs --check && node scripts/validate-nav.cjs",
+    "test": "npm run check:nav && node --test tests/navigation.test.cjs tests/notify-subsites.test.cjs",
+    "build": "npm run generate:nav && npm run check:nav && npm run build:css && node scripts/build-site.cjs && node scripts/build-news.cjs && node scripts/build-site.cjs --inline-partials",
+    "predev": "npm run generate:nav",
     "dev": "node scripts/dev-server.cjs",
     "dev:cloudflare": "npm run build && wrangler dev --local --ip 127.0.0.1 --port 8787",
     "check:http": "node scripts/check-http.cjs",

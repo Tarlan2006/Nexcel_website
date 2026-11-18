@@ -20,5 +20,6 @@
 !/llms.txt
 !/assets/
 !/partials/
+!/shared/
 # Wrangler reads _headers as configuration; do not serve it as a public file.
 

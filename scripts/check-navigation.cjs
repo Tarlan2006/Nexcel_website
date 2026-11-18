@@ -2,8 +2,10 @@ const assert = require('node:assert/strict');
 const { chromium, expect } = require('@playwright/test');
 
 const base = 'http://127.0.0.1:5500';
-const services = ['/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/licensing', '/sozdanie-saitov', '/seo', '/#calculator'];
-const sections = ['/templates', '/news', '/o-kompanii', '/faq'];
+const source = require('../content/navigation.json');
+const { localHref } = require('./lib/navigation.cjs');
+const services = [...source.services, source.calculator].map(item => localHref(item.href));
+const sections = source.headerPages.map(id => localHref(source.pages[id].href));
 const activeHighlight = /(?:^|\s)text-emeraldAccent(?:\s|$)/;
 
 async function openPage(browser, width) {
@@ -153,7 +155,7 @@ async function checkMobileAccordion(page) {
 async function checkLinks(page, mobile) {
   const nav = mobile ? page.locator('#mobile-menu') : page.locator('header nav').filter({ has: page.locator('#desktop-services') });
   const servicesToggle = page.locator(mobile ? '#mobile-services-toggle' : '#desktop-services-toggle');
-  for (const target of [...services, ...sections]) {
+  for (const target of [...services, ...sections].filter(href => href.startsWith('/'))) {
     await page.goto(base);
     if (mobile) await page.locator('#mobile-menu-toggle').click();
     if (services.includes(target)) await servicesToggle.click();
@@ -205,7 +207,7 @@ async function run() {
     await page.locator('#pill-bots').click();
     await page.locator('#inspector-bots').waitFor();
     assert.deepEqual(errors, []);
-    const clicks = 2 * (services.length + sections.length + 2);
+    const clicks = 2 * (services.filter(href => href.startsWith('/')).length + sections.length + 2);
     console.log('PASS: static header links, desktop dropdown and mobile accordion interactions, ' + clicks + ' navigation clicks, active states, fetch failure isolation');
   } finally {
     await browser.close();

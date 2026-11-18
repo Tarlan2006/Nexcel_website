@@ -9,8 +9,8 @@ const pages = new Map([
   ['/telegram-boty', 'telegram-boty.html'], ['/vnedrenie-ii', 'vnedrenie-ii.html'], ['/sozdanie-saitov', 'sozdanie-saitov.html'], ['/seo', 'seo.html'],
   ['/templates', 'templates.html'], ['/faq', 'faq.html'], ['/o-kompanii', 'o-kompanii.html'], ['/privacy', 'privacy.html']
 ]);
-const publicFiles = new Set(['favicon.ico', 'robots.txt', 'sitemap.xml', 'llms.txt', 'partials/header.html', 'partials/footer.html']);
-const types = { '.js': 'text/javascript; charset=utf-8', '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.txt': 'text/plain; charset=utf-8', '.xml': 'application/xml', '.svg': 'image/svg+xml', '.png': 'image/png', '.webp': 'image/webp', '.ico': 'image/x-icon' };
+const publicFiles = new Set(['favicon.ico', 'robots.txt', 'sitemap.xml', 'llms.txt', 'partials/header.html', 'partials/footer.html', 'shared/nav.json']);
+const types = { '.js': 'text/javascript; charset=utf-8', '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.txt': 'text/plain; charset=utf-8', '.xml': 'application/xml', '.json': 'application/json; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.webp': 'image/webp', '.ico': 'image/x-icon' };
 
 function pageFile(route) {
   if (route === '/news' || /^\/news\/[a-z0-9-]+$/.test(route)) return `dist${route}.html`;
@@ -39,7 +39,10 @@ const server = http.createServer(async (req, res) => {
       return;
     }
     const data = await fs.readFile(absolute);
-    res.writeHead(200, { 'Content-Type': types[path.extname(absolute)] || 'application/octet-stream', 'Cache-Control': 'no-store' });
+    const sharedNav = relative === 'shared/nav.json';
+    res.writeHead(200, { 'Content-Type': types[path.extname(absolute)] || 'application/octet-stream',
+      'Cache-Control': sharedNav ? 'public, max-age=300' : 'no-store',
+      ...(sharedNav ? { 'Access-Control-Allow-Origin': 'https://photo.nexcel.kz' } : {}) });
     res.end(req.method === 'HEAD' ? undefined : data);
   } catch (error) {
     res.writeHead(error instanceof URIError ? 400 : 404).end('Not found');

@@ -39,6 +39,14 @@ function checkSecurityHeaders(response) {
 }
 
 async function run() {
+  const navResponse = await request('/shared/nav.json', { headers: { Origin: 'https://photo.nexcel.kz' } });
+  assert.equal(navResponse.status, 200, 'shared navigation must be public');
+  assert.match(navResponse.headers.get('content-type'), /^application\/json/);
+  assert.equal(navResponse.headers.get('cache-control'), 'public, max-age=300');
+  assert.equal(navResponse.headers.get('access-control-allow-origin'), 'https://photo.nexcel.kz');
+  const nav = require('./lib/navigation.cjs').validateNavigation(await navResponse.json());
+  assert.deepEqual(nav, JSON.parse(await fs.readFile(path.join(root, 'shared/nav.json'), 'utf8')));
+  checks++;
   const servicePages = serviceRoutes.map(route => [route, `${route.slice(1)}.html`]);
   for (const [route, file] of [['/partials/header.html', 'partials/header.html'], ['/partials/footer.html', 'partials/footer.html'], ['/assets/include-partials.js', 'assets/include-partials.js'], ['/assets/cookie-notice.js', 'assets/cookie-notice.js'], ['/', 'index.html'], ['/licensing', 'licensing.html'], ...servicePages, ['/templates', 'templates.html'], ['/faq', 'faq.html'], ['/o-kompanii', 'o-kompanii.html'], ['/privacy', 'privacy.html'], ['/assets/faq.js', 'assets/faq.js'], ['/assets/styles.css', 'assets/styles.css'], ['/robots.txt', 'robots.txt'], ['/sitemap.xml', 'sitemap.xml'], ['/llms.txt', 'llms.txt']]) {
     const response = await request(route, cloudflare && route.startsWith('/partials/') ? { redirect: 'follow' } : {});
@@ -60,7 +68,7 @@ async function run() {
     assert.equal(location.pathname + location.search, target, `${route}: destination`);
     checks++;
   }
-  for (const route of ['/does-not-exist', '/package.json', '/package-lock.json', '/wrangler.jsonc', '/AI_HANDOFF.md', '/audit%20from%20claude.txt', '/.assetsignore', '/.ignore', '/.git/config', '/.wrangler/state', '/src/input.css', '/scripts/dev-server.cjs', '/node_modules/wrangler/package.json', '/_headers', '/.env', '/.env.production', '/.dev.vars', '/.dev.vars.production', '/.local/preview.json', '/.local-tools/npm.cmd']) {
+  for (const route of ['/does-not-exist', '/package.json', '/package-lock.json', '/wrangler.jsonc', '/AI_HANDOFF.md', '/audit%20from%20claude.txt', '/.assetsignore', '/.ignore', '/.git/config', '/.wrangler/state', '/src/input.css', '/src/shared/header.template.html', '/content/navigation.json', '/schemas/nav.schema.json', '/.github/workflows/notify-subsites.yml', '/scripts/dev-server.cjs', '/node_modules/wrangler/package.json', '/_headers', '/.env', '/.env.production', '/.dev.vars', '/.dev.vars.production', '/.local/preview.json', '/.local-tools/npm.cmd']) {
     const response = await request(route);
     assert.equal(response.status, 404, `${route}: must not be public`);
     if (cloudflare && route === '/does-not-exist') {

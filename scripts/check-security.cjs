@@ -13,9 +13,9 @@ const root = path.resolve(__dirname, '..');
 const serviceFaqCounts = new Map([
   ['/avtomatizaciya-excel', 6], ['/telegram-boty', 4], ['/vnedrenie-ii', 4], ['/licensing', 4], ['/sozdanie-saitov', 7], ['/seo', 7]
 ]);
-const serviceLinks = [
-  '/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/licensing', '/sozdanie-saitov', '/seo', '/#calculator'
-];
+const navigationSource = require('../content/navigation.json');
+const { localHref } = require('./lib/navigation.cjs');
+const serviceLinks = [...navigationSource.services, navigationSource.calculator].map(item => localHref(item.href));
 
 async function checkHeader(page, response, width, route) {
   const links = await page.evaluate(source => {

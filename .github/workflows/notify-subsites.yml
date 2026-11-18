@@ -1,0 +1,71 @@
+name: Validate shared navigation and notify subsites
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'content/navigation.json'
+      - 'shared/nav.json'
+      - 'schemas/nav.schema.json'
+      - 'src/shared/**'
+      - 'scripts/generate-navigation.cjs'
+      - 'scripts/lib/navigation.cjs'
+      - 'scripts/validate-nav.cjs'
+      - 'scripts/notify-subsites.cjs'
+      - 'scripts/build-site.cjs'
+      - 'partials/**'
+      - '_headers'
+      - '.assetsignore'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'tests/navigation.test.cjs'
+      - 'tests/notify-subsites.test.cjs'
+      - '.github/workflows/notify-subsites.yml'
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: shared-navigation-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - name: Confirm generated files are committed
+        run: git diff --exit-code -- shared/nav.json partials/header.html partials/footer.html
+
+  notify-photo:
+    needs: validate
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      PHOTO_DEPLOY_HOOK: ${{ secrets.PHOTO_DEPLOY_HOOK }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+      - name: Wait for published navigation, then trigger photo deployment
+        if: env.PHOTO_DEPLOY_HOOK != ''
+        run: node scripts/notify-subsites.cjs
+      - name: No deploy hook configured
+        if: env.PHOTO_DEPLOY_HOOK == ''
+        run: echo 'PHOTO_DEPLOY_HOOK is not configured; notification skipped.'
