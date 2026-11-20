@@ -7,7 +7,6 @@
 !/vnedrenie-ii.html
 !/seo.html
 !/sozdanie-saitov.html
-!/templates.html
 !/free.html
 !/faq.html
 !/o-kompanii.html
@@ -24,3 +23,4 @@
 !/shared/
 # Wrangler reads _headers as configuration; do not serve it as a public file.
 
+# Wrangler reads _redirects from dist as configuration; exclude only its public asset URL.

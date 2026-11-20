@@ -1,4 +1,5 @@
 ﻿const { chromium } = require('@playwright/test');
+const base = process.argv[2] || 'http://127.0.0.1:5500';
 const assert = require('node:assert/strict');
 (async () => {
  const browser = await chromium.launch({channel:'chrome'});
@@ -7,7 +8,7 @@ const assert = require('node:assert/strict');
    for (const width of [320,768,1440]) {
     const page = await browser.newPage({viewport:{width,height:900}});
     await page.route('https://fonts.googleapis.com/**', r => r.abort());
-    await page.goto('http://127.0.0.1:5500' + route);
+    await page.goto(base + route);
     const pairs = await page.locator('#faq-container button[aria-controls]').evaluateAll(buttons => buttons.map(button => ({
      name: button.querySelector('span').textContent.replace(/^\d+\.\s*/, '').trim(),
      text: document.getElementById(button.getAttribute('aria-controls')).textContent.trim()

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-20T09:45:01.708Z",
+  "updatedAt": "2026-11-20T10:32:25Z",
   "logo": {
     "href": "https://nexcel.kz/",
     "src": "https://nexcel.kz/assets/logo.svg",
@@ -85,13 +85,6 @@
     }
   ],
   "pages": {
-    "templates": {
-      "label": {
-        "ru": "Шаблоны",
-        "kk": ""
-      },
-      "href": "https://nexcel.kz/templates"
-    },
     "news": {
       "label": {
         "ru": "Кейсы и статьи",

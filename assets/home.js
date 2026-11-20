@@ -51,6 +51,9 @@ function setHeroInspector(key) {
   });
 
   const data = heroContent[key];
+  document.getElementById('hero-panels').dataset.direction = key;
+  document.getElementById('hero-window-status').dataset.direction = key;
+  document.getElementById('hero-web-details').hidden = key !== 'web';
   const label = document.getElementById('hero-window-filename');
   if (label) label.textContent = data.label;
   const panel = document.getElementById('inspector-' + key);

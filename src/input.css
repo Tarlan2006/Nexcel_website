@@ -84,6 +84,71 @@ body { padding-bottom: var(--cookie-notice-height, 0px); }
   pointer-events: none;
 }
 
+/* The richer web demo uses its own height without enlarging the other four tabs. */
+.hero-panels > #inspector-web.hidden,
+.hero-panels[data-direction="web"] > .inspector-panel.hidden { display: none; }
+.web-preview {
+  overflow: hidden;
+  border: 1px solid #e5e5e5;
+  border-radius: 0.5rem;
+  background: #fbfbfa;
+  color: #141715;
+}
+.web-preview-browser {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-bottom: 1px solid #e5e5e5;
+  background: #fff;
+}
+.web-preview-dots { display: flex; gap: 0.1875rem; flex-shrink: 0; }
+.web-preview-dots i { width: 0.3125rem; height: 0.3125rem; border-radius: 50%; background: #b6bab7; }
+.web-preview-url {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.5625rem;
+  line-height: 1.5;
+}
+.web-preview-ssl, .web-preview-badge { color: #1b6b44; background: #ebf5f0; font-weight: 600; }
+.web-preview-ssl { flex-shrink: 0; padding: 0.1875rem 0.25rem; border-radius: 0.25rem; font-size: 0.5rem; white-space: nowrap; }
+.web-preview-page { padding: 0.625rem; }
+.web-preview-nav { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+.web-preview-logo { display: flex; align-items: center; gap: 0.25rem; margin-right: auto; color: #1b6b44; }
+.web-preview-logo svg { width: 1rem; height: 1rem; }
+.web-preview-logo i { width: 1.75rem; height: 0.3125rem; background: #141715; border-radius: 0.125rem; }
+.web-preview-menu { display: flex; gap: 0.375rem; }
+.web-preview-menu i { width: 1rem; height: 0.25rem; background: #d4d7d5; border-radius: 0.125rem; }
+.web-preview-nav-cta, .web-preview-primary { color: #fff; background: #1b6b44; border: 1px solid #1b6b44; }
+.web-preview-nav-cta { padding: 0.1875rem 0.375rem; border-radius: 0.25rem; font-size: 0.5rem; font-weight: 600; }
+.web-preview-hero { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); align-items: center; gap: 0.625rem; }
+.web-preview-copy { min-width: 0; }
+.web-preview-badge { display: inline-block; padding: 0.1875rem 0.3125rem; border-radius: 0.25rem; font-size: 0.5rem; line-height: 1.5; }
+.web-preview-title { margin-top: 0.375rem; font-family: 'Manrope', sans-serif; font-size: 1rem; line-height: 1.2; font-weight: 800; }
+.web-preview-description { margin-top: 0.375rem; font-size: 0.625rem; line-height: 1.5; color: #3d414a; }
+.web-preview-actions { display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.5rem; }
+.web-preview-actions > span { padding: 0.3125rem 0.375rem; border-radius: 0.25rem; font-size: 0.5rem; line-height: 1.25; font-weight: 600; }
+.web-preview-secondary { border: 1px solid #e5e5e5; background: #fff; }
+.web-preview-analytics { min-width: 0; padding: 0.5rem; border: 1px solid #e5e5e5; border-radius: 0.375rem; background: #fff; }
+.web-preview-metric-label { font-size: 0.5625rem; color: #3d414a; }
+.web-preview-metric { margin-top: 0.125rem; font-family: 'JetBrains Mono', monospace; font-size: 1.25rem; line-height: 1.4; font-weight: 700; color: #1b6b44; }
+.web-preview-progress { margin-top: 0.375rem; height: 0.25rem; overflow: hidden; border-radius: 1rem; background: #edf0ee; }
+.web-preview-progress i { display: block; width: 82%; height: 100%; border-radius: inherit; background: #1b6b44; }
+.web-preview-progress-secondary i { width: 60%; background: #7cb695; }
+.web-preview-speed { margin-top: 0.5rem; padding-top: 0.375rem; border-top: 1px solid #e5e5e5; font-family: 'JetBrains Mono', monospace; font-size: 0.5rem; line-height: 1.5; }
+.web-preview-speed strong { color: #1b6b44; white-space: nowrap; }
+.web-preview-features { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.375rem; margin-top: 0.75rem; }
+.web-preview-features > div { padding: 0.4375rem; border: 1px solid #e5e5e5; border-radius: 0.375rem; background: #fff; }
+.web-preview-features p { font-size: 0.5625rem; font-weight: 700; line-height: 1.4; }
+.web-preview-features span { display: block; margin-top: 0.1875rem; font-size: 0.5rem; line-height: 1.5; color: #3d414a; }
+#hero-window-status[data-direction="web"] { gap: 0.75rem; font-family: 'JetBrains Mono', monospace; }
+#hero-window-status[data-direction="web"] > span { min-width: 0; }
+#hero-web-details { flex-shrink: 0; max-width: 48%; text-align: right; font-family: 'Inter', sans-serif; }
+
 /* A grid track follows the answer's natural height, including after resizing. */
 .faq-answer {
   display: grid;

@@ -1,7 +1,7 @@
 const assert = require('node:assert/strict');
 const { chromium, expect } = require('@playwright/test');
 
-const base = 'http://127.0.0.1:5500';
+const base = process.argv[2] || 'http://127.0.0.1:5500';
 const source = require('../content/navigation.json');
 const { localHref } = require('./lib/navigation.cjs');
 const services = source.services.map(item => localHref(item.href));
@@ -179,12 +179,21 @@ async function checkLinks(page, mobile) {
   await page.waitForURL(base + '/o-kompanii');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('О компании Nexcel Solutions');
 
-  await page.goto(base + '/templates#library');
-  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  await page.goto(base + '/templates#template-stock');
+  await page.waitForURL(base + '/free#template-stock');
+  await expect(page.locator('#template-stock')).toBeVisible();
   await expect(nav.locator('a[href="/templates"]')).toHaveCount(0);
   await page.goto(base + '/free');
   await expect(nav.locator('a[href="/free"]')).toHaveAttribute('aria-current', 'page');
   await expect(nav.locator('a[href="/free"]')).toHaveClass(activeHighlight);
+  await expect(page.locator('main a[href^="/templates"]')).toHaveCount(0);
+  const sheets = page.locator('#free-templates a[href^="https://docs.google.com/spreadsheets/d/"]');
+  await expect(sheets).toHaveCount(2);
+  for (const link of await sheets.all()) {
+    await expect(link).toHaveAttribute('target', '_blank');
+    await expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+  }
+  await expect(page.locator('#free-templates button[data-action="request-template"]')).toHaveCount(3);
   await page.locator('#tools a[href="/#calculator"]').click();
   await page.waitForURL(base + '/#calculator');
   await expect(page.locator('#calculator')).toBeVisible();

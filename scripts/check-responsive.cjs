@@ -1,4 +1,5 @@
 const { chromium } = require('@playwright/test');
+const base = process.argv[2] || 'http://127.0.0.1:5500';
 const fs = require('node:fs/promises');
 
 const desktopWidth = 1024;
@@ -30,10 +31,10 @@ function fitsViewport(element) {
   const widths = [320, 360, 390, 768, 1000, 1024, 1150, 1280, 1440, 1536, 1920];
   try {
     for (const width of widths) {
-      for (const route of ['/', '/licensing', '/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/sozdanie-saitov', '/seo', '/templates', '/free', '/faq', '/o-kompanii']) {
+      for (const route of ['/', '/licensing', '/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/sozdanie-saitov', '/seo', '/free', '/faq', '/o-kompanii']) {
         const page = await context.newPage();
         await page.setViewportSize({ width, height: 900 });
-        await page.goto('http://127.0.0.1:5500' + route);
+        await page.goto(base + route);
         await page.locator('#site-header-row').waitFor();
         await page.locator('#site-footer footer').waitFor();
         await page.evaluate(() => document.fonts.ready);
@@ -98,17 +99,17 @@ function fitsViewport(element) {
           if (!await nav.evaluate(fitsViewport)) failures.push(`${width}px: services panel overflows`);
           await page.keyboard.press('Escape');
           if (width < desktopWidth) await page.keyboard.press('Escape');
-          await page.goto('http://127.0.0.1:5500/free');
+          await page.goto(base + '/free');
           await page.locator(`#tools a[href="/${calculatorAnchor}"]`).click();
           await page.waitForURL('**/#calculator');
           const position = await page.locator(calculatorAnchor).evaluate(el => ({ top: el.getBoundingClientRect().top, header: document.querySelector('header').getBoundingClientRect().bottom }));
           if (position.top < position.header - 1) failures.push(`${width}px: calculator behind header`);
           if (width < desktopWidth && await page.locator('#mobile-menu-toggle').getAttribute('aria-expanded') !== 'false') failures.push(`${width}px: menu stayed open`);
         }
-        if (route === '/templates') {
-          await page.locator('a[href="#library"]').click();
-          const bounds = await page.locator('#library h2').evaluate(el => ({ top: el.getBoundingClientRect().top, header: document.querySelector('header').getBoundingClientRect().bottom }));
-          if (bounds.top < bounds.header) failures.push(`${width}px: library behind header`);
+        if (route === '/free') {
+          await page.goto(base + '/free#free-templates');
+          const bounds = await page.locator('#free-templates h2').evaluate(el => ({ top: el.getBoundingClientRect().top, header: document.querySelector('header').getBoundingClientRect().bottom }));
+          if (bounds.top < bounds.header) failures.push(`${width}px: templates behind header`);
         }
         if (route !== '/') {
           const target = route === '/licensing' ? '/free' : '/licensing';
@@ -122,7 +123,7 @@ function fitsViewport(element) {
     for (const viewport of [{width:320,height:568},{width:844,height:390}]) {
       const page = await context.newPage();
       await page.setViewportSize(viewport);
-      await page.goto('http://127.0.0.1:5500');
+      await page.goto(base);
       const services = await openNavigation(page, viewport.width, true);
       const contacts = page.locator('#mobile-contacts');
       await contacts.scrollIntoViewIfNeeded();
@@ -146,5 +147,5 @@ function fitsViewport(element) {
   } finally { await browser.close(); }
   await fs.writeFile('.review/responsive/layout.json', JSON.stringify(results, null, 2));
   if (failures.length) { console.error(failures.join('\n')); process.exitCode = 1; }
-  else console.log('PASS:', results.length, 'single-row header layouts,', widths.length * 4, 'inspector panels,', widths.length, 'calculator anchors,', widths.length, 'library anchors,', results.length - widths.length, 'interpage links and 2 short-screen mobile menu checks.');
+  else console.log('PASS:', results.length, 'single-row header layouts,', widths.length * 4, 'inspector panels,', widths.length, 'calculator anchors,', widths.length, 'template section anchors,', results.length - widths.length, 'interpage links and 2 short-screen mobile menu checks.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

@@ -50,7 +50,7 @@ async function run() {
   assert.deepEqual(nav, JSON.parse(await fs.readFile(path.join(root, 'shared/nav.json'), 'utf8')));
   checks++;
   const servicePages = serviceRoutes.map(route => [route, `${route.slice(1)}.html`]);
-  for (const [route, file] of [['/partials/header.html', 'partials/header.html'], ['/partials/footer.html', 'partials/footer.html'], ['/assets/include-partials.js', 'assets/include-partials.js'], ['/assets/cookie-notice.js', 'assets/cookie-notice.js'], ['/', 'index.html'], ['/licensing', 'licensing.html'], ...servicePages, ['/templates', 'templates.html'], ['/free', 'free.html'], ['/faq', 'faq.html'], ['/o-kompanii', 'o-kompanii.html'], ['/privacy', 'privacy.html'], ['/assets/faq.js', 'assets/faq.js'], ['/assets/styles.css', 'assets/styles.css'], ['/robots.txt', 'robots.txt'], ['/sitemap.xml', 'sitemap.xml'], ['/llms.txt', 'llms.txt']]) {
+  for (const [route, file] of [['/partials/header.html', 'partials/header.html'], ['/partials/footer.html', 'partials/footer.html'], ['/assets/include-partials.js', 'assets/include-partials.js'], ['/assets/cookie-notice.js', 'assets/cookie-notice.js'], ['/', 'index.html'], ['/licensing', 'licensing.html'], ...servicePages, ['/free', 'free.html'], ['/faq', 'faq.html'], ['/o-kompanii', 'o-kompanii.html'], ['/privacy', 'privacy.html'], ['/assets/faq.js', 'assets/faq.js'], ['/assets/styles.css', 'assets/styles.css'], ['/robots.txt', 'robots.txt'], ['/sitemap.xml', 'sitemap.xml'], ['/llms.txt', 'llms.txt']]) {
     const response = await request(route, cloudflare && route.startsWith('/partials/') ? { redirect: 'follow' } : {});
     assert.equal(response.status, 200, route);
     assert.equal(await response.text(), await fs.readFile(path.join(root, cloudflare ? 'dist' : '.', file), 'utf8'), `${route}: body`);
@@ -62,15 +62,23 @@ async function run() {
     }
     checks++;
   }
+  for (const route of ['/templates', '/templates.html', '/templates/', '/templates?source=check', '/templates.html?source=check']) {
+    const response = await request(route);
+    assert.equal(response.status, 301, route + ': permanent redirect');
+    const location = new URL(response.headers.get('location'), base);
+    assert.equal(location.pathname, '/free', route + ': destination');
+    assert.equal(location.search, new URL(route, base).search, route + ': preserve query');
+    checks++;
+  }
   const serviceRedirects = serviceRoutes.flatMap(route => [[`${route}.html`, route], [`${route}/`, route], [`${route}.html?source=check`, `${route}?source=check`]]);
-  for (const [route, target] of [['/index.html', '/'], ['/licensing.html', '/licensing'], ['/licensing/', '/licensing'], ...serviceRedirects, ['/free.html', '/free'], ['/free/', '/free'], ['/free.html?source=check', '/free?source=check'], ['/templates.html', '/templates'], ['/faq.html', '/faq'], ['/faq/', '/faq'], ['/faq.html?source=check', '/faq?source=check'], ['/templates/', '/templates'], ['/templates.html?source=check', '/templates?source=check'], ['/o-kompanii.html', '/o-kompanii'], ['/o-kompanii/', '/o-kompanii'], ['/privacy.html', '/privacy'], ['/privacy/', '/privacy']]) {
+  for (const [route, target] of [['/index.html', '/'], ['/licensing.html', '/licensing'], ['/licensing/', '/licensing'], ...serviceRedirects, ['/free.html', '/free'], ['/free/', '/free'], ['/free.html?source=check', '/free?source=check'], ['/faq.html', '/faq'], ['/faq/', '/faq'], ['/faq.html?source=check', '/faq?source=check'], ['/o-kompanii.html', '/o-kompanii'], ['/o-kompanii/', '/o-kompanii'], ['/privacy.html', '/privacy'], ['/privacy/', '/privacy']]) {
     const response = await request(route);
     assert.equal(response.status, 307, `${route}: redirect`);
     const location = new URL(response.headers.get('location'), base);
     assert.equal(location.pathname + location.search, target, `${route}: destination`);
     checks++;
   }
-  for (const route of ['/does-not-exist', '/package.json', '/package-lock.json', '/wrangler.jsonc', '/AI_HANDOFF.md', '/audit%20from%20claude.txt', '/.assetsignore', '/.ignore', '/.git/config', '/.wrangler/state', '/src/input.css', '/src/shared/header.template.html', '/content/navigation.json', '/schemas/nav.schema.json', '/.github/workflows/notify-subsites.yml', '/scripts/dev-server.cjs', '/node_modules/wrangler/package.json', '/_headers', '/.env', '/.env.production', '/.dev.vars', '/.dev.vars.production', '/.local/preview.json', '/.local-tools/npm.cmd']) {
+  for (const route of ['/does-not-exist', '/package.json', '/package-lock.json', '/wrangler.jsonc', '/AI_HANDOFF.md', '/audit%20from%20claude.txt', '/.assetsignore', '/.ignore', '/.git/config', '/.wrangler/state', '/src/input.css', '/src/shared/header.template.html', '/content/navigation.json', '/schemas/nav.schema.json', '/.github/workflows/notify-subsites.yml', '/scripts/dev-server.cjs', '/node_modules/wrangler/package.json', '/_headers', '/_redirects', '/.env', '/.env.production', '/.dev.vars', '/.dev.vars.production', '/.local/preview.json', '/.local-tools/npm.cmd']) {
     const response = await request(route);
     assert.equal(response.status, 404, `${route}: must not be public`);
     if (cloudflare && route === '/does-not-exist') {
@@ -81,7 +89,7 @@ async function run() {
     }
     checks++;
   }
-  const head = await request('/templates', { method: 'HEAD' });
+  const head = await request('/free', { method: 'HEAD' });
   assert.equal(head.status, 200);
   assert.equal(await head.text(), '');
   assert.equal((await request('/', { method: 'POST' })).status, 405);

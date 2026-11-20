@@ -261,7 +261,7 @@
                 <span>ПОДОБРАТЬ ЛИЦЕНЗИИ ПО</span>
                 <span aria-hidden="true" class="text-emeraldAccent">→</span>
               </a>
-              <a href="/templates" class="inline-flex min-h-11 items-center text-xs font-semibold text-emeraldAccent hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emeraldAccent">Бесплатные шаблоны</a>
+              <a href="/free#free-templates" class="inline-flex min-h-11 items-center text-xs font-semibold text-emeraldAccent hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emeraldAccent">Бесплатные шаблоны</a>
             </div>
           </div>
 
@@ -353,17 +353,41 @@
                 </div>
               </div>
 
-              <div id="inspector-web" class="inspector-panel hidden p-2.5 sm:p-4 space-y-2 font-sans">
-                <div class="rounded-lg border border-gridBorder overflow-hidden">
-                  <div class="border-b border-gridBorder bg-slate-100 px-3 py-1.5 font-mono text-[11px] text-textMuted">nexcel.kz</div>
-                  <div class="bg-paper p-3 space-y-1">
-                    <p class="font-heading text-base font-extrabold text-darkBg">Сайт для вашего бизнеса</p>
-                    <p class="leading-relaxed text-textMuted">Страницы услуг, кейсы и контакты. Адаптируем под телефон и настраиваем аналитику.</p>
+              <div id="inspector-web" class="inspector-panel hidden p-2.5 sm:p-4 font-sans">
+                <div class="web-preview" role="group" aria-label="Пример посадочной страницы; показатели демонстрационные">
+                  <div class="web-preview-browser">
+                    <span class="web-preview-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                    <span class="web-preview-url">https://your-company.kz</span>
+                    <span class="web-preview-ssl">SSL • Адаптив</span>
+                  </div>
+                  <div class="web-preview-page">
+                    <div class="web-preview-nav">
+                      <span class="web-preview-logo" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="M4 15V5l12 10V5" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" /></svg><i></i></span>
+                      <span class="web-preview-menu" aria-hidden="true"><i></i><i></i></span>
+                      <span class="web-preview-nav-cta">Заявка</span>
+                    </div>
+                    <div class="web-preview-hero">
+                      <div class="web-preview-copy">
+                        <span class="web-preview-badge">Под ключ за 10–14 дней</span>
+                        <p class="web-preview-title">Сайт для вашего бизнеса</p>
+                        <p class="web-preview-description">Каталог услуг, кейсы, интеграция с WhatsApp и CRM</p>
+                        <div class="web-preview-actions"><span class="web-preview-primary">Оставить заявку</span><span class="web-preview-secondary">Кейсы</span></div>
+                      </div>
+                      <div class="web-preview-analytics">
+                        <p class="web-preview-metric-label">Конверсия</p>
+                        <p class="web-preview-metric">+42%</p>
+                        <div class="web-preview-progress" aria-hidden="true"><i></i></div>
+                        <div class="web-preview-progress web-preview-progress-secondary" aria-hidden="true"><i></i></div>
+                        <p class="web-preview-speed">Google Speed: <strong>99/100</strong></p>
+                      </div>
+                    </div>
+                    <div class="web-preview-features">
+                      <div><p>Mobile First</p><span>Идеально на смартфоне</span></div>
+                      <div><p>Аналитика</p><span>GA4, Метрика, цели</span></div>
+                      <div><p>SEO-база</p><span>Готов к рекламе</span></div>
+                    </div>
                   </div>
                 </div>
-                <a href="/sozdanie-saitov" class="inline-flex min-h-8 items-center gap-1 font-semibold text-emeraldAccent hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">
-                  Подробнее о разработке <span aria-hidden="true">→</span>
-                </a>
               </div>
 
               <div id="inspector-saas" class="inspector-panel hidden p-2.5 sm:p-4 space-y-1.5 sm:space-y-3">
@@ -386,8 +410,9 @@
 
               </div>
 
-              <div class="px-3 sm:px-4 py-2 sm:py-2.5 bg-slate-100 border-t border-gridBorder text-[10px] text-textMuted flex items-center justify-between">
+              <div id="hero-window-status" class="px-3 sm:px-4 py-2 sm:py-2.5 bg-slate-100 border-t border-gridBorder text-[10px] text-textMuted flex items-center justify-between">
                 <span>Казахстан • Астана • Nexcel Solutions</span>
+                <a id="hero-web-details" href="/sozdanie-saitov" hidden class="font-semibold text-emeraldAccent hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">Подробнее о разработке <span aria-hidden="true">→</span></a>
               </div>
             </div>
           </div>

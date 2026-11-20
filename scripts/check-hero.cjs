@@ -43,12 +43,18 @@ const base = process.argv[2] || 'http://127.0.0.1:5500';
         assert.deepEqual(state.active, ['inspector-' + key]);
         assert.deepEqual(state.pressed, ['pill-' + key]);
         assert(state.hiddenInert);
-        assert(Math.abs(state.height - initialHeight) < 1);
+        // Only the web wireframe uses its natural content height.
+        if (key !== 'web') assert(Math.abs(state.height - initialHeight) < 1);
         assert(state.scrollWidth <= width);
         if (key === 'web') {
-          const link = page.locator('#inspector-web a');
+          const link = page.locator('#hero-window-status a');
           assert(await link.isVisible());
           assert.equal(await link.getAttribute('href'), '/sozdanie-saitov');
+          const bottomSpace = await page.locator('#hero-panels').evaluate(el =>
+            el.getBoundingClientRect().bottom - el.querySelector('.web-preview').getBoundingClientRect().bottom);
+          assert(bottomSpace <= 17, 'Web demo has no unused space below its content');
+        } else {
+          assert(!await page.locator('#hero-web-details').isVisible());
         }
       }
       assert.equal(await page.locator('#hero-orders').inputValue(), '500');
@@ -72,7 +78,7 @@ const base = process.argv[2] || 'http://127.0.0.1:5500';
       assert.equal(await page.locator('#inspector-tables').evaluate(el => getComputedStyle(el).opacity), '1');
       assert.deepEqual(errors, []);
       await context.close();
-      console.log(`PASS ${width}px: reveal, stable height, one visible panel, rapid clicks, preserved inputs, reduced motion.`);
+      console.log(`PASS ${width}px: reveal, four unchanged panel heights, compact web demo and status link, one visible panel, rapid clicks, preserved inputs, reduced motion.`);
     }
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });
