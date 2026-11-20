@@ -210,6 +210,21 @@ async function run() {
     await checkLinks(mobile, true);
     await mobile.close();
 
+    const stale = await browser.newPage();
+    await stale.route('**/*', route => new URL(route.request().url()).origin === base ? route.continue() : route.abort());
+    await stale.route(base + '/', async route => {
+      const response = await route.fetch();
+      const body = (await response.text()).replace(
+        '<div id="site-footer"></div>',
+        '<div id="site-footer"><footer data-stale-footer>Старый футер</footer></div>'
+      );
+      await route.fulfill({ response, body });
+    });
+    await stale.goto(base);
+    await expect(stale.locator('footer[data-stale-footer]')).toHaveCount(0);
+    await expect(stale.locator('footer a[href="https://go.2gis.com/cyGjq"]')).toBeAttached();
+    await stale.close();
+
     const page = await browser.newPage();
     await page.route('**/*', route => new URL(route.request().url()).origin === base ? route.continue() : route.abort());
     await page.route('**/partials/**', route => route.fulfill({ status: 500, body: 'error' }));

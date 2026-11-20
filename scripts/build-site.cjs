@@ -26,6 +26,11 @@ if (process.argv.includes('--inline-partials')) {
         const original = fs.readFileSync(file, 'utf8');
         let html = original;
         for (const partial of partials) html = html.replace(partial.placeholder, () => partial.html);
+        for (const partial of partials) {
+          if (html.split(partial.html).length !== 2) {
+            throw new Error('Shared navigation differs from its partial in ' + path.relative(output, file));
+          }
+        }
         if (html !== original) {
           fs.writeFileSync(file, html);
           changed++;

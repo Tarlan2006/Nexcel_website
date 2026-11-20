@@ -10,9 +10,9 @@ const localHref = href => {
   return url.origin === SITE ? url.pathname + url.search + url.hash : href;
 };
 
-const officeAddress = contacts => contacts.addressLines
+const officeAddress = contacts => contacts.officeAddress || (contacts.addressLines
   ? 'Казахстан, г. ' + contacts.addressLines.slice(0, 2).map(line => line.ru).join(', ')
-  : '';
+  : '');
 
 function navigationFromSource(source) {
   const { footer, contacts } = source;
@@ -163,10 +163,11 @@ function renderArtifacts(source, root) {
     aboutHref: escapeHtml(localHref(source.pages.about.href)), privacyHref: escapeHtml(localHref(source.pages.privacy.href)),
     privacyLabel: escapeHtml(source.pages.privacy.label.ru), companyTitle: escapeHtml(source.footer.companyTitle.ru),
     contactsTitle: escapeHtml(source.contacts.title.ru),
+    addressMapHref: escapeHtml(source.contacts.addressMap?.href || source.contacts.map?.href || source.logo.href),
     contactAddress: source.contacts.addressLines
       ? source.contacts.addressLines.map((line, index) => '<span class="block' + (index === 2 ? ' text-textMutedOnDark' : '') + '">' + escapeHtml(line.ru) + '</span>').join('')
       : escapeHtml(source.contacts.location.ru),
-    mapLink: source.contacts.map ? '<li>' + anchor(source.contacts.map, 'inline-flex min-h-7 items-center ' + footerClass, ' target="_blank" rel="noopener noreferrer"') + '</li>' : '',
+    mapLink: source.contacts.map ? '<li>' + anchor(source.contacts.map, 'inline-flex min-h-7 items-center underline underline-offset-4 ' + footerClass, ' target="_blank" rel="noopener noreferrer"') + '</li>' : '',
     footerAddress: officeAddress(source.contacts) ? '<span class="block min-[641px]:inline"><span aria-hidden="true" class="hidden min-[641px]:inline">·&nbsp;</span><span class="text-textMutedOnDark">Адрес:</span> ' + escapeHtml(officeAddress(source.contacts)) + '</span>' : '',
     whatsappHref: escapeHtml(source.contacts.whatsapp), socialTitle: escapeHtml(source.socialTitle.ru),
     company: escapeHtml(source.footer.company), businessId: escapeHtml(source.footer.businessId),

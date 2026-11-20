@@ -186,20 +186,29 @@
     updateCurrent();
     window.addEventListener('hashchange', updateCurrent);
   }
-  async function include(id, url, initialize) {
+  async function include(id, url, initialize, refresh = false) {
     const container = document.getElementById(id);
     if (!container) return;
-    try {
-      if (!container.firstElementChild) {
-        const response = await fetch(url);
+    if (refresh || !container.firstElementChild) {
+      try {
+        const response = await fetch(url, { cache: 'no-cache' });
         if (!response.ok) throw new Error('HTTP ' + response.status);
-        container.innerHTML = await response.text();
+        const markup = document.createElement('template');
+        markup.innerHTML = await response.text();
+        if (container.innerHTML.trim() !== markup.innerHTML.trim()) {
+          container.replaceChildren(markup.content);
+        }
+      } catch (error) {
+        console.warn('Could not load ' + url + ':', error);
       }
+    }
+    if (!container.firstElementChild) return;
+    try {
       if (initialize) await initialize();
     } catch (error) {
-      console.warn('Could not load ' + url + ':', error);
+      console.warn('Could not initialize ' + url + ':', error);
     }
   }
   include('site-header', '/partials/header.html', initHeader);
-  include('site-footer', '/partials/footer.html', () => import('/assets/cookie-notice.js'));
+  include('site-footer', '/partials/footer.html', () => import('/assets/cookie-notice.js'), true);
 })();
