@@ -30,7 +30,7 @@ function fitsViewport(element) {
   const widths = [320, 360, 390, 768, 1000, 1024, 1150, 1280, 1440, 1536, 1920];
   try {
     for (const width of widths) {
-      for (const route of ['/', '/licensing', '/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/sozdanie-saitov', '/seo', '/templates', '/faq', '/o-kompanii']) {
+      for (const route of ['/', '/licensing', '/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/sozdanie-saitov', '/seo', '/templates', '/free', '/faq', '/o-kompanii']) {
         const page = await context.newPage();
         await page.setViewportSize({ width, height: 900 });
         await page.goto('http://127.0.0.1:5500' + route);
@@ -107,7 +107,7 @@ function fitsViewport(element) {
           if (bounds.top < bounds.header) failures.push(`${width}px: library behind header`);
         }
         if (route !== '/') {
-          const target = route === '/licensing' ? '/templates' : '/licensing';
+          const target = route === '/licensing' ? '/free' : '/licensing';
           const nav = await openNavigation(page, width, target === '/licensing');
           await nav.locator(`a[href="${target}"]`).click();
           if (new URL(page.url()).pathname !== target) failures.push(`${width}px: interpage navigation`);

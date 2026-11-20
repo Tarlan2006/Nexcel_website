@@ -7,7 +7,7 @@
 - Сайт: https://nexcel.kz
 - Email: info@nexcel.kz
 - Телефон / WhatsApp: +7 (771) 136-90-95
-- Локация: Республика Казахстан, г. Астана
+- Адрес офиса: Астана, ЭКСПО, сфера «Нур Алем», 5-й этаж, офис NS, Международный центр ИИ [alem.ai](https://alem.ai/).
 - Работаем с компаниями по договору. Оплата в тенге, ЭСФ и АВР через ИС ЭСФ.
 - [О компании Nexcel Solutions](https://nexcel.kz/o-kompanii) — инженерно-аналитическое бюро в Астане. Работаем дистанционно по всему Казахстану.
 
@@ -75,3 +75,10 @@
 - [Instagram](https://www.instagram.com/nexcel.solutions/)
 - [Facebook](https://www.facebook.com/nexcelsolutionskz/)
 - [Threads](https://www.threads.com/@nexcel.solutions)
+
+## Бесплатные сервисы
+
+- [Бесплатные сервисы Nexcel](https://nexcel.kz/free) — инструменты и шаблоны Nexcel.
+- [Шаблоны Google Sheets](https://nexcel.kz/templates) — движение денег, складской учёт, отпуска и компенсации.
+- [Фото на документы](https://photo.nexcel.kz/?utm_source=nexcel.kz&utm_medium=free) — размер и кадр фото для удостоверения личности РК и Green Card.
+- [AIdos](https://aidos.nexcel.kz/?utm_source=nexcel.kz&utm_medium=free) — детская игровая платформа с ИИ-помощником, интерфейс на казахском языке.

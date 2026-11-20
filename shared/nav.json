@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-18T15:10:50.391Z",
+  "updatedAt": "2026-11-20T08:43:50.528Z",
   "logo": {
     "href": "https://nexcel.kz/",
     "src": "https://nexcel.kz/assets/logo.svg",
@@ -65,13 +65,6 @@
     },
     {
       "label": {
-        "ru": "Шаблоны",
-        "kk": ""
-      },
-      "href": "https://nexcel.kz/templates"
-    },
-    {
-      "label": {
         "ru": "Кейсы и статьи",
         "kk": ""
       },
@@ -90,6 +83,13 @@
         "kk": ""
       },
       "href": "https://nexcel.kz/faq"
+    },
+    {
+      "label": {
+        "ru": "Бесплатно",
+        "kk": ""
+      },
+      "href": "https://nexcel.kz/free"
     }
   ],
   "cta": {
@@ -180,13 +180,6 @@
           },
           {
             "label": {
-              "ru": "Шаблоны",
-              "kk": ""
-            },
-            "href": "https://nexcel.kz/templates"
-          },
-          {
-            "label": {
               "ru": "С какими продуктами работаем",
               "kk": ""
             },
@@ -198,6 +191,13 @@
               "kk": ""
             },
             "href": "https://nexcel.kz/faq"
+          },
+          {
+            "label": {
+              "ru": "Бесплатно",
+              "kk": ""
+            },
+            "href": "https://nexcel.kz/free"
           }
         ]
       }
@@ -208,7 +208,7 @@
         "kk": ""
       },
       "location": {
-        "ru": "Астана",
+        "ru": "Астана, ЭКСПО, сфера «Нур Алем», 5-й этаж, офис NS, Международный центр ИИ",
         "kk": ""
       },
       "email": "info@nexcel.kz",

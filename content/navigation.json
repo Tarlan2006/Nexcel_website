@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-18T15:10:50.391Z",
+  "updatedAt": "2026-11-20T08:43:50.528Z",
   "logo": {
     "href": "https://nexcel.kz/",
     "src": "https://nexcel.kz/assets/logo.svg",
@@ -141,20 +141,27 @@
         "kk": ""
       },
       "href": "https://nexcel.kz/privacy"
+    },
+    "free": {
+      "label": {
+        "ru": "Бесплатно",
+        "kk": ""
+      },
+      "href": "https://nexcel.kz/free"
     }
   },
   "headerPages": [
-    "templates",
     "news",
     "about",
-    "faq"
+    "faq",
+    "free"
   ],
   "footerPages": [
     "about",
     "news",
-    "templates",
     "partners",
-    "faq"
+    "faq",
+    "free"
   ],
   "cta": {
     "label": {
@@ -169,7 +176,7 @@
       "kk": ""
     },
     "location": {
-      "ru": "Астана",
+      "ru": "Астана, ЭКСПО, сфера «Нур Алем», 5-й этаж, офис NS, Международный центр ИИ",
       "kk": ""
     },
     "email": "info@nexcel.kz",

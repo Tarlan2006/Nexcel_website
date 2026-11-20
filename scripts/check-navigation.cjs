@@ -42,6 +42,9 @@ async function checkStaticHeader(page) {
   assert.deepEqual(header.desktopSections, sections);
   assert.deepEqual(header.mobileServices, services);
   assert.deepEqual(header.mobileSections, sections);
+  assert(!header.desktopSections.includes('/templates'));
+  assert.equal(header.desktopSections.at(-1), '/free');
+  assert.equal(header.desktopSections.at(-2), '/faq');
   assert.equal(header.mobileLast, 'mobile-whatsapp');
   assert.equal(header.contacts.length, 2);
   assert.deepEqual(header.contactGroups, header.contacts.map(contact => ['mailto:info@nexcel.kz', contact]));
@@ -102,7 +105,7 @@ async function checkDesktopDisclosure(page) {
   await page.keyboard.press('Space');
   await expect(items.first()).toBeFocused();
   await page.keyboard.press('Tab');
-  await expect(page.locator('header a[href="/templates"]:visible')).toBeFocused();
+  await expect(page.locator('header a[href="/news"]:visible')).toBeFocused();
   await expect(menu).toBeHidden();
 
   await page.setViewportSize({ width: 1024, height: 270 });
@@ -177,7 +180,11 @@ async function checkLinks(page, mobile) {
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('О компании Nexcel Solutions');
 
   await page.goto(base + '/templates#library');
-  await expect(nav.locator('a[href="/templates"]')).toHaveAttribute('aria-current', 'page');
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  await expect(nav.locator('a[href="/templates"]')).toHaveCount(0);
+  await page.goto(base + '/free');
+  await expect(nav.locator('a[href="/free"]')).toHaveAttribute('aria-current', 'page');
+  await expect(nav.locator('a[href="/free"]')).toHaveClass(activeHighlight);
   await page.goto(base + '/news/5-priznakov-chto-excel-pora-avtomatizirovat');
   const news = nav.locator('a[href="/news"]');
   await expect(news).toHaveClass(activeHighlight);

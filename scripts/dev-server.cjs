@@ -7,7 +7,7 @@ const root = path.resolve(__dirname, '..');
 const pages = new Map([
   ['/', 'index.html'], ['/licensing', 'licensing.html'], ['/avtomatizaciya-excel', 'avtomatizaciya-excel.html'],
   ['/telegram-boty', 'telegram-boty.html'], ['/vnedrenie-ii', 'vnedrenie-ii.html'], ['/sozdanie-saitov', 'sozdanie-saitov.html'], ['/seo', 'seo.html'],
-  ['/templates', 'templates.html'], ['/faq', 'faq.html'], ['/o-kompanii', 'o-kompanii.html'], ['/privacy', 'privacy.html']
+  ['/templates', 'templates.html'], ['/free', 'free.html'], ['/faq', 'faq.html'], ['/o-kompanii', 'o-kompanii.html'], ['/privacy', 'privacy.html']
 ]);
 const publicFiles = new Set(['favicon.ico', 'robots.txt', 'sitemap.xml', 'llms.txt', 'partials/header.html', 'partials/footer.html', 'shared/nav.json']);
 const types = { '.js': 'text/javascript; charset=utf-8', '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.txt': 'text/plain; charset=utf-8', '.xml': 'application/xml', '.json': 'application/json; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.webp': 'image/webp', '.ico': 'image/x-icon' };

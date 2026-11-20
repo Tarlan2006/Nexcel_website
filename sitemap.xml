@@ -54,4 +54,9 @@
     <loc>https://nexcel.kz/privacy</loc>
     <lastmod>2026-11-11</lastmod>
   </url>
+  <url>
+    <loc>https://nexcel.kz/free</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>
