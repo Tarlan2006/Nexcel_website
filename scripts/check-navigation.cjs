@@ -43,8 +43,9 @@ async function checkStaticHeader(page) {
   assert.deepEqual(header.mobileServices, services);
   assert.deepEqual(header.mobileSections, sections);
   assert(!header.desktopSections.includes('/templates'));
-  assert.equal(header.desktopSections[0], '/bitrix24');
-  assert.equal(header.desktopSections[1], '/news');
+  assert(!header.desktopSections.includes('/bitrix24'));
+  assert(!header.mobileSections.includes('/bitrix24'));
+  assert.equal(header.desktopSections[0], '/news');
   assert.equal(header.desktopSections.at(-1), '/free');
   assert.equal(header.desktopSections.at(-2), '/faq');
   assert.equal(header.mobileLast, 'mobile-whatsapp');
@@ -107,7 +108,7 @@ async function checkDesktopDisclosure(page) {
   await page.keyboard.press('Space');
   await expect(items.first()).toBeFocused();
   await page.keyboard.press('Tab');
-  await expect(page.locator('header a[href="/bitrix24"]:visible')).toBeFocused();
+  await expect(page.locator('header a[href="/news"]:visible')).toBeFocused();
   await expect(menu).toBeHidden();
 
   await page.setViewportSize({ width: 1024, height: 270 });
@@ -201,6 +202,13 @@ async function checkLinks(page, mobile) {
   await expect(page.locator('#calculator')).toBeVisible();
   await expect(nav.locator('a[href="/#calculator"]')).toHaveCount(0);
   await expect(nav.locator('a[href^="https://photo.nexcel.kz/"]')).toHaveCount(0);
+  await page.goto(base + '/licensing');
+  await expect(page.locator('#partner-bitrix24 img')).toHaveAttribute('src', '/assets/partners/1c-bitrix-logo.svg');
+  await expect(page.locator('main a[href="/bitrix24"]')).toHaveCount(1);
+  await page.locator('#partner-bitrix24 a[href="/bitrix24"]').click();
+  await page.waitForURL(base + '/bitrix24');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Продажа лицензий и внедрение Битрикс24 для вашего бизнеса');
+  await expect(page.locator('footer a[href="/bitrix24"]')).toHaveCount(1);
   await page.goto(base + '/news/5-priznakov-chto-excel-pora-avtomatizirovat');
   const news = nav.locator('a[href="/news"]');
   await expect(news).toHaveClass(activeHighlight);
