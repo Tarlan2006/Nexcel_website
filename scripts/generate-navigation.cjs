@@ -16,7 +16,7 @@ function generate(check = false) {
     else { fs.mkdirSync(path.dirname(target), { recursive: true }); fs.writeFileSync(target, expected); }
   }
   if (stale.length) throw new Error('Generated navigation is stale: ' + stale.join(', ') + '. Run npm run generate:nav.');
-  console.log(check ? 'PASS: shared navigation and partials match their source.' : 'Generated shared/nav.json and both partials from content/navigation.json.');
+  console.log(check ? 'PASS: shared navigation and header match their source; footer is maintained in partials/footer.html.' : 'Generated shared/nav.json and header; canonical partials/footer.html preserved.');
 }
 if (require.main === module) {
   try { generate(process.argv.includes('--check')); } catch (error) { console.error(error.message); process.exitCode = 1; }

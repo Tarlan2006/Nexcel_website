@@ -191,11 +191,16 @@
     if (!container) return;
     if (refresh || !container.firstElementChild) {
       try {
-        const response = await fetch(url, { cache: 'no-cache' });
+        const response = await fetch(url, { cache: 'no-store' });
         if (!response.ok) throw new Error('HTTP ' + response.status);
         const markup = document.createElement('template');
         markup.innerHTML = await response.text();
-        if (container.innerHTML.trim() !== markup.innerHTML.trim()) {
+        const currentFooter = refresh && container.querySelector('footer');
+        const incomingFooter = refresh && markup.content.querySelector('footer');
+        if (refresh && !incomingFooter) throw new Error('Footer response is missing its footer');
+        if (currentFooter && incomingFooter) {
+          if (currentFooter.outerHTML !== incomingFooter.outerHTML) currentFooter.replaceWith(incomingFooter);
+        } else if (container.innerHTML.trim() !== markup.innerHTML.trim()) {
           container.replaceChildren(markup.content);
         }
       } catch (error) {
@@ -210,5 +215,9 @@
     }
   }
   include('site-header', '/partials/header.html', initHeader);
-  include('site-footer', '/partials/footer.html', () => import('/assets/cookie-notice.js'), true);
+  const refreshFooter = () => include('site-footer', '/partials/footer.html', () => import('/assets/cookie-notice.js'), true);
+  refreshFooter();
+  window.addEventListener('pageshow', event => {
+    if (event.persisted) refreshFooter();
+  });
 })();

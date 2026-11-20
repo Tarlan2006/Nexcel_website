@@ -137,7 +137,6 @@ function validateNavigation(nav) {
 const desktopServiceClass = 'block rounded px-3 py-2 hover:bg-paperSecondary hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent';
 const desktopPageClass = 'rounded py-2 hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent';
 const mobileClass = 'block rounded px-3 py-2.5 hover:bg-white hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent';
-const footerClass = 'hover:text-emeraldOnDark transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emeraldOnDark';
 
 function renderArtifacts(source, root) {
   const nav = validateNavigation(navigationFromSource(source));
@@ -152,36 +151,14 @@ function renderArtifacts(source, root) {
     desktopServices: services.map(item => '            <li role="none">' + anchor(item, desktopServiceClass, ' role="menuitem" tabindex="-1"') + '</li>').join('\n'),
     mobileServices: services.map(item => '            ' + anchor(item, mobileClass)).join('\n'),
     desktopPages: primary.map(item => '        ' + anchor(item, desktopPageClass)).join('\n'),
-    mobilePages: primary.map(item => '        ' + anchor(item, mobileClass)).join('\n'),
-    footerServices: nav.footer.columns[0].links.map(item => '            <li>' + anchor(item, footerClass) + '</li>').join('\n'),
-    footerPages: nav.footer.columns[1].links.map(item => '            <li>' + anchor(item, footerClass) + '</li>').join('\n'),
-    socialLinks: source.social.map(item => {
-      const icon = fs.readFileSync(path.join(root, 'src/shared/icons', item.id + '.svg'), 'utf8').trim();
-      return `              <a href="${escapeHtml(item.href)}" style="${escapeHtml(item.style)}" aria-label="${escapeHtml(item.label.ru)}" title="${escapeHtml(item.title.ru)}" target="_blank" rel="noopener noreferrer" class="footer-social w-11 h-11 sm:w-10 sm:h-10 rounded-lg border border-slate-800 bg-slate-900 text-textOnDark flex items-center justify-center">\n                ${icon}\n              </a>`;
-    }).join('\n'),
-    description: escapeHtml(source.footer.description.ru), aboutLabel: escapeHtml(source.footer.aboutLabel.ru),
-    aboutHref: escapeHtml(localHref(source.pages.about.href)), privacyHref: escapeHtml(localHref(source.pages.privacy.href)),
-    privacyLabel: escapeHtml(source.pages.privacy.label.ru), companyTitle: escapeHtml(source.footer.companyTitle.ru),
-    contactsTitle: escapeHtml(source.contacts.title.ru),
-    addressMapHref: escapeHtml(source.contacts.addressMap?.href || source.contacts.map?.href || source.logo.href),
-    contactAddress: source.contacts.addressLines
-      ? source.contacts.addressLines.map((line, index) => '<span class="block' + (index === 2 ? ' text-textMutedOnDark' : '') + '">' + escapeHtml(line.ru) + '</span>').join('')
-      : escapeHtml(source.contacts.location.ru),
-    mapLink: source.contacts.map ? '<li>' + anchor(source.contacts.map, 'inline-flex min-h-7 items-center underline underline-offset-4 ' + footerClass, ' target="_blank" rel="noopener noreferrer"') + '</li>' : '',
-    footerAddress: officeAddress(source.contacts) ? '<span class="block min-[641px]:inline"><span aria-hidden="true" class="hidden min-[641px]:inline">·&nbsp;</span><span class="text-textMutedOnDark">Адрес:</span> ' + escapeHtml(officeAddress(source.contacts)) + '</span>' : '',
-    whatsappHref: escapeHtml(source.contacts.whatsapp), socialTitle: escapeHtml(source.socialTitle.ru),
-    company: escapeHtml(source.footer.company), businessId: escapeHtml(source.footer.businessId),
-    copyright: escapeHtml(source.footer.copyright.ru), paymentTerms: escapeHtml(source.footer.paymentTerms.ru), logoRights: escapeHtml(source.footer.logoRights.ru)
+    mobilePages: primary.map(item => '        ' + anchor(item, mobileClass)).join('\n')
   };
-  source.footer.badges.forEach((item, index) => { values['badge' + index] = escapeHtml(item.ru); });
   const artifacts = { 'shared/nav.json': JSON.stringify(nav, null, 2) + '\n' };
-  for (const name of ['header','footer']) {
-    const template = fs.readFileSync(path.join(root, 'src/shared', name + '.template.html'), 'utf8');
-    artifacts['partials/' + name + '.html'] = template.replace(/{{(\w+)}}/g, (_match, key) => {
-      if (!Object.hasOwn(values, key)) throw new Error('Unknown template field: ' + key);
-      return values[key];
-    });
-  }
+  const template = fs.readFileSync(path.join(root, 'src/shared/header.template.html'), 'utf8');
+  artifacts['partials/header.html'] = template.replace(/{{(\w+)}}/g, (_match, key) => {
+    if (!Object.hasOwn(values, key)) throw new Error('Unknown template field: ' + key);
+    return values[key];
+  });
   return artifacts;
 }
 

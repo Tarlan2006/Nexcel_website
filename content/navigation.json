@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-20T09:26:34.200Z",
+  "updatedAt": "2026-11-20T09:45:01.708Z",
   "logo": {
     "href": "https://nexcel.kz/",
     "src": "https://nexcel.kz/assets/logo.svg",
@@ -167,20 +167,6 @@
     "email": "info@nexcel.kz",
     "phone": "+7 771 136-90-95",
     "whatsapp": "https://wa.me/77711369095",
-    "addressLines": [
-      {
-        "ru": "Астана, просп. Мангилик Ел, 55/1",
-        "kk": ""
-      },
-      {
-        "ru": "Экспо, сфера «Нур Алем», 5 этаж, офис NS",
-        "kk": ""
-      },
-      {
-        "ru": "Международный центр ИИ Alem.ai",
-        "kk": ""
-      }
-    ],
     "map": {
       "label": {
         "ru": "Мы на Google Картах",
@@ -188,14 +174,7 @@
       },
       "href": "https://maps.app.goo.gl/thGZ4ix5PoamNvnD9"
     },
-    "officeAddress": "Казахстан, г. Астана, просп. Мангилик Ел, 55/1, Экспо, 5 этаж, офис NS",
-    "addressMap": {
-      "label": {
-        "ru": "Адрес офиса на карте 2ГИС",
-        "kk": ""
-      },
-      "href": "https://go.2gis.com/cyGjq"
-    }
+    "officeAddress": "Казахстан, г. Астана, просп. Мангилик Ел, 55/1, Экспо, 5 этаж, офис NS"
   },
   "socialTitle": {
     "ru": "Мы в соцсетях",

@@ -23,15 +23,23 @@ test('public schema has all canonical links, real logo and no invented KZ transl
   labels(nav);
 });
 
-test('one new service reaches JSON, desktop, mobile and footer, with escaped labels', () => {
+test('one new service reaches shared JSON and both header menus, preserving the canonical footer', () => {
   const changed = structuredClone(source);
   changed.services.push({ id:'example',label:{ru:'Тест <новой> & "услуги"',kk:''},href:'https://nexcel.kz/example' });
   const artifacts = renderArtifacts(changed, root), nav = JSON.parse(artifacts['shared/nav.json']);
   assert.equal(nav.nav.filter(item => item.href === 'https://nexcel.kz/example').length,1);
   assert.equal(nav.footer.columns[0].links.filter(item => item.href === 'https://nexcel.kz/example').length,1);
   assert.equal(artifacts['partials/header.html'].match(/href="\/example"/g).length,2);
-  assert.equal(artifacts['partials/footer.html'].match(/href="\/example"/g).length,1);
+  assert.equal(Object.hasOwn(artifacts, 'partials/footer.html'), false);
   assert.ok(artifacts['partials/header.html'].includes('Тест &lt;новой&gt; &amp; &quot;услуги&quot;'));
+});
+
+test('navigation generation never overwrites the manually maintained footer', () => {
+  const file = path.join(root, 'partials/footer.html');
+  const before = fs.readFileSync(file, 'utf8');
+  const artifacts = renderArtifacts(source, root);
+  assert.equal(Object.hasOwn(artifacts, 'partials/footer.html'), false);
+  assert.equal(fs.readFileSync(file, 'utf8'), before);
 });
 
 test('schema rejects missing labels, invalid dates, wrong types and extra fields', () => {

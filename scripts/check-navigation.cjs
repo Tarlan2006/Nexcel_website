@@ -225,6 +225,21 @@ async function run() {
     await expect(stale.locator('footer a[href="https://go.2gis.com/cyGjq"]')).toBeAttached();
     await stale.close();
 
+    const restored = await browser.newPage();
+    await restored.route('**/*', route => new URL(route.request().url()).origin === base ? route.continue() : route.abort());
+    await restored.goto(base);
+    await restored.locator('#cookie-notice').waitFor();
+    await restored.evaluate(() => {
+      window.savedCookieNotice = document.getElementById('cookie-notice');
+      document.querySelector('footer').setAttribute('data-restored-footer', 'outdated');
+      window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true }));
+    });
+    await expect(restored.locator('footer[data-restored-footer]')).toHaveCount(0);
+    assert(await restored.evaluate(() => document.getElementById('cookie-notice') === window.savedCookieNotice));
+    await restored.locator('#cookie-notice-dismiss').click();
+    await expect(restored.locator('#cookie-notice')).toBeHidden();
+    await restored.close();
+
     const page = await browser.newPage();
     await page.route('**/*', route => new URL(route.request().url()).origin === base ? route.continue() : route.abort());
     await page.route('**/partials/**', route => route.fulfill({ status: 500, body: 'error' }));

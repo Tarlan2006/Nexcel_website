@@ -8,6 +8,7 @@
 
 /partials/*
   X-Robots-Tag: noindex
+  Cache-Control: no-store
 
 /shared/nav.json
   Access-Control-Allow-Origin: https://photo.nexcel.kz

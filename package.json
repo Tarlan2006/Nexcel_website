@@ -7,8 +7,8 @@
     "build:css": "tailwindcss -i ./src/input.css -o ./assets/styles.css --minify",
     "generate:nav": "node scripts/generate-navigation.cjs",
     "check:nav": "node scripts/generate-navigation.cjs --check && node scripts/validate-nav.cjs",
-    "test": "npm run check:nav && node --test tests/navigation.test.cjs tests/notify-subsites.test.cjs",
-    "build": "npm run generate:nav && npm run check:nav && npm run build:css && node scripts/build-site.cjs && node scripts/build-news.cjs && node scripts/build-site.cjs --inline-partials",
+    "test": "npm run check:nav && node --test tests/navigation.test.cjs tests/notify-subsites.test.cjs tests/footer-integrity.test.cjs",
+    "build": "npm run generate:nav && npm run check:nav && npm run build:css && node scripts/build-site.cjs && node scripts/build-news.cjs && node scripts/build-site.cjs --inline-partials && npm run check:footers",
     "predev": "npm run generate:nav",
     "dev": "node scripts/dev-server.cjs",
     "dev:cloudflare": "npm run build && wrangler dev --local --ip 127.0.0.1 --port 8787",
@@ -21,7 +21,8 @@
     "check:navigation": "node scripts/check-navigation.cjs",
     "check:cloudflare": "node scripts/check-http.cjs http://127.0.0.1:8787 --cloudflare",
     "check:security": "node scripts/check-security.cjs",
-    "check:seo": "node scripts/check-seo.cjs"
+    "check:seo": "node scripts/check-seo.cjs",
+    "check:footers": "node scripts/check-footers.cjs"
   },
   "keywords": [],
   "author": "",

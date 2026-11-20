@@ -76,10 +76,11 @@
 - [Facebook](https://www.facebook.com/nexcelsolutionskz/)
 - [Threads](https://www.threads.com/@nexcel.solutions)
 
-## Бесплатные сервисы
+## Бесплатно
 
 - [Инструменты](https://nexcel.kz/free#tools) — калькулятор окупаемости автоматизации.
 
 - [Бесплатные сервисы Nexcel](https://nexcel.kz/free) — инструменты, шаблоны и социальные проекты Nexcel.
 - [Шаблоны Google Sheets](https://nexcel.kz/templates) — движение денег, складской учёт, отпуска и компенсации.
 - [AIdos](https://aidos.nexcel.kz/?utm_source=nexcel.kz&utm_medium=free) — детская игровая платформа с ИИ-помощником, интерфейс на казахском языке.
+- [Фото на документы](https://photo.nexcel.kz/) — социальный проект для подготовки фото на документы.

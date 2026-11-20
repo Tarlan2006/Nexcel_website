@@ -39,6 +39,8 @@ function checkSecurityHeaders(response) {
 }
 
 async function run() {
+  const integrity = require('./check-footers.cjs').checkFooters(root);
+  console.log('PASS footer integrity: ' + integrity.pages.length + ' built pages, SHA-256 ' + integrity.hash);
   const navResponse = await request('/shared/nav.json', { headers: { Origin: 'https://photo.nexcel.kz' } });
   assert.equal(navResponse.status, 200, 'shared navigation must be public');
   assert.match(navResponse.headers.get('content-type'), /^application\/json/);
