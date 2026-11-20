@@ -6,7 +6,7 @@ const path = require('node:path');
 const base = process.argv[2] || 'http://127.0.0.1:5500';
 const cloudflare = process.argv.includes('--cloudflare');
 const root = path.resolve(__dirname, '..');
-const serviceRoutes = ['/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/sozdanie-saitov', '/seo'];
+const serviceRoutes = ['/bitrix24', '/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/sozdanie-saitov', '/seo'];
 let checks = 0;
 
 async function request(route, options = {}) {
@@ -50,7 +50,7 @@ async function run() {
   assert.deepEqual(nav, JSON.parse(await fs.readFile(path.join(root, 'shared/nav.json'), 'utf8')));
   checks++;
   const servicePages = serviceRoutes.map(route => [route, `${route.slice(1)}.html`]);
-  for (const [route, file] of [['/partials/header.html', 'partials/header.html'], ['/partials/footer.html', 'partials/footer.html'], ['/assets/include-partials.js', 'assets/include-partials.js'], ['/assets/cookie-notice.js', 'assets/cookie-notice.js'], ['/', 'index.html'], ['/licensing', 'licensing.html'], ...servicePages, ['/free', 'free.html'], ['/faq', 'faq.html'], ['/o-kompanii', 'o-kompanii.html'], ['/privacy', 'privacy.html'], ['/assets/faq.js', 'assets/faq.js'], ['/assets/styles.css', 'assets/styles.css'], ['/robots.txt', 'robots.txt'], ['/sitemap.xml', 'sitemap.xml'], ['/llms.txt', 'llms.txt']]) {
+  for (const [route, file] of [['/partials/header.html', 'partials/header.html'], ['/partials/footer.html', 'partials/footer.html'], ['/assets/include-partials.js', 'assets/include-partials.js'], ['/assets/cookie-notice.js', 'assets/cookie-notice.js'], ['/', 'index.html'], ['/licensing', 'licensing.html'], ...servicePages, ['/free', 'free.html'], ['/faq', 'faq.html'], ['/o-kompanii', 'o-kompanii.html'], ['/privacy', 'privacy.html'], ['/assets/faq.js', 'assets/faq.js'], ['/assets/styles.css', 'assets/styles.css'], ['/assets/partners/1c-bitrix-logo.svg', 'assets/partners/1c-bitrix-logo.svg'], ['/robots.txt', 'robots.txt'], ['/sitemap.xml', 'sitemap.xml'], ['/llms.txt', 'llms.txt']]) {
     const response = await request(route, cloudflare && route.startsWith('/partials/') ? { redirect: 'follow' } : {});
     assert.equal(response.status, 200, route);
     assert.equal(await response.text(), await fs.readFile(path.join(root, cloudflare ? 'dist' : '.', file), 'utf8'), `${route}: body`);
@@ -70,6 +70,11 @@ async function run() {
     assert.equal(location.search, new URL(route, base).search, route + ': preserve query');
     checks++;
   }
+  const bitrix = await fs.readFile(path.join(root, 'dist', 'bitrix24.html'), 'utf8');
+  assert.doesNotMatch(bitrix, /Битрикс[\s-]+24|Bitrix\s+24|\d[\d\s.,]*\s*(?:₸|тенге)/iu, 'Bitrix page brand and pricing');
+  assert.doesNotMatch(bitrix, /<(?:form|input|textarea|select)\b/i, 'Bitrix page has no data-entry form');
+  assert.match(bitrix, /href="https:\/\/www\.bitrix24\.kz\/create\.php\?p=29389888" target="_blank" rel="noopener noreferrer sponsored"/, 'Bitrix partner signup');
+  checks++;
   const serviceRedirects = serviceRoutes.flatMap(route => [[`${route}.html`, route], [`${route}/`, route], [`${route}.html?source=check`, `${route}?source=check`]]);
   for (const [route, target] of [['/index.html', '/'], ['/licensing.html', '/licensing'], ['/licensing/', '/licensing'], ...serviceRedirects, ['/free.html', '/free'], ['/free/', '/free'], ['/free.html?source=check', '/free?source=check'], ['/faq.html', '/faq'], ['/faq/', '/faq'], ['/faq.html?source=check', '/faq?source=check'], ['/o-kompanii.html', '/o-kompanii'], ['/o-kompanii/', '/o-kompanii'], ['/privacy.html', '/privacy'], ['/privacy/', '/privacy']]) {
     const response = await request(route);

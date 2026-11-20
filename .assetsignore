@@ -1,6 +1,7 @@
 # Publish only the site's public files. New root files stay private by default.
 /*
 !/index.html
+!/bitrix24.html
 !/licensing.html
 !/avtomatizaciya-excel.html
 !/telegram-boty.html

@@ -43,6 +43,8 @@ async function checkStaticHeader(page) {
   assert.deepEqual(header.mobileServices, services);
   assert.deepEqual(header.mobileSections, sections);
   assert(!header.desktopSections.includes('/templates'));
+  assert.equal(header.desktopSections[0], '/bitrix24');
+  assert.equal(header.desktopSections[1], '/news');
   assert.equal(header.desktopSections.at(-1), '/free');
   assert.equal(header.desktopSections.at(-2), '/faq');
   assert.equal(header.mobileLast, 'mobile-whatsapp');
@@ -75,14 +77,14 @@ async function checkDesktopDisclosure(page) {
   await expect(toggle).toHaveAttribute('aria-expanded', 'true');
   await items.first().hover();
   await expect(items.first()).toBeVisible();
-  await page.locator('main h1').hover();
+  await page.mouse.move(1, page.viewportSize().height - 1);
   await expect(toggle).toHaveAttribute('aria-expanded', 'false');
 
   await toggle.click();
   await expect(items.first()).toBeFocused();
-  await page.locator('main h1').hover();
+  await page.mouse.move(1, page.viewportSize().height - 1);
   await expect(menu).toBeVisible();
-  await page.locator('main h1').click();
+  await page.mouse.click(1, page.viewportSize().height - 1);
   await expect(toggle).toHaveAttribute('aria-expanded', 'false');
 
   await page.locator('#site-brand').focus();
@@ -105,7 +107,7 @@ async function checkDesktopDisclosure(page) {
   await page.keyboard.press('Space');
   await expect(items.first()).toBeFocused();
   await page.keyboard.press('Tab');
-  await expect(page.locator('header a[href="/news"]:visible')).toBeFocused();
+  await expect(page.locator('header a[href="/bitrix24"]:visible')).toBeFocused();
   await expect(menu).toBeHidden();
 
   await page.setViewportSize({ width: 1024, height: 270 });

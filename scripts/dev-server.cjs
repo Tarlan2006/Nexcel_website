@@ -5,7 +5,7 @@ const path = require('node:path');
 
 const root = path.resolve(__dirname, '..');
 const pages = new Map([
-  ['/', 'index.html'], ['/licensing', 'licensing.html'], ['/avtomatizaciya-excel', 'avtomatizaciya-excel.html'],
+  ['/', 'index.html'], ['/bitrix24', 'bitrix24.html'], ['/licensing', 'licensing.html'], ['/avtomatizaciya-excel', 'avtomatizaciya-excel.html'],
   ['/telegram-boty', 'telegram-boty.html'], ['/vnedrenie-ii', 'vnedrenie-ii.html'], ['/sozdanie-saitov', 'sozdanie-saitov.html'], ['/seo', 'seo.html'],
   ['/free', 'free.html'], ['/faq', 'faq.html'], ['/o-kompanii', 'o-kompanii.html'], ['/privacy', 'privacy.html']
 ]);

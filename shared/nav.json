@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-20T10:32:25Z",
+  "updatedAt": "2026-11-20T12:08:06Z",
   "logo": {
     "href": "https://nexcel.kz/",
     "src": "https://nexcel.kz/assets/logo.svg",
@@ -48,6 +48,13 @@
         "kk": ""
       },
       "href": "https://nexcel.kz/seo"
+    },
+    {
+      "label": {
+        "ru": "Битрикс24",
+        "kk": ""
+      },
+      "href": "https://nexcel.kz/bitrix24"
     },
     {
       "label": {
@@ -149,6 +156,13 @@
               "kk": ""
             },
             "href": "https://nexcel.kz/o-kompanii"
+          },
+          {
+            "label": {
+              "ru": "Битрикс24",
+              "kk": ""
+            },
+            "href": "https://nexcel.kz/bitrix24"
           },
           {
             "label": {

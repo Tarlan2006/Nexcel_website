@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-20T10:32:25Z",
+  "updatedAt": "2026-11-20T12:08:06Z",
   "logo": {
     "href": "https://nexcel.kz/",
     "src": "https://nexcel.kz/assets/logo.svg",
@@ -126,9 +126,17 @@
         "kk": ""
       },
       "href": "https://nexcel.kz/free"
+    },
+    "bitrix24": {
+      "label": {
+        "ru": "Битрикс24",
+        "kk": ""
+      },
+      "href": "https://nexcel.kz/bitrix24"
     }
   },
   "headerPages": [
+    "bitrix24",
     "news",
     "about",
     "faq",
@@ -136,6 +144,7 @@
   ],
   "footerPages": [
     "about",
+    "bitrix24",
     "news",
     "partners",
     "faq",
