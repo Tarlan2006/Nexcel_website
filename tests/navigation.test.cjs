@@ -9,8 +9,10 @@ const navigation = () => structuredClone(navigationFromSource(source));
 
 test('public schema has all canonical links, real logo and no invented KZ translation', () => {
   const nav = validateNavigation(navigation());
-  assert.equal(nav.nav.length, source.services.length + source.headerPages.length + 1);
-  assert.ok(nav.nav.some(item => item.href === 'https://photo.nexcel.kz/' && item.label.ru === 'Фото на документы'));
+  assert.equal(nav.nav.length, source.services.length + source.headerPages.length);
+  assert.ok(!nav.nav.some(item => item.href.startsWith('https://photo.nexcel.kz/') || item.href === 'https://nexcel.kz/#calculator'));
+  assert.ok(!nav.footer.columns[0].links.some(item => item.href.startsWith('https://photo.nexcel.kz/')));
+  assert.equal(nav.footer.columns[1].links.filter(item => item.href === 'https://nexcel.kz/free').length, 1);
   assert.ok(nav.nav.some(item => item.href === 'https://nexcel.kz/sozdanie-saitov'));
   assert.equal(nav.logo.src, 'https://nexcel.kz/assets/logo.svg');
   function labels(value) {

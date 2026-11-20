@@ -15,7 +15,7 @@ const serviceFaqCounts = new Map([
 ]);
 const navigationSource = require('../content/navigation.json');
 const { localHref } = require('./lib/navigation.cjs');
-const serviceLinks = [...navigationSource.services, navigationSource.calculator].map(item => localHref(item.href));
+const serviceLinks = navigationSource.services.map(item => localHref(item.href));
 
 async function checkHeader(page, response, width, route) {
   const links = await page.evaluate(source => {

@@ -45,7 +45,8 @@
         <div class="col-span-2 space-y-2 sm:space-y-3 min-w-0 md:col-span-1">
           <div class="text-white font-semibold text-[11px] uppercase tracking-wider">{{contactsTitle}}</div>
           <ul class="space-y-1.5 sm:space-y-2 text-textOnDark text-[11px] sm:text-xs">
-            <li class="flex items-start gap-1.5"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldOnDark shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /> <circle cx="12" cy="10" r="3" /></svg> <address class="min-w-0 not-italic leading-relaxed">{{location}} <a href="https://alem.ai/" class="font-semibold text-emeraldOnDark underline underline-offset-4 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldOnDark">alem.ai</a>.</address></li>
+            <li class="flex items-start gap-1.5"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldOnDark shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /> <circle cx="12" cy="10" r="3" /></svg> <address class="min-w-0 not-italic leading-relaxed">{{contactAddress}}</address></li>
+            {{mapLink}}
             <li><a href="mailto:{{email}}" class="inline-flex min-h-7 items-center gap-1.5 hover:text-emeraldOnDark transition-colors break-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldOnDark"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldOnDark shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" /> <rect x="2" y="4" width="20" height="16" rx="2" /></svg> {{email}}</a></li>
             <li><a href="{{whatsappHref}}" target="_blank" rel="noopener noreferrer" class="inline-flex min-h-7 items-center gap-1.5 hover:text-emeraldOnDark transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldOnDark"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emeraldOnDark shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z" /></svg> {{phone}}</a></li>
           </ul>
@@ -59,6 +60,7 @@
           <span class="block min-[641px]:inline">
             <span aria-hidden="true" class="hidden min-[641px]:inline">·&nbsp;</span><span class="text-textMutedOnDark">БИН<span class="min-[641px]:hidden">:</span></span>&nbsp;{{businessId}}
           </span>
+          {{footerAddress}}
         </div>
         <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
           <div class="flex flex-wrap justify-center sm:justify-start gap-x-4 gap-y-2">

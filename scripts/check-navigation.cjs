@@ -4,7 +4,7 @@ const { chromium, expect } = require('@playwright/test');
 const base = 'http://127.0.0.1:5500';
 const source = require('../content/navigation.json');
 const { localHref } = require('./lib/navigation.cjs');
-const services = [...source.services, source.calculator].map(item => localHref(item.href));
+const services = source.services.map(item => localHref(item.href));
 const sections = source.headerPages.map(id => localHref(source.pages[id].href));
 const activeHighlight = /(?:^|\s)text-emeraldAccent(?:\s|$)/;
 
@@ -185,6 +185,11 @@ async function checkLinks(page, mobile) {
   await page.goto(base + '/free');
   await expect(nav.locator('a[href="/free"]')).toHaveAttribute('aria-current', 'page');
   await expect(nav.locator('a[href="/free"]')).toHaveClass(activeHighlight);
+  await page.locator('#tools a[href="/#calculator"]').click();
+  await page.waitForURL(base + '/#calculator');
+  await expect(page.locator('#calculator')).toBeVisible();
+  await expect(nav.locator('a[href="/#calculator"]')).toHaveCount(0);
+  await expect(nav.locator('a[href^="https://photo.nexcel.kz/"]')).toHaveCount(0);
   await page.goto(base + '/news/5-priznakov-chto-excel-pora-avtomatizirovat');
   const news = nav.locator('a[href="/news"]');
   await expect(news).toHaveClass(activeHighlight);

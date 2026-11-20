@@ -96,7 +96,11 @@ function fitsViewport(element) {
           }
           const nav = await openNavigation(page, width, true);
           if (!await nav.evaluate(fitsViewport)) failures.push(`${width}px: services panel overflows`);
-          await nav.locator(`a[href="/${calculatorAnchor}"]`).click();
+          await page.keyboard.press('Escape');
+          if (width < desktopWidth) await page.keyboard.press('Escape');
+          await page.goto('http://127.0.0.1:5500/free');
+          await page.locator(`#tools a[href="/${calculatorAnchor}"]`).click();
+          await page.waitForURL('**/#calculator');
           const position = await page.locator(calculatorAnchor).evaluate(el => ({ top: el.getBoundingClientRect().top, header: document.querySelector('header').getBoundingClientRect().bottom }));
           if (position.top < position.header - 1) failures.push(`${width}px: calculator behind header`);
           if (width < desktopWidth && await page.locator('#mobile-menu-toggle').getAttribute('aria-expanded') !== 'false') failures.push(`${width}px: menu stayed open`);

@@ -10,11 +10,16 @@ const localHref = href => {
   return url.origin === SITE ? url.pathname + url.search + url.hash : href;
 };
 
+const officeAddress = contacts => contacts.addressLines
+  ? 'Казахстан, г. ' + contacts.addressLines.slice(0, 2).map(line => line.ru).join(', ')
+  : '';
+
 function navigationFromSource(source) {
   const { footer, contacts } = source;
+  const address = officeAddress(contacts);
   return {
     version: source.version, updatedAt: source.updatedAt, logo: source.logo,
-    nav: [...source.services, source.calculator, ...source.headerPages.map(id => source.pages[id])].map(asLink),
+    nav: [...source.services, ...source.headerPages.map(id => source.pages[id])].map(asLink),
     cta: source.cta,
     footer: {
       columns: [
@@ -24,7 +29,7 @@ function navigationFromSource(source) {
       contacts: { title: contacts.title, location: contacts.location, email: contacts.email, phone: contacts.phone,
         whatsapp: { label: { ru: contacts.phone, kk: '' }, href: contacts.whatsapp }, ...(contacts.map ? { map: contacts.map } : {}) },
       social: source.social.map(({ id, label, title, href }) => ({ id, label, title, href })),
-      legal: footer.company + ' БИН: ' + footer.businessId,
+      legal: footer.company + ' БИН: ' + footer.businessId + (address ? ' Адрес: ' + address : ''),
       description: footer.description, about: { label: footer.aboutLabel, href: source.pages.about.href },
       badges: footer.badges, socialTitle: source.socialTitle,
       copyright: footer.copyright, privacy: asLink(source.pages.privacy), paymentTerms: footer.paymentTerms, logoRights: footer.logoRights
@@ -137,15 +142,15 @@ const footerClass = 'hover:text-emeraldOnDark transition-colors focus-visible:ou
 function renderArtifacts(source, root) {
   const nav = validateNavigation(navigationFromSource(source));
   const anchor = (item, className, attributes = '') => `<a${attributes} href="${escapeHtml(localHref(item.href))}" class="${className}">${escapeHtml(item.label.ru)}</a>`;
-  const services = [...source.services, source.calculator];
+  const services = source.services;
   const primary = source.headerPages.map(id => source.pages[id]);
   const brand = source.logo.alt.split(' ');
   const values = {
     home: escapeHtml(localHref(source.logo.href)), brandFirst: escapeHtml(brand.shift()), brandRest: escapeHtml(brand.join(' ')),
     email: escapeHtml(source.contacts.email), phone: escapeHtml(source.contacts.phone),
     ctaHref: escapeHtml(source.cta.href), ctaLabel: escapeHtml(source.cta.label.ru), servicesTitle: escapeHtml(source.servicesTitle.ru),
-    desktopServices: services.map((item, index) => '            <li role="none"' + (index === services.length - 1 ? ' class="mt-1 border-t border-gridBorder pt-1"' : '') + '>' + anchor(item, desktopServiceClass, ' role="menuitem" tabindex="-1"') + '</li>').join('\n'),
-    mobileServices: services.map((item, index) => '            ' + anchor(item, mobileClass + (index === services.length - 1 ? ' mt-1 border-t border-gridBorder' : ''))).join('\n'),
+    desktopServices: services.map(item => '            <li role="none">' + anchor(item, desktopServiceClass, ' role="menuitem" tabindex="-1"') + '</li>').join('\n'),
+    mobileServices: services.map(item => '            ' + anchor(item, mobileClass)).join('\n'),
     desktopPages: primary.map(item => '        ' + anchor(item, desktopPageClass)).join('\n'),
     mobilePages: primary.map(item => '        ' + anchor(item, mobileClass)).join('\n'),
     footerServices: nav.footer.columns[0].links.map(item => '            <li>' + anchor(item, footerClass) + '</li>').join('\n'),
@@ -157,7 +162,12 @@ function renderArtifacts(source, root) {
     description: escapeHtml(source.footer.description.ru), aboutLabel: escapeHtml(source.footer.aboutLabel.ru),
     aboutHref: escapeHtml(localHref(source.pages.about.href)), privacyHref: escapeHtml(localHref(source.pages.privacy.href)),
     privacyLabel: escapeHtml(source.pages.privacy.label.ru), companyTitle: escapeHtml(source.footer.companyTitle.ru),
-    contactsTitle: escapeHtml(source.contacts.title.ru), location: escapeHtml(source.contacts.location.ru),
+    contactsTitle: escapeHtml(source.contacts.title.ru),
+    contactAddress: source.contacts.addressLines
+      ? source.contacts.addressLines.map((line, index) => '<span class="block' + (index === 2 ? ' text-textMutedOnDark' : '') + '">' + escapeHtml(line.ru) + '</span>').join('')
+      : escapeHtml(source.contacts.location.ru),
+    mapLink: source.contacts.map ? '<li>' + anchor(source.contacts.map, 'inline-flex min-h-7 items-center ' + footerClass, ' target="_blank" rel="noopener noreferrer"') + '</li>' : '',
+    footerAddress: officeAddress(source.contacts) ? '<span class="block min-[641px]:inline"><span aria-hidden="true" class="hidden min-[641px]:inline">·&nbsp;</span><span class="text-textMutedOnDark">Адрес:</span> ' + escapeHtml(officeAddress(source.contacts)) + '</span>' : '',
     whatsappHref: escapeHtml(source.contacts.whatsapp), socialTitle: escapeHtml(source.socialTitle.ru),
     company: escapeHtml(source.footer.company), businessId: escapeHtml(source.footer.businessId),
     copyright: escapeHtml(source.footer.copyright.ru), paymentTerms: escapeHtml(source.footer.paymentTerms.ru), logoRights: escapeHtml(source.footer.logoRights.ru)
