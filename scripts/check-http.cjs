@@ -6,7 +6,7 @@ const path = require('node:path');
 const base = process.argv[2] || 'http://127.0.0.1:5500';
 const cloudflare = process.argv.includes('--cloudflare');
 const root = path.resolve(__dirname, '..');
-const serviceRoutes = ['/bitrix24', '/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/sozdanie-saitov', '/seo'];
+const serviceRoutes = ['/bitrix24', '/veeam', '/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/sozdanie-saitov', '/seo'];
 let checks = 0;
 
 async function request(route, options = {}) {
@@ -74,6 +74,22 @@ async function run() {
   assert.doesNotMatch(bitrix, /Битрикс[\s-]+24|Bitrix\s+24|\d[\d\s.,]*\s*(?:₸|тенге)/iu, 'Bitrix page brand and pricing');
   assert.doesNotMatch(bitrix, /<(?:form|input|textarea|select)\b/i, 'Bitrix page has no data-entry form');
   assert.match(bitrix, /href="https:\/\/www\.bitrix24\.kz\/create\.php\?p=29389888" target="_blank" rel="noopener noreferrer sponsored"/, 'Bitrix partner signup');
+  checks++;
+  const veeam = await fs.readFile(path.join(root, 'dist', 'veeam.html'), 'utf8');
+  assert.doesNotMatch(veeam, /\d[\d\s.,]*\s*(?:₸|тенге|KZT)|(?:официальн[\p{L}]*|авторизованн[\p{L}]*)\s+партн[её]р|Partner\s*ID|n\.abenov@nexcel\.kz/iu, 'Veeam page has no prices, unconfirmed partner claims or private contacts');
+  assert.doesNotMatch(veeam, /<(?:form|input|textarea|select)\b/i, 'Veeam page has no data-entry form');
+  assert.ok(veeam.includes('<!-- после подтверждения статуса: «Veeam ProPartner Registered Reseller» -->'), 'Veeam status comment is preserved');
+  assert.match(veeam, /href="https:\/\/www\.veeam\.com\/" target="_blank" rel="noopener noreferrer"/, 'Veeam external technology link');
+  const veeamSchema = JSON.parse(veeam.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])['@graph'];
+  const veeamService = veeamSchema.find(item => item['@type'] === 'Service');
+  assert.equal(veeamService.url, 'https://nexcel.kz/veeam');
+  assert.equal(veeamService.provider.name, 'Nexcel Solutions');
+  assert.equal(veeamService.areaServed.name, 'Казахстан');
+  assert.equal(veeamSchema.find(item => item['@type'] === 'BreadcrumbList').itemListElement.at(-1).item, veeamService.url);
+  for (const filename of ['veeam-logo.svg', 'veeam-proPartner-badge.svg', 'veeam-letter-of-recognition.pdf']) {
+    const asset = 'assets/partners/' + filename;
+    if (!await fs.stat(path.join(root, asset)).catch(() => null)) assert.ok(!veeam.includes(`="/${asset}"`), 'Missing Veeam asset must not be linked: ' + filename);
+  }
   checks++;
   const serviceRedirects = serviceRoutes.flatMap(route => [[`${route}.html`, route], [`${route}/`, route], [`${route}.html?source=check`, `${route}?source=check`]]);
   for (const [route, target] of [['/index.html', '/'], ['/licensing.html', '/licensing'], ['/licensing/', '/licensing'], ...serviceRedirects, ['/free.html', '/free'], ['/free/', '/free'], ['/free.html?source=check', '/free?source=check'], ['/faq.html', '/faq'], ['/faq/', '/faq'], ['/faq.html?source=check', '/faq?source=check'], ['/o-kompanii.html', '/o-kompanii'], ['/o-kompanii/', '/o-kompanii'], ['/privacy.html', '/privacy'], ['/privacy/', '/privacy']]) {

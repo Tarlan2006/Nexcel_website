@@ -4,6 +4,8 @@ const fs = require('node:fs/promises');
 
 const desktopWidth = 1024;
 const calculatorAnchor = '#calculator';
+const screenshotStyle = '#cookie-notice { visibility: hidden !important; }';
+const sectionScreenshotStyle = screenshotStyle + ' #site-header { visibility: hidden !important; }';
 
 async function openNavigation(page, width, services = false) {
   const mobile = width < desktopWidth;
@@ -31,7 +33,7 @@ function fitsViewport(element) {
   const widths = [320, 360, 390, 768, 1000, 1024, 1150, 1280, 1440, 1536, 1920];
   try {
     for (const width of widths) {
-      for (const route of ['/', '/bitrix24', '/licensing', '/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/sozdanie-saitov', '/seo', '/free', '/faq', '/o-kompanii']) {
+      for (const route of ['/', '/bitrix24', '/veeam', '/licensing', '/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/sozdanie-saitov', '/seo', '/free', '/faq', '/o-kompanii']) {
         const page = await context.newPage();
         await page.setViewportSize({ width, height: 900 });
         await page.goto(base + route);
@@ -73,13 +75,28 @@ function fitsViewport(element) {
           };
         });
         const name = route === '/' ? 'index' : route.slice(1);
-        await page.screenshot({ path: `.review/responsive/${name}-${width}.png` });
-        if ([390, 768, 1440].includes(width)) {
-          await page.screenshot({ path: `.review/responsive/${name}-${width}-full.png`, fullPage: true });
+        if ([360, 1440].includes(width) && ['/', '/licensing'].includes(route)) {
+          await page.locator(route === '/' ? '#partners-teaser' : '#partners').evaluate(async element => {
+            await Promise.all([...element.querySelectorAll('img')].map(image => {
+              image.loading = 'eager';
+              return image.decode();
+            }));
+          });
+        }
+        await page.screenshot({ path: `.review/responsive/${name}-${width}.png`, style: screenshotStyle });
+        if ([390, 768, 1440].includes(width) || (route === '/veeam' && width === 360)) {
+          await page.screenshot({ path: `.review/responsive/${name}-${width}-full.png`, fullPage: true, style: screenshotStyle });
           if (route === '/') {
             for (const id of ['directions', 'calculator', 'cases']) {
               await page.locator('#' + id).screenshot({ path: `.review/responsive/${id}-${width}.png` });
             }
+          }
+        }
+        if ([360, 1440].includes(width)) {
+          if (route === '/') await page.locator('#partners-teaser').screenshot({ path: `.review/responsive/partners-home-${width}.png`, style: sectionScreenshotStyle });
+          if (route === '/licensing') {
+            await page.locator('#partners').screenshot({ path: `.review/responsive/partners-licensing-${width}.png`, style: sectionScreenshotStyle });
+            await page.locator('#partner-veeam').screenshot({ path: `.review/responsive/veeam-card-${width}.png`, style: sectionScreenshotStyle });
           }
         }
         results.push({ route, ...result });

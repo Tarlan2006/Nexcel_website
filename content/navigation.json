@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-20T15:39:39Z",
+  "updatedAt": "2026-11-21T10:02:27Z",
   "logo": {
     "href": "https://nexcel.kz/",
     "src": "https://nexcel.kz/assets/logo.svg",
@@ -58,6 +58,14 @@
         "ru": "Лицензии ПО & SaaS",
         "kk": ""
       }
+    },
+    {
+      "id": "veeam",
+      "label": {
+        "ru": "Резервное копирование Veeam",
+        "kk": ""
+      },
+      "href": "https://nexcel.kz/veeam"
     },
     {
       "id": "sozdanie-saitov",

@@ -45,6 +45,10 @@ async function checkStaticHeader(page) {
   assert(!header.desktopSections.includes('/templates'));
   assert(!header.desktopSections.includes('/bitrix24'));
   assert(!header.mobileSections.includes('/bitrix24'));
+  assert(!header.desktopSections.includes('/veeam'));
+  assert(!header.mobileSections.includes('/veeam'));
+  assert(header.desktopServices.includes('/veeam'));
+  assert(header.mobileServices.includes('/veeam'));
   assert.equal(header.desktopSections[0], '/news');
   assert.equal(header.desktopSections.at(-1), '/free');
   assert.equal(header.desktopSections.at(-2), '/faq');
@@ -209,6 +213,22 @@ async function checkLinks(page, mobile) {
   await page.waitForURL(base + '/bitrix24');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Продажа лицензий и внедрение Битрикс24 для вашего бизнеса');
   await expect(page.locator('footer a[href="/bitrix24"]')).toHaveCount(1);
+  for (const route of ['/', '/licensing']) {
+    await page.goto(base + route);
+    await expect(page.locator('#partner-veeam')).toContainText('Veeam');
+    await page.locator('#partner-veeam a[href="/veeam"]').click();
+    await page.waitForURL(base + '/veeam');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Поставка лицензий Veeam и защита данных для вашего бизнеса');
+    await expect(page.locator('#veeam-supply-badge')).toHaveText('Поставка лицензий Veeam');
+    await expect(page.locator('footer a[href="/veeam"]')).toHaveCount(1);
+    await expect(page.locator('main form, main input, main textarea, main select')).toHaveCount(0);
+    const whatsapp = new URL(await page.locator('#request a[href^="https://wa.me/"]').getAttribute('href'));
+    assert.equal(whatsapp.searchParams.get('text'), 'Здравствуйте! Нужен расчет Veeam');
+    assert.doesNotMatch(await page.locator('main').innerText(), /\d[\d\s.,]*\s*(?:₸|тенге|KZT)|(?:официальн[\p{L}]*|авторизованн[\p{L}]*)\s+партн[её]р|ProPartner|Partner\s*ID|n\.abenov@nexcel\.kz/iu);
+    await page.getByRole('link', { name: 'Запросить расчет стоимости', exact: true }).click();
+    await expect(page).toHaveURL(base + '/veeam#request');
+    await expect(page.locator('#request-heading')).toBeInViewport();
+  }
   await page.goto(base + '/news/5-priznakov-chto-excel-pora-avtomatizirovat');
   const news = nav.locator('a[href="/news"]');
   await expect(news).toHaveClass(activeHighlight);
