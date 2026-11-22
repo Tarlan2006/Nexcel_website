@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-21T10:02:27Z",
+  "updatedAt": "2026-11-22T19:19:14Z",
   "logo": {
     "href": "https://nexcel.kz/",
     "src": "https://nexcel.kz/assets/logo.svg",
@@ -50,22 +50,32 @@
     {
       "id": "licensing",
       "label": {
-        "ru": "Лицензии ПО",
+        "ru": "Лицензии ПО & SaaS",
         "kk": ""
       },
       "href": "https://nexcel.kz/licensing",
       "footerLabel": {
         "ru": "Лицензии ПО & SaaS",
         "kk": ""
-      }
-    },
-    {
-      "id": "veeam",
-      "label": {
-        "ru": "Резервное копирование Veeam",
-        "kk": ""
       },
-      "href": "https://nexcel.kz/veeam"
+      "children": [
+        {
+          "id": "bitrix24",
+          "label": {
+            "ru": "Битрикс24",
+            "kk": ""
+          },
+          "href": "https://nexcel.kz/bitrix24"
+        },
+        {
+          "id": "veeam",
+          "label": {
+            "ru": "Резервное копирование Veeam",
+            "kk": ""
+          },
+          "href": "https://nexcel.kz/veeam"
+        }
+      ]
     },
     {
       "id": "sozdanie-saitov",
@@ -151,7 +161,6 @@
   ],
   "footerPages": [
     "about",
-    "bitrix24",
     "news",
     "partners",
     "faq",

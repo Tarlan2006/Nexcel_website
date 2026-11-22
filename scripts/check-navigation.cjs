@@ -3,8 +3,8 @@ const { chromium, expect } = require('@playwright/test');
 
 const base = process.argv[2] || 'http://127.0.0.1:5500';
 const source = require('../content/navigation.json');
-const { localHref } = require('./lib/navigation.cjs');
-const services = source.services.map(item => localHref(item.href));
+const { localHref, flattenLinks } = require('./lib/navigation.cjs');
+const services = flattenLinks(source.services).map(item => localHref(item.href));
 const sections = source.headerPages.map(id => localHref(source.pages[id].href));
 const activeHighlight = /(?:^|\s)text-emeraldAccent(?:\s|$)/;
 
@@ -29,6 +29,10 @@ async function checkStaticHeader(page) {
       brand: doc.querySelector('a#site-brand')?.getAttribute('href'),
       contactGroups: ['desktop', 'mobile'].map(mode => hrefs(doc.querySelector(`#${mode}-contacts`))),
       desktopServices: hrefs(doc.querySelector('#desktop-services-menu')),
+      groups: ['desktop', 'mobile'].map(mode => {
+        const group = doc.querySelector('#' + mode + '-services-menu ul[aria-label]');
+        return { label: group?.getAttribute('aria-label'), parent: group?.previousElementSibling?.getAttribute('href'), children: hrefs(group) };
+      }),
       desktopSections: hrefs(desktopNav, 'a[href]', '#desktop-services-menu, #desktop-whatsapp'),
       mobileServices: hrefs(doc.querySelector('#mobile-services-menu')),
       mobileSections: hrefs(doc.querySelector('#mobile-menu'), 'a[href]', '#mobile-services-menu, #mobile-contacts'),
@@ -49,6 +53,16 @@ async function checkStaticHeader(page) {
   assert(!header.mobileSections.includes('/veeam'));
   assert(header.desktopServices.includes('/veeam'));
   assert(header.mobileServices.includes('/veeam'));
+  for (const group of header.groups) {
+    assert.equal(group.label, 'Решения в разделе Лицензии ПО & SaaS');
+    assert.equal(group.parent, '/licensing');
+    assert.deepEqual(group.children, ['/bitrix24', '/veeam']);
+  }
+  for (const links of [header.desktopServices, header.mobileServices]) assert.equal(new Set(links).size, links.length);
+  const footerGroup = page.locator('footer ul[aria-label="Решения в разделе Лицензии ПО & SaaS"]');
+  await expect(footerGroup.locator('a[href="/bitrix24"]')).toHaveCount(1);
+  await expect(footerGroup.locator('a[href="/veeam"]')).toHaveCount(1);
+  await expect(page.locator('footer nav[aria-label="Компания"] a[href="/bitrix24"]')).toHaveCount(0);
   assert.equal(header.desktopSections[0], '/news');
   assert.equal(header.desktopSections.at(-1), '/free');
   assert.equal(header.desktopSections.at(-2), '/faq');
@@ -174,6 +188,13 @@ async function checkLinks(page, mobile) {
     await expect(nav.locator('a[href="' + target + '"]')).toHaveAttribute('aria-current', target.includes('#') ? 'location' : 'page');
     await expect(nav.locator('a[aria-current]')).toHaveCount(1);
     if (target.includes('#')) await expect(page.locator(target.slice(1))).toBeVisible();
+    if (['/bitrix24', '/veeam'].includes(target)) {
+      await expect(nav.locator('a[href="/licensing"]')).toHaveClass(activeHighlight);
+      await expect(nav.locator('a[href="/licensing"]')).not.toHaveAttribute('aria-current', 'page');
+      await expect(page.locator('nav[aria-label="Хлебные крошки"] a[href="/licensing"]')).toHaveCount(1);
+      const crumbs = await page.locator('script[type="application/ld+json"]').evaluate(el => JSON.parse(el.textContent)['@graph'].find(node => node['@type'] === 'BreadcrumbList').itemListElement);
+      assert.deepEqual(crumbs.map(item => item.item), ['https://nexcel.kz/', 'https://nexcel.kz/licensing', 'https://nexcel.kz' + target]);
+    }
     if (services.includes(target)) await expect(servicesToggle).toHaveClass(activeHighlight);
     else await expect(servicesToggle).not.toHaveClass(activeHighlight);
     const menuToggle = mobile ? page.locator('#mobile-menu-toggle') : servicesToggle;

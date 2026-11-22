@@ -3,7 +3,9 @@ const path = require('node:path');
 const schema = require('../../schemas/nav.schema.json');
 
 const SITE = 'https://nexcel.kz';
-const asLink = item => ({ label: item.label, href: item.href });
+const asLink = item => ({ label: item.label, href: item.href,
+  ...(item.children ? { children: item.children.map(asLink) } : {}) });
+const flattenLinks = items => items.flatMap(item => [item, ...flattenLinks(item.children || [])]);
 const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 const localHref = href => {
   const url = new URL(href);
@@ -23,7 +25,7 @@ function navigationFromSource(source) {
     cta: source.cta,
     footer: {
       columns: [
-        { title: source.servicesTitle, links: source.services.map(item => ({ label: item.footerLabel || item.label, href: item.href })) },
+        { title: source.servicesTitle, links: source.services.map(item => asLink({ ...item, label: item.footerLabel || item.label })) },
         { title: footer.companyTitle, links: source.footerPages.map(id => asLink(source.pages[id])) }
       ],
       contacts: { title: contacts.title, location: contacts.location, email: contacts.email, phone: contacts.phone,
@@ -79,15 +81,15 @@ function validateNavigation(nav) {
     return url;
   };
   const link = (value, field) => { object(value, field); label(value.label, field + '.label'); https(value.href, field + '.href'); };
-  const links = (values, field) => {
+  const links = (values, field, seen = new Set()) => {
     fail(Array.isArray(values) && values.length > 0, field, 'ожидается непустой массив');
-    const seen = new Set();
     values.forEach((value, index) => {
       link(value, field + '[' + index + ']');
       const url = new URL(value.href);
       url.pathname = url.pathname.replace(/\/$/, '') || '/';
       fail(!seen.has(url.href), field + '[' + index + '].href', 'повтор ссылки внутри списка');
       seen.add(url.href);
+      if (value.children) links(value.children, field + '[' + index + '].children', seen);
     });
   };
   object(nav, 'nav.json');
@@ -143,13 +145,22 @@ function renderArtifacts(source, root) {
   const anchor = (item, className, attributes = '') => `<a${attributes} href="${escapeHtml(localHref(item.href))}" class="${className}">${escapeHtml(item.label.ru)}</a>`;
   const services = source.services;
   const primary = source.headerPages.map(id => source.pages[id]);
+  const groupLabel = item => 'Решения в разделе ' + item.label.ru;
+  function serviceList(items, mobile, parent) {
+    return items.map(item => {
+      const attributes = (mobile ? '' : ' role="menuitem" tabindex="-1"') +
+        (parent ? ` data-section="${escapeHtml(localHref(parent.href))}"` : '');
+      const children = item.children ? `<ul${mobile ? '' : ' role="group"'} aria-label="${escapeHtml(groupLabel(item))}" class="ml-3 border-l border-gridBorder pl-2">${serviceList(item.children, mobile, item)}</ul>` : '';
+      return `<li${mobile ? '' : ' role="none"'}>${anchor(item, mobile ? mobileClass : desktopServiceClass, attributes)}${children}</li>`;
+    }).join('\n');
+  }
   const brand = source.logo.alt.split(' ');
   const values = {
     home: escapeHtml(localHref(source.logo.href)), brandFirst: escapeHtml(brand.shift()), brandRest: escapeHtml(brand.join(' ')),
     email: escapeHtml(source.contacts.email), phone: escapeHtml(source.contacts.phone),
     ctaHref: escapeHtml(source.cta.href), ctaLabel: escapeHtml(source.cta.label.ru), servicesTitle: escapeHtml(source.servicesTitle.ru),
-    desktopServices: services.map(item => '            <li role="none">' + anchor(item, desktopServiceClass, ' role="menuitem" tabindex="-1"') + '</li>').join('\n'),
-    mobileServices: services.map(item => '            ' + anchor(item, mobileClass)).join('\n'),
+    desktopServices: serviceList(services, false),
+    mobileServices: '<ul>' + serviceList(services, true) + '</ul>',
     desktopPages: primary.map(item => '        ' + anchor(item, desktopPageClass)).join('\n'),
     mobilePages: primary.map(item => '        ' + anchor(item, mobileClass)).join('\n')
   };
@@ -162,4 +173,4 @@ function renderArtifacts(source, root) {
   return artifacts;
 }
 
-module.exports = { navigationFromSource, validateNavigation, renderArtifacts, localHref, escapeHtml };
+module.exports = { navigationFromSource, validateNavigation, renderArtifacts, localHref, escapeHtml, flattenLinks };

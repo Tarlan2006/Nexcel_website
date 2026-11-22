@@ -51,7 +51,7 @@
     "label": {"type": "object", "required": ["ru", "kk"], "additionalProperties": false,
       "properties": {"ru": {"type": "string", "minLength": 1, "pattern": "\\S"}, "kk": {"type": "string"}}},
     "link": {"type": "object", "required": ["label", "href"], "additionalProperties": false,
-      "properties": {"label": {"$ref": "#/$defs/label"}, "href": {"$ref": "#/$defs/https"}}},
+      "properties": {"label": {"$ref": "#/$defs/label"}, "href": {"$ref": "#/$defs/https"}, "children": {"$ref": "#/$defs/links"}}},
     "links": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/link"}}
   }
 }

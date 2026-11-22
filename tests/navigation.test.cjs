@@ -2,7 +2,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const { test } = require('node:test');
-const { navigationFromSource, validateNavigation, renderArtifacts } = require('../scripts/lib/navigation.cjs');
+const { navigationFromSource, validateNavigation, renderArtifacts, flattenLinks } = require('../scripts/lib/navigation.cjs');
 const source = require('../content/navigation.json');
 const root = path.resolve(__dirname, '..');
 const navigation = () => structuredClone(navigationFromSource(source));
@@ -72,4 +72,23 @@ test('generated artifacts are deterministic and committed copies are current', (
   const artifacts=renderArtifacts(source,root);
   assert.deepEqual(artifacts,renderArtifacts(source,root));
   for (const [file,content] of Object.entries(artifacts)) assert.equal(fs.readFileSync(path.join(root,file),'utf8').replaceAll('\r\n','\n'),content.replaceAll('\r\n','\n'),file);
+});
+
+test('licensing groups both solutions once; nested duplicates and invalid links are rejected', () => {
+  const nav = navigation();
+  const licensing = nav.nav.find(item => item.href === 'https://nexcel.kz/licensing');
+  assert.deepEqual(licensing.children.map(item => item.href), ['https://nexcel.kz/bitrix24', 'https://nexcel.kz/veeam']);
+  assert(!nav.nav.some(item => ['/bitrix24', '/veeam'].includes(new URL(item.href).pathname)));
+  assert.equal(new Set(flattenLinks(nav.nav).map(item => item.href)).size, flattenLinks(nav.nav).length);
+  for (const mutate of [
+    item => { item.children[0].href = 'javascript:alert(1)'; },
+    item => { item.children[0].href = item.href; },
+    item => { item.children[0].href = nav.nav[0].href; },
+    item => { item.children.push(item.children[0]); },
+    item => { delete item.children[0].label.ru; }
+  ]) {
+    const invalid = navigation();
+    mutate(invalid.nav.find(item => item.href === 'https://nexcel.kz/licensing'));
+    assert.throws(() => validateNavigation(invalid));
+  }
 });

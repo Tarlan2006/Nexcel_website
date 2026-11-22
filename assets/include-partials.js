@@ -168,10 +168,13 @@
         [mobileMenu, mobileServices, mobileServicesToggle]
       ]) {
         let serviceCurrent = false;
+        const activeSections = new Set([...nav.querySelectorAll('a[data-section]')]
+          .filter(link => new URL(link.href).pathname === current)
+          .map(link => link.dataset.section));
         for (const link of nav.querySelectorAll('a[href^="/"]')) {
           const url = new URL(link.href);
           const active = url.pathname === current && (!url.hash || url.hash === location.hash);
-          const highlighted = active || (url.pathname === '/news' && current.startsWith('/news/'));
+          const highlighted = active || activeSections.has(url.pathname) || (url.pathname === '/news' && current.startsWith('/news/'));
           if (active) link.setAttribute('aria-current', url.hash ? 'location' : 'page');
           else link.removeAttribute('aria-current');
           link.classList.toggle('text-emeraldAccent', highlighted);
