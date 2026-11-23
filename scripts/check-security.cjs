@@ -15,21 +15,22 @@ const serviceFaqCounts = new Map([
 ]);
 const navigationSource = require('../content/navigation.json');
 const { localHref, flattenLinks } = require('./lib/navigation.cjs');
-const serviceLinks = flattenLinks(navigationSource.services).map(item => localHref(item.href));
+const serviceLinks = navigationSource.serviceGroups.flatMap(group => group.links).map(item => localHref(item.href));
 
 async function checkHeader(page, response, width, route) {
   const links = await page.evaluate(source => {
     const html = new DOMParser().parseFromString(source, 'text/html');
     return ['desktop', 'mobile'].map(mode =>
-      [...html.querySelectorAll(`#${mode}-services-menu a[href]`)].map(link => link.getAttribute('href'))
+      [...html.querySelectorAll(`[data-${mode}-group] a[href]`)].map(link => link.getAttribute('href'))
     );
   }, await response.text());
   assert.deepEqual(links, [serviceLinks, serviceLinks], `${route}: services are ordinary links in the served HTML`);
 
   const mobile = width < 1024;
   const mode = mobile ? 'mobile' : 'desktop';
-  const toggle = page.locator(`#${mode}-services-toggle`);
-  const menu = page.locator(`#${mode}-services-menu`);
+  const group = navigationSource.serviceGroups.find(group => group.links.some(item => localHref(item.href) === route)) || navigationSource.serviceGroups[0];
+  const toggle = page.locator(`#${mode}-${group.id}-toggle`);
+  const menu = page.locator(`#${mode}-${group.id}-menu`);
   const whatsapp = page.locator(`#${mode}-whatsapp`);
   const mainToggle = page.locator('#mobile-menu-toggle');
   if (mobile) {
@@ -47,7 +48,7 @@ async function checkHeader(page, response, width, route) {
   assert.equal(await whatsapp.getAttribute('target'), '_blank');
   assert.ok((await whatsapp.getAttribute('rel')).split(/\s+/).includes('noopener'));
 
-  assert.equal(await toggle.getAttribute('aria-controls'), `${mode}-services-menu`);
+  assert.equal(await toggle.getAttribute('aria-controls'), `${mode}-${group.id}-menu`);
   assert.equal(await toggle.getAttribute('aria-expanded'), 'false');
   assert.equal(await menu.isVisible(), false);
   await toggle.press('Enter');

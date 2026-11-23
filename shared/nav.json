@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-22T19:19:14Z",
+  "updatedAt": "2026-11-23T19:42:42Z",
   "logo": {
     "href": "https://nexcel.kz/",
     "src": "https://nexcel.kz/assets/logo.svg",
@@ -16,7 +16,7 @@
     },
     {
       "label": {
-        "ru": "Telegram + ИИ",
+        "ru": "Telegram-боты",
         "kk": ""
       },
       "href": "https://nexcel.kz/telegram-boty"
@@ -27,29 +27,6 @@
         "kk": ""
       },
       "href": "https://nexcel.kz/vnedrenie-ii"
-    },
-    {
-      "label": {
-        "ru": "Лицензии ПО & SaaS",
-        "kk": ""
-      },
-      "href": "https://nexcel.kz/licensing",
-      "children": [
-        {
-          "label": {
-            "ru": "Битрикс24",
-            "kk": ""
-          },
-          "href": "https://nexcel.kz/bitrix24"
-        },
-        {
-          "label": {
-            "ru": "Резервное копирование Veeam",
-            "kk": ""
-          },
-          "href": "https://nexcel.kz/veeam"
-        }
-      ]
     },
     {
       "label": {
@@ -64,6 +41,27 @@
         "kk": ""
       },
       "href": "https://nexcel.kz/seo"
+    },
+    {
+      "label": {
+        "ru": "Обзор лицензий",
+        "kk": ""
+      },
+      "href": "https://nexcel.kz/licensing"
+    },
+    {
+      "label": {
+        "ru": "Битрикс24",
+        "kk": ""
+      },
+      "href": "https://nexcel.kz/bitrix24"
+    },
+    {
+      "label": {
+        "ru": "Резервное копирование Veeam",
+        "kk": ""
+      },
+      "href": "https://nexcel.kz/veeam"
     },
     {
       "label": {
@@ -94,6 +92,82 @@
       "href": "https://nexcel.kz/free"
     }
   ],
+  "groups": [
+    {
+      "id": "development",
+      "label": {
+        "ru": "Разработка",
+        "kk": ""
+      },
+      "links": [
+        {
+          "label": {
+            "ru": "Автоматизация Excel и Google Sheets",
+            "kk": ""
+          },
+          "href": "https://nexcel.kz/avtomatizaciya-excel"
+        },
+        {
+          "label": {
+            "ru": "Telegram-боты",
+            "kk": ""
+          },
+          "href": "https://nexcel.kz/telegram-boty"
+        },
+        {
+          "label": {
+            "ru": "Внедрение ИИ",
+            "kk": ""
+          },
+          "href": "https://nexcel.kz/vnedrenie-ii"
+        },
+        {
+          "label": {
+            "ru": "Создание сайтов",
+            "kk": ""
+          },
+          "href": "https://nexcel.kz/sozdanie-saitov"
+        },
+        {
+          "label": {
+            "ru": "GEO-аудит и продвижение",
+            "kk": ""
+          },
+          "href": "https://nexcel.kz/seo"
+        }
+      ]
+    },
+    {
+      "id": "licensing",
+      "label": {
+        "ru": "Лицензии ПО и SaaS",
+        "kk": ""
+      },
+      "links": [
+        {
+          "label": {
+            "ru": "Обзор лицензий",
+            "kk": ""
+          },
+          "href": "https://nexcel.kz/licensing"
+        },
+        {
+          "label": {
+            "ru": "Битрикс24",
+            "kk": ""
+          },
+          "href": "https://nexcel.kz/bitrix24"
+        },
+        {
+          "label": {
+            "ru": "Резервное копирование Veeam",
+            "kk": ""
+          },
+          "href": "https://nexcel.kz/veeam"
+        }
+      ]
+    }
+  ],
   "cta": {
     "label": {
       "ru": "Написать в WhatsApp",
@@ -105,13 +179,13 @@
     "columns": [
       {
         "title": {
-          "ru": "Услуги",
+          "ru": "Разработка",
           "kk": ""
         },
         "links": [
           {
             "label": {
-              "ru": "Автоматизация Excel",
+              "ru": "Автоматизация Excel и Google Sheets",
               "kk": ""
             },
             "href": "https://nexcel.kz/avtomatizaciya-excel"
@@ -132,29 +206,6 @@
           },
           {
             "label": {
-              "ru": "Лицензии ПО & SaaS",
-              "kk": ""
-            },
-            "href": "https://nexcel.kz/licensing",
-            "children": [
-              {
-                "label": {
-                  "ru": "Битрикс24",
-                  "kk": ""
-                },
-                "href": "https://nexcel.kz/bitrix24"
-              },
-              {
-                "label": {
-                  "ru": "Резервное копирование Veeam",
-                  "kk": ""
-                },
-                "href": "https://nexcel.kz/veeam"
-              }
-            ]
-          },
-          {
-            "label": {
               "ru": "Создание сайтов",
               "kk": ""
             },
@@ -166,6 +217,35 @@
               "kk": ""
             },
             "href": "https://nexcel.kz/seo"
+          }
+        ]
+      },
+      {
+        "title": {
+          "ru": "Лицензии ПО и SaaS",
+          "kk": ""
+        },
+        "links": [
+          {
+            "label": {
+              "ru": "Обзор лицензий",
+              "kk": ""
+            },
+            "href": "https://nexcel.kz/licensing"
+          },
+          {
+            "label": {
+              "ru": "Битрикс24",
+              "kk": ""
+            },
+            "href": "https://nexcel.kz/bitrix24"
+          },
+          {
+            "label": {
+              "ru": "Резервное копирование Veeam",
+              "kk": ""
+            },
+            "href": "https://nexcel.kz/veeam"
           }
         ]
       },

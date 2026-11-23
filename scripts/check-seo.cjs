@@ -91,7 +91,7 @@ async function inspectHtml(page, html) {
       links: attrs('a[href]', 'href'),
       mainLinks: attrs('main a[href]', 'href'),
       ids: attrs('[id]', 'id'),
-      nav: ['#desktop-services-menu', '#mobile-services-menu', '#site-footer'].map(selector => attrs(selector + ' a[href]', 'href')),
+      nav: ['[data-desktop-group]', '[data-mobile-group]', '#site-footer'].map(selector => attrs(selector + ' a[href]', 'href')),
       ending: [...(main.lastElementChild?.querySelectorAll('a[href]') || [])].map(link => ({
         href: link.getAttribute('href'), text: clean(link.textContent)
       }))

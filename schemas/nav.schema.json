@@ -13,6 +13,7 @@
       "properties": {"href": {"$ref": "#/$defs/https"}, "src": {"$ref": "#/$defs/https"}, "alt": {"type": "string", "minLength": 1}}
     },
     "nav": {"$ref": "#/$defs/links"},
+    "groups": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["id", "label", "links"], "additionalProperties": false, "properties": {"id": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"}, "label": {"$ref": "#/$defs/label"}, "links": {"$ref": "#/$defs/links"}}}},
     "cta": {"$ref": "#/$defs/link"},
     "footer": {
       "type": "object",

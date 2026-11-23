@@ -21,11 +21,12 @@ function navigationFromSource(source) {
   const address = officeAddress(contacts);
   return {
     version: source.version, updatedAt: source.updatedAt, logo: source.logo,
-    nav: [...source.services, ...source.headerPages.map(id => source.pages[id])].map(asLink),
+    nav: [...source.serviceGroups.flatMap(group => group.links), ...source.headerPages.map(id => source.pages[id])].map(asLink),
+    groups: source.serviceGroups.map(group => ({ id: group.id, label: group.label, links: group.links.map(asLink) })),
     cta: source.cta,
     footer: {
       columns: [
-        { title: source.servicesTitle, links: source.services.map(item => asLink({ ...item, label: item.footerLabel || item.label })) },
+        ...source.serviceGroups.map(group => ({ title: group.label, links: group.links.map(asLink) })),
         { title: footer.companyTitle, links: source.footerPages.map(id => asLink(source.pages[id])) }
       ],
       contacts: { title: contacts.title, location: contacts.location, email: contacts.email, phone: contacts.phone,
@@ -99,6 +100,14 @@ function validateNavigation(nav) {
     new Date(nav.updatedAt).toISOString() === nav.updatedAt.replace(/Z$/, nav.updatedAt.includes('.') ? 'Z' : '.000Z'), 'updatedAt', 'требуется действительная ISO-дата UTC');
   object(nav.logo, 'logo'); https(nav.logo.href, 'logo.href'); https(nav.logo.src, 'logo.src'); text(nav.logo.alt, 'logo.alt');
   links(nav.nav, 'nav'); link(nav.cta, 'cta');
+  if (nav.groups) {
+    const ids = new Set(), hrefs = new Set();
+    for (const group of nav.groups) {
+      fail(!ids.has(group.id), 'groups.id', 'повтор группы');
+      ids.add(group.id); label(group.label, 'groups.label'); links(group.links, 'groups.links', hrefs);
+      for (const item of group.links) fail(nav.nav.some(link => link.href === item.href), 'groups.links', 'ссылка отсутствует в nav');
+    }
+  }
   object(nav.footer, 'footer');
   fail(Array.isArray(nav.footer.columns) && nav.footer.columns.length > 0, 'footer.columns', 'ожидаются колонки');
   const titles = new Set();
@@ -143,24 +152,28 @@ const mobileClass = 'block rounded px-3 py-2.5 hover:bg-white hover:text-emerald
 function renderArtifacts(source, root) {
   const nav = validateNavigation(navigationFromSource(source));
   const anchor = (item, className, attributes = '') => `<a${attributes} href="${escapeHtml(localHref(item.href))}" class="${className}">${escapeHtml(item.label.ru)}</a>`;
-  const services = source.services;
   const primary = source.headerPages.map(id => source.pages[id]);
-  const groupLabel = item => 'Решения в разделе ' + item.label.ru;
-  function serviceList(items, mobile, parent) {
-    return items.map(item => {
-      const attributes = (mobile ? '' : ' role="menuitem" tabindex="-1"') +
-        (parent ? ` data-section="${escapeHtml(localHref(parent.href))}"` : '');
-      const children = item.children ? `<ul${mobile ? '' : ' role="group"'} aria-label="${escapeHtml(groupLabel(item))}" class="ml-3 border-l border-gridBorder pl-2">${serviceList(item.children, mobile, item)}</ul>` : '';
-      return `<li${mobile ? '' : ' role="none"'}>${anchor(item, mobile ? mobileClass : desktopServiceClass, attributes)}${children}</li>`;
-    }).join('\n');
+  const chevron = '<svg aria-hidden="true" class="h-4 w-4 shrink-0 transition-transform group-aria-expanded:rotate-180 motion-reduce:transition-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>';
+  function groupMarkup(group, mobile) {
+    const mode = mobile ? 'mobile' : 'desktop';
+    const id = mode + '-' + group.id;
+    const buttonClass = mobile
+      ? 'group flex w-full items-center justify-between gap-2 rounded px-3 py-2.5 text-left hover:bg-white hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent'
+      : 'group inline-flex items-center gap-1.5 rounded py-2 hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent';
+    const listClass = mobile ? 'ml-3 mt-1 border-l border-gridBorder pl-2'
+      : 'absolute left-0 top-full z-10 max-h-[calc(100dvh-4rem)] w-72 overflow-y-auto whitespace-normal rounded-lg border border-gridBorder bg-white p-1.5 shadow-lg';
+    const items = group.links.map(item => '<li' + (mobile ? '' : ' role="none"') + '>' + anchor(item, mobile ? mobileClass : desktopServiceClass, mobile ? '' : ' role="menuitem" tabindex="-1"') + '</li>').join('');
+    return '<div id="' + id + '" data-' + mode + '-group="' + group.id + '" class="relative">' +
+      '<button type="button" id="' + id + '-toggle" aria-controls="' + id + '-menu" aria-expanded="false"' + (mobile ? '' : ' aria-haspopup="menu"') + ' class="' + buttonClass + '">' + escapeHtml(group.label.ru) + chevron + '</button>' +
+      '<ul id="' + id + '-menu" hidden aria-labelledby="' + id + '-toggle"' + (mobile ? '' : ' role="menu"') + ' class="' + listClass + '">' + items + '</ul></div>';
   }
   const brand = source.logo.alt.split(' ');
   const values = {
     home: escapeHtml(localHref(source.logo.href)), brandFirst: escapeHtml(brand.shift()), brandRest: escapeHtml(brand.join(' ')),
     email: escapeHtml(source.contacts.email), phone: escapeHtml(source.contacts.phone),
-    ctaHref: escapeHtml(source.cta.href), ctaLabel: escapeHtml(source.cta.label.ru), servicesTitle: escapeHtml(source.servicesTitle.ru),
-    desktopServices: serviceList(services, false),
-    mobileServices: '<ul>' + serviceList(services, true) + '</ul>',
+    ctaHref: escapeHtml(source.cta.href), ctaLabel: escapeHtml(source.cta.label.ru),
+    desktopGroups: source.serviceGroups.map(group => groupMarkup(group, false)).join('\n'),
+    mobileGroups: source.serviceGroups.map(group => groupMarkup(group, true)).join('\n'),
     desktopPages: primary.map(item => '        ' + anchor(item, desktopPageClass)).join('\n'),
     mobilePages: primary.map(item => '        ' + anchor(item, mobileClass)).join('\n')
   };

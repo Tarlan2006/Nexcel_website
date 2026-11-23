@@ -7,13 +7,13 @@ const calculatorAnchor = '#calculator';
 const screenshotStyle = '#cookie-notice { visibility: hidden !important; }';
 const sectionScreenshotStyle = screenshotStyle + ' #site-header { visibility: hidden !important; }';
 
-async function openNavigation(page, width, services = false) {
+async function openNavigation(page, width, group = null) {
   const mobile = width < desktopWidth;
   if (mobile) await page.locator('#mobile-menu-toggle').click();
-  if (services) {
+  if (group) {
     const prefix = mobile ? 'mobile' : 'desktop';
-    await page.locator(`#${prefix}-services-toggle`).click();
-    return page.locator(`#${prefix}-services-menu`);
+    await page.locator(`#${prefix}-${group}-toggle`).click();
+    return page.locator(`#${prefix}-${group}-menu`);
   }
   return page.locator(mobile ? '#mobile-menu' : '#site-header-row nav');
 }
@@ -112,7 +112,7 @@ function fitsViewport(element) {
             const clipped = await page.locator('#inspector-' + key).evaluate(panel => [...panel.querySelectorAll('*')].some(el => {const rect = el.getBoundingClientRect(); return rect.width > 0 && (rect.right > innerWidth + 1 || rect.left < -1);}));
             if (clipped) failures.push(`${width}px: inspector ${key} overflows`);
           }
-          const nav = await openNavigation(page, width, true);
+          const nav = await openNavigation(page, width, 'development');
           if (!await nav.evaluate(fitsViewport)) failures.push(`${width}px: services panel overflows`);
           await page.keyboard.press('Escape');
           if (width < desktopWidth) await page.keyboard.press('Escape');
@@ -130,7 +130,7 @@ function fitsViewport(element) {
         }
         if (route !== '/') {
           const target = route === '/licensing' ? '/free' : '/licensing';
-          const nav = await openNavigation(page, width, target === '/licensing');
+          const nav = await openNavigation(page, width, target === '/licensing' ? 'licensing' : null);
           await nav.locator(`a[href="${target}"]`).click();
           if (new URL(page.url()).pathname !== target) failures.push(`${width}px: interpage navigation`);
         }
@@ -141,7 +141,7 @@ function fitsViewport(element) {
       const page = await context.newPage();
       await page.setViewportSize(viewport);
       await page.goto(base);
-      const services = await openNavigation(page, viewport.width, true);
+      const services = await openNavigation(page, viewport.width, 'development');
       const contacts = page.locator('#mobile-contacts');
       await contacts.scrollIntoViewIfNeeded();
       if (!await services.evaluate(fitsViewport) || !await contacts.evaluate(element => {

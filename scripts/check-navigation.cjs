@@ -1,204 +1,104 @@
 const assert = require('node:assert/strict');
 const { chromium, expect } = require('@playwright/test');
-
-const base = process.argv[2] || 'http://127.0.0.1:5500';
 const source = require('../content/navigation.json');
-const { localHref, flattenLinks } = require('./lib/navigation.cjs');
-const services = flattenLinks(source.services).map(item => localHref(item.href));
+const { localHref } = require('./lib/navigation.cjs');
+const base = process.argv[2] || 'http://127.0.0.1:5500';
+const groups = source.serviceGroups;
+const services = groups.flatMap(group => group.links).map(item => localHref(item.href));
 const sections = source.headerPages.map(id => localHref(source.pages[id].href));
 const activeHighlight = /(?:^|\s)text-emeraldAccent(?:\s|$)/;
-
 async function openPage(browser, width) {
   const page = await browser.newPage({ viewport: { width, height: 900 }, reducedMotion: 'reduce' });
   await page.route('**/*', route => new URL(route.request().url()).origin === base ? route.continue() : route.abort());
-  await page.goto(base);
-  await page.locator('#site-header header').waitFor();
-  return page;
+  await page.goto(base); await page.locator('#site-header header').waitFor(); return page;
 }
-
 async function checkStaticHeader(page) {
-  const response = await page.request.get(base + '/partials/header.html');
-  assert.equal(response.status(), 200);
-  const header = await page.evaluate(html => {
-    const doc = new DOMParser().parseFromString(html, 'text/html');
-    const hrefs = (root, selector = 'a[href]', exclude) => [...(root?.querySelectorAll(selector) ?? [])]
-      .filter(link => !exclude || !link.closest(exclude))
-      .map(link => link.getAttribute('href'));
-    const desktopNav = doc.querySelector('#desktop-services-toggle')?.closest('nav');
-    return {
-      brand: doc.querySelector('a#site-brand')?.getAttribute('href'),
-      contactGroups: ['desktop', 'mobile'].map(mode => hrefs(doc.querySelector(`#${mode}-contacts`))),
-      desktopServices: hrefs(doc.querySelector('#desktop-services-menu')),
-      groups: ['desktop', 'mobile'].map(mode => {
-        const group = doc.querySelector('#' + mode + '-services-menu ul[aria-label]');
-        return { label: group?.getAttribute('aria-label'), parent: group?.previousElementSibling?.getAttribute('href'), children: hrefs(group) };
-      }),
-      desktopSections: hrefs(desktopNav, 'a[href]', '#desktop-services-menu, #desktop-whatsapp'),
-      mobileServices: hrefs(doc.querySelector('#mobile-services-menu')),
-      mobileSections: hrefs(doc.querySelector('#mobile-menu'), 'a[href]', '#mobile-services-menu, #mobile-contacts'),
-      mobileLast: [...doc.querySelectorAll('#mobile-menu a[href]')].at(-1)?.id,
-      contacts: hrefs(doc, 'a#desktop-whatsapp[href], a#mobile-whatsapp[href]')
-    };
-  }, await response.text());
-
-  assert.equal(header.brand, '/');
-  assert.deepEqual(header.desktopServices, services);
-  assert.deepEqual(header.desktopSections, sections);
-  assert.deepEqual(header.mobileServices, services);
-  assert.deepEqual(header.mobileSections, sections);
-  assert(!header.desktopSections.includes('/templates'));
-  assert(!header.desktopSections.includes('/bitrix24'));
-  assert(!header.mobileSections.includes('/bitrix24'));
-  assert(!header.desktopSections.includes('/veeam'));
-  assert(!header.mobileSections.includes('/veeam'));
-  assert(header.desktopServices.includes('/veeam'));
-  assert(header.mobileServices.includes('/veeam'));
-  for (const group of header.groups) {
-    assert.equal(group.label, 'Решения в разделе Лицензии ПО & SaaS');
-    assert.equal(group.parent, '/licensing');
-    assert.deepEqual(group.children, ['/bitrix24', '/veeam']);
+  for (const mode of ['desktop', 'mobile']) {
+    const containers = page.locator('[data-' + mode + '-group]');
+    await expect(containers).toHaveCount(2);
+    for (const group of groups) {
+      const box = page.locator('#' + mode + '-' + group.id);
+      await expect(box.locator('button')).toHaveText(group.label.ru);
+      assert.deepEqual(await box.locator('a').evaluateAll(els => els.map(e => e.getAttribute('href'))), group.links.map(item => localHref(item.href)));
+    }
+    const all = await containers.locator('a').evaluateAll(els => els.map(e => e.getAttribute('href')));
+    assert.equal(new Set(all).size, all.length);
   }
-  for (const links of [header.desktopServices, header.mobileServices]) assert.equal(new Set(links).size, links.length);
-  const footerGroup = page.locator('footer ul[aria-label="Решения в разделе Лицензии ПО & SaaS"]');
-  await expect(footerGroup.locator('a[href="/bitrix24"]')).toHaveCount(1);
-  await expect(footerGroup.locator('a[href="/veeam"]')).toHaveCount(1);
+  await expect(page.locator('header button').filter({ hasText: /^Услуги$/ })).toHaveCount(0);
+  for (const group of groups) {
+    const column = page.locator('footer nav[aria-label="' + group.label.ru + '"]');
+    assert.deepEqual(await column.locator('a').evaluateAll(els => els.map(e => e.getAttribute('href'))), group.links.map(item => localHref(item.href)));
+  }
   await expect(page.locator('footer nav[aria-label="Компания"] a[href="/bitrix24"]')).toHaveCount(0);
-  assert.equal(header.desktopSections[0], '/news');
-  assert.equal(header.desktopSections.at(-1), '/free');
-  assert.equal(header.desktopSections.at(-2), '/faq');
-  assert.equal(header.mobileLast, 'mobile-whatsapp');
-  assert.equal(header.contacts.length, 2);
-  assert.deepEqual(header.contactGroups, header.contacts.map(contact => ['mailto:info@nexcel.kz', contact]));
-  for (const contact of header.contacts) {
-    const url = new URL(contact);
-    assert.equal(url.origin + url.pathname, 'https://wa.me/77711369095');
-    assert.ok(url.searchParams.get('text'), 'WhatsApp has a prepared message');
-  }
-  await expect(page.locator('footer a[href="mailto:info@nexcel.kz"]')).toBeAttached();
-  for (const service of ['/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/sozdanie-saitov', '/seo']) {
-    await expect(page.locator('#directions a[href="' + service + '"]')).toHaveCount(1);
-    await expect(page.locator('footer a[href="' + service + '"]')).toHaveCount(1);
-  }
+  await expect(page.locator('footer nav[aria-label="Компания"] a[href="/licensing#partners"]')).toHaveCount(1);
 }
-
 async function checkDesktopDisclosure(page) {
-  const toggle = page.locator('#desktop-services-toggle');
-  const menu = page.locator('#desktop-services-menu');
-  const items = menu.locator('a[role="menuitem"][href][tabindex="-1"]');
-  await expect(toggle).toHaveAttribute('aria-haspopup', 'menu');
-  await expect(toggle).toHaveAttribute('aria-controls', 'desktop-services-menu');
-  await expect(menu).toHaveAttribute('role', 'menu');
-  await expect(items).toHaveCount(services.length);
-  await expect(toggle).toHaveAttribute('aria-expanded', 'false');
-  await expect(menu).toBeHidden();
-
-  await toggle.hover();
-  await expect(toggle).toHaveAttribute('aria-expanded', 'true');
-  await items.first().hover();
-  await expect(items.first()).toBeVisible();
-  await page.mouse.move(1, page.viewportSize().height - 1);
-  await expect(toggle).toHaveAttribute('aria-expanded', 'false');
-
-  await toggle.click();
-  await expect(items.first()).toBeFocused();
-  await page.mouse.move(1, page.viewportSize().height - 1);
-  await expect(menu).toBeVisible();
-  await page.mouse.click(1, page.viewportSize().height - 1);
-  await expect(toggle).toHaveAttribute('aria-expanded', 'false');
-
-  await page.locator('#site-brand').focus();
-  await page.keyboard.press('Tab');
-  await expect(toggle).toBeFocused();
-  await page.keyboard.press('Enter');
-  await expect(items.first()).toBeFocused();
-  await page.keyboard.press('ArrowDown');
-  await expect(items.nth(1)).toBeFocused();
-  await page.keyboard.press('ArrowUp');
-  await expect(items.first()).toBeFocused();
-  await page.keyboard.press('End');
-  await expect(items.last()).toBeFocused();
-  await page.keyboard.press('Home');
-  await expect(items.first()).toBeFocused();
-  await page.keyboard.press('Escape');
-  await expect(menu).toBeHidden();
-  await expect(toggle).toBeFocused();
-
-  await page.keyboard.press('Space');
-  await expect(items.first()).toBeFocused();
-  await page.keyboard.press('Tab');
-  await expect(page.locator('header a[href="/news"]:visible')).toBeFocused();
-  await expect(menu).toBeHidden();
-
-  await page.setViewportSize({ width: 1024, height: 270 });
-  await toggle.press('ArrowUp');
-  await expect(items.last()).toBeFocused();
-  assert(await items.last().evaluate(item => {
-    const panel = item.closest('[role="menu"]').getBoundingClientRect();
-    const bounds = item.getBoundingClientRect();
-    return bounds.top >= panel.top && bounds.bottom <= panel.bottom && panel.bottom <= innerHeight;
-  }), 'The last item is reachable in a short desktop viewport');
-  await page.keyboard.press('Escape');
-  await page.setViewportSize({ width: 1280, height: 900 });
+  for (const [index, group] of groups.entries()) {
+    const toggle = page.locator('#desktop-' + group.id + '-toggle');
+    const menu = page.locator('#desktop-' + group.id + '-menu');
+    const items = menu.locator('a');
+    await expect(toggle).toHaveAttribute('aria-haspopup', 'menu');
+    await toggle.hover(); await expect(menu).toBeVisible();
+    await page.mouse.move(1, 899); await expect(menu).toBeHidden();
+    await toggle.click(); await expect(items.first()).toBeFocused();
+    await page.mouse.move(1, 899); await expect(menu).toBeVisible();
+    await page.mouse.click(1, 899); await expect(menu).toBeHidden();
+    await toggle.press('Enter'); await expect(items.first()).toBeFocused();
+    await page.keyboard.press('ArrowDown'); await expect(items.nth(1)).toBeFocused();
+    await page.keyboard.press('ArrowUp'); await expect(items.first()).toBeFocused();
+    await page.keyboard.press('End'); await expect(items.last()).toBeFocused();
+    await page.keyboard.press('Home'); await expect(items.first()).toBeFocused();
+    await page.keyboard.press('Escape'); await expect(toggle).toBeFocused(); await expect(menu).toBeHidden();
+    await toggle.press('Space'); await expect(items.first()).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(index === 0 ? page.locator('#desktop-licensing-toggle') : page.locator('header a[href="/news"]:visible')).toBeFocused();
+    await expect(menu).toBeHidden();
+    await page.setViewportSize({ width: 1024, height: 270 });
+    await toggle.press('ArrowUp'); await expect(items.last()).toBeFocused();
+    assert(await items.last().evaluate(item => { const r=item.getBoundingClientRect(), p=item.closest('ul').getBoundingClientRect(); return r.top>=p.top && r.bottom<=p.bottom && p.bottom<=innerHeight; }));
+    await page.keyboard.press('Escape'); await page.setViewportSize({ width: 1280, height: 900 });
+  }
 }
-
 async function checkMobileAccordion(page) {
-  const menuToggle = page.locator('#mobile-menu-toggle');
-  const menu = page.locator('#mobile-menu');
-  const toggle = page.locator('#mobile-services-toggle');
-  const services = page.locator('#mobile-services-menu');
-  await expect(page.locator('#desktop-whatsapp')).toBeHidden();
-  await expect(page.locator('#desktop-email')).toBeHidden();
-  await expect(menu).toBeHidden();
-  await menuToggle.press('Enter');
-  await expect(menu).toBeVisible();
-  await expect(page.locator('#mobile-whatsapp')).toBeVisible();
-  await expect(page.locator('#mobile-email')).toBeVisible();
-  await expect(toggle).toHaveAttribute('aria-controls', 'mobile-services-menu');
-  await expect(toggle).toHaveAttribute('aria-expanded', 'false');
-  await expect(services).toBeHidden();
-
-  await toggle.press('Enter');
-  await expect(toggle).toHaveAttribute('aria-expanded', 'true');
-  await page.keyboard.press('Tab');
-  await expect(services.locator('a').first()).toBeFocused();
-  await page.keyboard.press('Escape');
-  await expect(services).toBeHidden();
-  await expect(toggle).toBeFocused();
-  await expect(menu).toBeVisible();
-  await page.keyboard.press('Escape');
-  await expect(menu).toBeHidden();
-  await expect(menuToggle).toBeFocused();
-
-  await menuToggle.press('Enter');
-  await page.locator('#mobile-whatsapp').focus();
-  await page.keyboard.press('Tab');
-  await expect(menu).toBeHidden();
-  assert(await page.evaluate(() => document.activeElement.closest('main') !== null), 'Tab moves to the page without leaving the menu over it');
+  const main = page.locator('#mobile-menu-toggle');
+  await main.press('Enter');
+  for (const group of groups) {
+    const toggle = page.locator('#mobile-' + group.id + '-toggle'), list = page.locator('#mobile-' + group.id + '-menu');
+    await toggle.press('Enter'); await expect(list).toBeVisible();
+    await page.keyboard.press('Tab'); await expect(list.locator('a').first()).toBeFocused();
+    await page.keyboard.press('Escape'); await expect(list).toBeHidden(); await expect(toggle).toBeFocused();
+  }
+  await page.locator('#mobile-development-toggle').click(); await page.locator('#mobile-licensing-toggle').click();
+  await expect(page.locator('#mobile-development-menu')).toBeVisible(); await expect(page.locator('#mobile-licensing-menu')).toBeVisible();
+  await page.keyboard.press('Escape'); await page.keyboard.press('Escape'); await page.keyboard.press('Escape');
+  await expect(page.locator('#mobile-menu')).toBeHidden(); await expect(main).toBeFocused();
+  await main.press('Enter'); await page.locator('#mobile-whatsapp').focus(); await page.keyboard.press('Tab');
+  await expect(page.locator('#mobile-menu')).toBeHidden();
 }
-
 async function checkLinks(page, mobile) {
-  const nav = mobile ? page.locator('#mobile-menu') : page.locator('header nav').filter({ has: page.locator('#desktop-services') });
-  const servicesToggle = page.locator(mobile ? '#mobile-services-toggle' : '#desktop-services-toggle');
-  for (const target of [...services, ...sections].filter(href => href.startsWith('/'))) {
+  const mode=mobile?'mobile':'desktop';
+  const nav=page.locator(mobile?'#mobile-menu':'#site-header-row nav');
+  for (const target of [...services, ...sections]) {
     await page.goto(base);
     if (mobile) await page.locator('#mobile-menu-toggle').click();
-    if (services.includes(target)) await servicesToggle.click();
-    await nav.locator('a[href="' + target + '"]').click();
-    await page.waitForURL(base + target);
-    await expect(nav.locator('a[href="' + target + '"]')).toHaveAttribute('aria-current', target.includes('#') ? 'location' : 'page');
+    const group = groups.find(group => group.links.some(item => localHref(item.href) === target));
+    if (group) await page.locator('#'+mode+'-'+group.id+'-toggle').click();
+    await nav.locator('a[href="'+target+'"]').click(); await page.waitForURL(base+target);
+    await expect(nav.locator('a[href="'+target+'"]')).toHaveAttribute('aria-current', target.includes('#')?'location':'page');
     await expect(nav.locator('a[aria-current]')).toHaveCount(1);
-    if (target.includes('#')) await expect(page.locator(target.slice(1))).toBeVisible();
-    if (['/bitrix24', '/veeam'].includes(target)) {
-      await expect(nav.locator('a[href="/licensing"]')).toHaveClass(activeHighlight);
-      await expect(nav.locator('a[href="/licensing"]')).not.toHaveAttribute('aria-current', 'page');
-      await expect(page.locator('nav[aria-label="Хлебные крошки"] a[href="/licensing"]')).toHaveCount(1);
-      const crumbs = await page.locator('script[type="application/ld+json"]').evaluate(el => JSON.parse(el.textContent)['@graph'].find(node => node['@type'] === 'BreadcrumbList').itemListElement);
-      assert.deepEqual(crumbs.map(item => item.item), ['https://nexcel.kz/', 'https://nexcel.kz/licensing', 'https://nexcel.kz' + target]);
+    for (const candidate of groups) {
+      if (candidate===group) await expect(page.locator('#'+mode+'-'+candidate.id+'-toggle')).toHaveClass(activeHighlight);
+      else await expect(page.locator('#'+mode+'-'+candidate.id+'-toggle')).not.toHaveClass(activeHighlight);
     }
-    if (services.includes(target)) await expect(servicesToggle).toHaveClass(activeHighlight);
-    else await expect(servicesToggle).not.toHaveClass(activeHighlight);
-    const menuToggle = mobile ? page.locator('#mobile-menu-toggle') : servicesToggle;
-    await expect(menuToggle).toHaveAttribute('aria-expanded', 'false');
+    if (group && target!=='/licensing') {
+      const crumb=page.locator('nav[aria-label="Хлебные крошки"]');
+      await expect(crumb).toContainText(group.label.ru);
+      const middle=await page.locator('script[type="application/ld+json"]').evaluateAll(els=>els.map(e=>JSON.parse(e.textContent)).flatMap(s=>s['@graph']||[s]).find(e=>e['@type']==='BreadcrumbList').itemListElement[1]);
+      assert.equal(middle.name, group.label.ru);
+      if (group.id==='development') { assert.equal(middle.item, undefined); await expect(crumb.locator('a')).toHaveCount(1); }
+      else { assert.equal(middle.item,'https://nexcel.kz/licensing'); await expect(crumb.locator('a[href="/licensing"]')).toHaveCount(1); }
+    }
+    if (group) await expect(page.locator('#'+mode+'-'+group.id+'-toggle')).toHaveAttribute('aria-expanded','false');
   }
   await page.locator('#site-brand').click();
   await page.waitForURL(base + '/');

@@ -9,10 +9,10 @@ const navigation = () => structuredClone(navigationFromSource(source));
 
 test('public schema has all canonical links, real logo and no invented KZ translation', () => {
   const nav = validateNavigation(navigation());
-  assert.equal(nav.nav.length, source.services.length + source.headerPages.length);
+  assert.equal(nav.nav.length, source.serviceGroups.flatMap(group => group.links).length + source.headerPages.length);
   assert.ok(!nav.nav.some(item => item.href.startsWith('https://photo.nexcel.kz/') || item.href === 'https://nexcel.kz/#calculator'));
   assert.ok(!nav.footer.columns[0].links.some(item => item.href.startsWith('https://photo.nexcel.kz/')));
-  assert.equal(nav.footer.columns[1].links.filter(item => item.href === 'https://nexcel.kz/free').length, 1);
+  assert.equal(nav.footer.columns[2].links.filter(item => item.href === 'https://nexcel.kz/free').length, 1);
   assert.ok(nav.nav.some(item => item.href === 'https://nexcel.kz/sozdanie-saitov'));
   assert.equal(nav.logo.src, 'https://nexcel.kz/assets/logo.svg');
   function labels(value) {
@@ -25,7 +25,7 @@ test('public schema has all canonical links, real logo and no invented KZ transl
 
 test('one new service reaches shared JSON and both header menus, preserving the canonical footer', () => {
   const changed = structuredClone(source);
-  changed.services.push({ id:'example',label:{ru:'Тест <новой> & "услуги"',kk:''},href:'https://nexcel.kz/example' });
+  changed.serviceGroups[0].links.push({ id:'example',label:{ru:'Тест <новой> & "услуги"',kk:''},href:'https://nexcel.kz/example' });
   const artifacts = renderArtifacts(changed, root), nav = JSON.parse(artifacts['shared/nav.json']);
   assert.equal(nav.nav.filter(item => item.href === 'https://nexcel.kz/example').length,1);
   assert.equal(nav.footer.columns[0].links.filter(item => item.href === 'https://nexcel.kz/example').length,1);
@@ -74,21 +74,15 @@ test('generated artifacts are deterministic and committed copies are current', (
   for (const [file,content] of Object.entries(artifacts)) assert.equal(fs.readFileSync(path.join(root,file),'utf8').replaceAll('\r\n','\n'),content.replaceAll('\r\n','\n'),file);
 });
 
-test('licensing groups both solutions once; nested duplicates and invalid links are rejected', () => {
+test('development and licensing are separate complete groups without duplicate or unsafe links', () => {
   const nav = navigation();
-  const licensing = nav.nav.find(item => item.href === 'https://nexcel.kz/licensing');
-  assert.deepEqual(licensing.children.map(item => item.href), ['https://nexcel.kz/bitrix24', 'https://nexcel.kz/veeam']);
-  assert(!nav.nav.some(item => ['/bitrix24', '/veeam'].includes(new URL(item.href).pathname)));
-  assert.equal(new Set(flattenLinks(nav.nav).map(item => item.href)).size, flattenLinks(nav.nav).length);
+  assert.deepEqual(nav.groups.map(group => [group.id, group.links.length]), [['development', 5], ['licensing', 3]]);
+  assert.deepEqual(nav.groups[1].links.map(item => new URL(item.href).pathname), ['/licensing', '/bitrix24', '/veeam']);
+  assert.deepEqual(nav.footer.columns.map(item => item.title.ru), ['Разработка', 'Лицензии ПО и SaaS', 'Компания']);
   for (const mutate of [
-    item => { item.children[0].href = 'javascript:alert(1)'; },
-    item => { item.children[0].href = item.href; },
-    item => { item.children[0].href = nav.nav[0].href; },
-    item => { item.children.push(item.children[0]); },
-    item => { delete item.children[0].label.ru; }
-  ]) {
-    const invalid = navigation();
-    mutate(invalid.nav.find(item => item.href === 'https://nexcel.kz/licensing'));
-    assert.throws(() => validateNavigation(invalid));
-  }
+    nav => { nav.groups[1].links[0].href = 'javascript:alert(1)'; },
+    nav => { nav.groups[1].links.push(nav.groups[0].links[0]); },
+    nav => { nav.groups[1].id = nav.groups[0].id; },
+    nav => { delete nav.groups[0].links[0].label.ru; }
+  ]) { const invalid = navigation(); mutate(invalid); assert.throws(() => validateNavigation(invalid)); }
 });

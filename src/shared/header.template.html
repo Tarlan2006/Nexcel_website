@@ -20,31 +20,21 @@
         </div>
         <div class="flex flex-col min-w-0">
           <span class="font-heading font-extrabold text-sm sm:text-base tracking-tight leading-none text-darkBg whitespace-nowrap">
-            {{brandFirst}} <span class="text-emeraldAccent">{{brandRest}}</span>
+            {{brandFirst}} <span class="text-emeraldAccent lg:hidden xl:inline">{{brandRest}}</span>
           </span>
-          <span class="hidden sm:block font-sans text-[10px] text-textMuted tracking-wider uppercase mt-0.5 whitespace-nowrap">Engineering & Solutions</span>
+          <span class="hidden sm:block lg:hidden xl:block font-sans text-[10px] text-textMuted tracking-wider uppercase mt-0.5 whitespace-nowrap">Engineering & Solutions</span>
         </div>
       </a>
 
-      <nav aria-label="Основная навигация" class="hidden lg:flex items-center gap-5 xl:gap-7 text-sm font-medium text-textMain font-sans whitespace-nowrap">
-        <div id="desktop-services" class="relative">
-          <button type="button" id="desktop-services-toggle" aria-haspopup="menu" aria-controls="desktop-services-menu" aria-expanded="false"
-                  class="group inline-flex items-center gap-1.5 rounded py-2 hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">
-            {{servicesTitle}}
-            <svg aria-hidden="true" class="h-4 w-4 shrink-0 transition-transform group-aria-expanded:rotate-180 motion-reduce:transition-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
-          </button>
-          <ul id="desktop-services-menu" role="menu" aria-labelledby="desktop-services-toggle" hidden
-              class="absolute left-0 top-full z-10 max-h-[calc(100dvh-4rem)] w-72 overflow-y-auto whitespace-normal rounded-lg border border-gridBorder bg-white p-1.5 shadow-lg">
-{{desktopServices}}
-          </ul>
-        </div>
+      <nav aria-label="Основная навигация" class="hidden lg:flex items-center gap-3 xl:gap-4 text-[13px] xl:text-sm font-medium text-textMain font-sans whitespace-nowrap">
+{{desktopGroups}}
 {{desktopPages}}
       </nav>
 
       <div id="desktop-contacts" class="hidden lg:flex items-center gap-3 shrink-0">
-        <a id="desktop-email" href="mailto:{{email}}" class="inline-flex items-center gap-1.5 rounded border border-gridBorder bg-white px-2.5 py-1.5 text-xs font-sans text-textMuted whitespace-nowrap hover:text-darkBg transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">
+        <a id="desktop-email" href="mailto:{{email}}" aria-label="{{email}}" class="inline-flex items-center gap-1.5 rounded border border-gridBorder bg-white px-2.5 py-1.5 text-xs font-sans text-textMuted whitespace-nowrap hover:text-darkBg transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">
           <svg aria-hidden="true" class="w-3.5 h-3.5 shrink-0 text-emeraldAccent" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" /> <rect x="2" y="4" width="20" height="16" rx="2" /></svg>
-          <span>{{email}}</span>
+          <span class="lg:hidden xl:inline">{{email}}</span>
         </a>
         <a id="desktop-whatsapp" href="{{ctaHref}}" target="_blank" rel="noopener noreferrer"
            aria-label="{{ctaLabel}}: {{phone}}" title="WhatsApp: {{phone}}"
@@ -62,16 +52,7 @@
 
     <nav id="mobile-menu" aria-label="Меню разделов" aria-hidden="true" inert class="hidden lg:hidden border-t border-gridBorder bg-paper max-h-[calc(100dvh-4rem)] overflow-y-auto">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-col gap-1 text-sm font-medium text-textMain font-sans">
-        <div>
-          <button type="button" id="mobile-services-toggle" aria-controls="mobile-services-menu" aria-expanded="false"
-                  class="group flex w-full items-center justify-between gap-2 rounded px-3 py-2.5 text-left hover:bg-white hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">
-            {{servicesTitle}}
-            <svg aria-hidden="true" class="h-4 w-4 shrink-0 transition-transform group-aria-expanded:rotate-180 motion-reduce:transition-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
-          </button>
-          <div id="mobile-services-menu" hidden class="ml-3 mt-1 border-l border-gridBorder pl-2">
-{{mobileServices}}
-          </div>
-        </div>
+{{mobileGroups}}
 {{mobilePages}}
         <div id="mobile-contacts" class="mt-2 grid grid-cols-[auto_minmax(0,1fr)] gap-2">
           <a id="mobile-email" href="mailto:{{email}}" class="inline-flex items-center justify-center gap-1.5 rounded border border-gridBorder bg-white px-2.5 py-3 text-xs font-sans text-textMuted whitespace-nowrap hover:text-darkBg transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent">
