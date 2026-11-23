@@ -2,6 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://nexcel.kz/</loc>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -48,13 +49,14 @@
   </url>
   <url>
     <loc>https://nexcel.kz/o-kompanii</loc>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://nexcel.kz/privacy</loc>
-    <lastmod>2026-11-11</lastmod>
-  </url>
+    <lastmod>2026-11-24</lastmod>
+    </url>
   <url>
     <loc>https://nexcel.kz/free</loc>
     <changefreq>monthly</changefreq>

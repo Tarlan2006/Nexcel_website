@@ -65,7 +65,12 @@ function fitsViewport(element) {
             const a = items[i].rect, b = items[j].rect;
             if (Math.min(a.right, b.right) - Math.max(a.left, b.left) > 1 && Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > 1) overlap.push([items[i].text, items[j].text]);
           }
+          const footerGrid = document.querySelector('.site-footer-grid');
+          const office = footerGrid.querySelector('address');
+          const footerColumns = getComputedStyle(footerGrid).gridTemplateColumns.split(' ').length;
+          const addressLines = office.getBoundingClientRect().height / parseFloat(getComputedStyle(office).lineHeight);
           return {
+            footerColumns, addressLines,
             width: innerWidth, scrollWidth: document.documentElement.scrollWidth,
             overlap, singleHeaderRow, correctHeaderControls,
             headerBottom: header.getBoundingClientRect().bottom,
@@ -102,6 +107,7 @@ function fitsViewport(element) {
         results.push({ route, ...result });
         console.log(`Checked ${route} at ${width}px; fonts loaded: ${result.fonts}`);
         if (result.scrollWidth > width || result.overlap.length || result.headingTop < result.headerBottom || result.overflowing.length) failures.push(`${route} at ${width}px: layout`);
+        if (width >= 1024 && (result.footerColumns !== 5 || result.addressLines > 3.05)) failures.push(`${route} at ${width}px: desktop footer grid/address wraps incorrectly`);
         if (!result.singleHeaderRow || !result.correctHeaderControls) failures.push(`${route} at ${width}px: header controls do not fit on one row`);
         const needsMono = route === '/' || route === '/licensing';
         const fontsLoaded = await page.evaluate(needsMono => ['Inter', 'Manrope', ...(needsMono ? ['JetBrains Mono'] : [])].every(name => [...document.fonts].some(face => face.family.replace(/"/g, '') === name && face.status === 'loaded')), needsMono);

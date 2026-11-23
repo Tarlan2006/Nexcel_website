@@ -309,3 +309,8 @@ body { padding-bottom: var(--cookie-notice-height, 0px); }
     transition: none !important;
   }
 }
+
+/* Give the office address three complete lines on desktop widths. */
+@media (min-width: 1024px) {
+  footer .site-footer-grid { grid-template-columns: minmax(0, 1.2fr) repeat(3, minmax(0, 1fr)) minmax(18rem, 1.8fr); column-gap: 1.5rem; }
+}

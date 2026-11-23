@@ -36,11 +36,14 @@ function checkSecurityHeaders(response) {
     assert.ok(csp.includes(directive), `Missing CSP directive: ${directive}`);
   }
   assert.equal(response.headers.get('access-control-allow-origin'), null);
+  assert.equal(response.headers.get('cache-control'), 'no-store');
 }
 
 async function run() {
   const integrity = require('./check-footers.cjs').checkFooters(root);
-  console.log('PASS footer integrity: ' + integrity.pages.length + ' built pages, SHA-256 ' + integrity.hash);
+  console.log('PASS header/footer integrity: ' + integrity.pages.length + ' built pages');
+  console.table(integrity.pages.map(({ page, headerHash, footerHash }) => ({ page, header: headerHash.slice(0, 16), footer: footerHash.slice(0, 16) })));
+  assert(await fs.readFile(path.join(root, 'dist/free.html'), 'utf8').then(html => html.includes('id="tools"') && html.includes('href="/#calculator"')), '/free#tools must contain the calculator card');
   const navResponse = await request('/shared/nav.json', { headers: { Origin: 'https://photo.nexcel.kz' } });
   assert.equal(navResponse.status, 200, 'shared navigation must be public');
   assert.match(navResponse.headers.get('content-type'), /^application\/json/);

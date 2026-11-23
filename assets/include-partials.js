@@ -1,6 +1,8 @@
 // Shared navigation is initialized only after its markup has loaded.
 (() => {
   function initHeader() {
+    const events = new AbortController();
+    const listen = (target, type, handler) => target.addEventListener(type, handler, { signal: events.signal });
     const menuMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const desktopViewport = window.matchMedia('(min-width: 1024px)');
     const readGroups = (mode) => [...document.querySelectorAll('[data-' + mode + '-group]')].map(container => ({
@@ -31,25 +33,25 @@
       group.links[index].focus();
     }
     for (const group of desktopGroups) {
-      group.container.addEventListener('pointerenter', event => {
+      listen(group.container, 'pointerenter', event => {
         if (event.pointerType === 'mouse' && desktopViewport.matches) setDesktopGroup(group, true);
       });
-      group.container.addEventListener('pointerleave', () => {
+      listen(group.container, 'pointerleave', () => {
         if (!group.pinned) setDesktopGroup(group, false, true);
       });
-      group.container.addEventListener('focusout', event => {
+      listen(group.container, 'focusout', event => {
         if (event.relatedTarget && !group.container.contains(event.relatedTarget)) setDesktopGroup(group, false);
       });
-      group.toggle.addEventListener('click', () => {
+      listen(group.toggle, 'click', () => {
         if (group.pinned) setDesktopGroup(group, false, true);
         else openDesktopGroup(group, 0);
       });
-      group.toggle.addEventListener('keydown', event => {
+      listen(group.toggle, 'keydown', event => {
         if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
         event.preventDefault();
         openDesktopGroup(group, event.key === 'ArrowUp' ? group.links.length - 1 : 0);
       });
-      group.list.addEventListener('keydown', event => {
+      listen(group.list, 'keydown', event => {
         const current = group.links.indexOf(document.activeElement);
         if (event.key === 'Tab') { setDesktopGroup(group, false, true); return; }
         if (current < 0) return;
@@ -60,7 +62,7 @@
         event.preventDefault();
         group.links[next].focus();
       });
-      group.links.forEach(link => link.addEventListener('click', () => setDesktopGroup(group, false, true)));
+      group.links.forEach(link => listen(link, 'click', () => setDesktopGroup(group, false, true)));
     }
     function setMobileGroup(group, open, restoreFocus = false) {
       if (!open && restoreFocus) group.toggle.focus();
@@ -99,27 +101,27 @@
       }, () => {});
     }
     const isMobileMenuOpen = () => mobileToggle.getAttribute('aria-expanded') === 'true';
-    mobileToggle.addEventListener('click', () => setMobileMenu(!isMobileMenuOpen()));
-    mobileGroups.forEach(group => group.toggle.addEventListener('click', () => setMobileGroup(group, group.list.hidden)));
-    mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setMobileMenu(false)));
-    menuMotion.addEventListener('change', () => { if (menuMotion.matches) setMobileMenu(isMobileMenuOpen(), true); });
-    desktopViewport.addEventListener('change', () => {
+    listen(mobileToggle, 'click', () => setMobileMenu(!isMobileMenuOpen()));
+    mobileGroups.forEach(group => listen(group.toggle, 'click', () => setMobileGroup(group, group.list.hidden)));
+    mobileMenu.querySelectorAll('a').forEach(link => listen(link, 'click', () => setMobileMenu(false)));
+    listen(menuMotion, 'change', () => { if (menuMotion.matches) setMobileMenu(isMobileMenuOpen(), true); });
+    listen(desktopViewport, 'change', () => {
       if (desktopViewport.matches) setMobileMenu(false, true);
       else {
         if (desktopGroups.some(group => group.container.contains(document.activeElement))) mobileToggle.focus({ preventScroll: true });
         desktopGroups.forEach(group => setDesktopGroup(group, false));
       }
     });
-    document.addEventListener('pointerdown', event => {
+    listen(document, 'pointerdown', event => {
       desktopGroups.forEach(group => {
         if (!group.list.hidden && !group.container.contains(event.target)) setDesktopGroup(group, false, true);
       });
       if (isMobileMenuOpen() && !mobileMenu.contains(event.target) && !mobileToggle.contains(event.target)) setMobileMenu(false);
     });
-    document.addEventListener('focusin', event => {
+    listen(document, 'focusin', event => {
       if (!desktopViewport.matches && isMobileMenuOpen() && event.target !== mobileToggle && !mobileMenu.contains(event.target)) setMobileMenu(false);
     });
-    document.addEventListener('keydown', event => {
+    listen(document, 'keydown', event => {
       if (event.key !== 'Escape') return;
       const desktop = desktopGroups.find(group => !group.list.hidden);
       const opened = mobileGroups.filter(group => !group.list.hidden);
@@ -146,40 +148,63 @@
         group.toggle.classList.toggle('text-emeraldAccent', group.links.some(link => link.hasAttribute('aria-current')));
       }
     }
-    updateCurrent(); window.addEventListener('hashchange', updateCurrent);
+    updateCurrent(); listen(window, 'hashchange', updateCurrent);
+    return () => { events.abort(); menuAnimation?.cancel(); };
+  }
+  let headerCleanup = null;
+  let renderedHeader = document.querySelector('#site-header header');
+  let headerMarkup = renderedHeader?.outerHTML || '';
+  const requests = new Map();
+  function initializeHeader() {
+    if (!headerCleanup && document.querySelector('[data-desktop-group]')) headerCleanup = initHeader();
   }
   async function include(id, url, initialize, refresh = false) {
     const container = document.getElementById(id);
     if (!container) return;
+    const request = (requests.get(id) || 0) + 1;
+    requests.set(id, request);
     if (refresh || !container.firstElementChild) {
       try {
         const response = await fetch(url, { cache: 'no-store' });
         if (!response.ok) throw new Error('HTTP ' + response.status);
         const markup = document.createElement('template');
         markup.innerHTML = await response.text();
-        const currentFooter = refresh && container.querySelector('footer');
-        const incomingFooter = refresh && markup.content.querySelector('footer');
-        if (refresh && !incomingFooter) throw new Error('Footer response is missing its footer');
-        if (currentFooter && incomingFooter) {
-          if (currentFooter.outerHTML !== incomingFooter.outerHTML) currentFooter.replaceWith(incomingFooter);
-        } else if (container.innerHTML.trim() !== markup.innerHTML.trim()) {
-          container.replaceChildren(markup.content);
+        if (requests.get(id) !== request) return;
+        const tag = id === 'site-header' ? 'header' : 'footer';
+        const current = container.querySelector(tag), incoming = markup.content.querySelector(tag);
+        if (!incoming) throw new Error('Partial response is missing its ' + tag);
+        const changed = tag === 'header'
+          ? current !== renderedHeader || incoming.outerHTML !== headerMarkup
+          : !current || current.outerHTML !== incoming.outerHTML;
+        if (changed) {
+          if (tag === 'header') { headerCleanup?.(); headerCleanup = null; }
+          if (current) current.replaceWith(incoming);
+          else container.replaceChildren(markup.content);
+          if (tag === 'header') { renderedHeader = container.querySelector('header'); headerMarkup = renderedHeader.outerHTML; }
         }
-      } catch (error) {
-        console.warn('Could not load ' + url + ':', error);
-      }
+      } catch (error) { console.warn('Could not load ' + url + ':', error); }
     }
     if (!container.firstElementChild) return;
-    try {
-      if (initialize) await initialize();
-    } catch (error) {
-      console.warn('Could not initialize ' + url + ':', error);
-    }
+    try { if (initialize) await initialize(); }
+    catch (error) { console.warn('Could not initialize ' + url + ':', error); }
   }
-  include('site-header', '/partials/header.html', initHeader);
+  initializeHeader();
+  const refreshHeader = () => include('site-header', '/partials/header.html', initializeHeader, true);
   const refreshFooter = () => include('site-footer', '/partials/footer.html', () => import('/assets/cookie-notice.js'), true);
-  refreshFooter();
+  refreshHeader(); refreshFooter();
+  let reloadingPage = false;
+  async function verifyDocumentVersion() {
+    try {
+      const current = document.querySelector('meta[name="nexcel-page-version"]')?.content;
+      const response = await fetch(location.href, { cache: 'no-store' });
+      if (!response.ok) return;
+      const fresh = new DOMParser().parseFromString(await response.text(), 'text/html');
+      const latest = fresh.querySelector('meta[name="nexcel-page-version"]')?.content;
+      if (latest && latest !== current && !reloadingPage) { reloadingPage = true; location.reload(); }
+    } catch (error) { console.warn('Could not verify the current page version:', error); }
+  }
+  if (!document.querySelector('meta[name="nexcel-page-version"]')) verifyDocumentVersion();
   window.addEventListener('pageshow', event => {
-    if (event.persisted) refreshFooter();
+    if (event.persisted) { refreshHeader(); refreshFooter(); verifyDocumentVersion(); }
   });
 })();

@@ -15,6 +15,7 @@ if (process.argv.includes('--inline-partials')) {
     placeholder: new RegExp(`<div id="site-${name}">\\s*</div>`, 'g'),
     html: `<div id="site-${name}">${fs.readFileSync(path.join(output, 'partials', `${name}.html`), 'utf8')}</div>`
   }));
+  const includeVersion = require('node:crypto').createHash('sha256').update(fs.readFileSync(path.join(output, 'assets/include-partials.js'))).digest('hex').slice(0, 16);
   let changed = 0;
   function inlinePartials(directory) {
     for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
@@ -26,11 +27,15 @@ if (process.argv.includes('--inline-partials')) {
         const original = fs.readFileSync(file, 'utf8');
         let html = original;
         for (const partial of partials) html = html.replace(partial.placeholder, () => partial.html);
+        html = html.replace(/src="\/assets\/include-partials\.js(?:\?v=[^"]*)?"/g, 'src="/assets/include-partials.js?v=' + includeVersion + '"');
         for (const partial of partials) {
           if (html.split(partial.html).length !== 2) {
             throw new Error('Shared navigation differs from its partial in ' + path.relative(output, file));
           }
         }
+        html = html.replace(/\s*<meta name="nexcel-page-version" content="[^"]*"\s*\/?>/g, '');
+        const pageVersion = require('node:crypto').createHash('sha256').update(html.replace(/\r\n/g, '\n')).update(fs.readFileSync(path.join(output, 'assets/styles.css'))).digest('hex').slice(0, 16);
+        html = html.replace('</head>', '<meta name="nexcel-page-version" content="' + pageVersion + '" />\n</head>');
         if (html !== original) {
           fs.writeFileSync(file, html);
           changed++;

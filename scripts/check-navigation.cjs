@@ -174,13 +174,14 @@ async function run() {
     await stale.route('**/*', route => new URL(route.request().url()).origin === base ? route.continue() : route.abort());
     await stale.route(base + '/', async route => {
       const response = await route.fetch();
-      const body = (await response.text()).replace(
-        '<div id="site-footer"></div>',
-        '<div id="site-footer"><footer data-stale-footer>Старый футер</footer></div>'
-      );
+      const body = (await response.text())
+        .replace(/<header\b[^>]*>[\s\S]*?<\/header>/, '<header data-stale-header><nav>Старая шапка</nav></header>')
+        .replace(/<footer\b[^>]*>[\s\S]*?<\/footer>/, '<footer data-stale-footer>Старый футер</footer>');
       await route.fulfill({ response, body });
     });
     await stale.goto(base);
+    await expect(stale.locator('header[data-stale-header]')).toHaveCount(0);
+    await expect(stale.locator('#desktop-development-toggle')).toBeAttached();
     await expect(stale.locator('footer[data-stale-footer]')).toHaveCount(0);
     await expect(stale.locator('footer a[href="https://go.2gis.com/cyGjq"]')).toBeAttached();
     await stale.close();
@@ -189,16 +190,45 @@ async function run() {
     await restored.route('**/*', route => new URL(route.request().url()).origin === base ? route.continue() : route.abort());
     await restored.goto(base);
     await restored.locator('#cookie-notice').waitFor();
-    await restored.evaluate(() => {
-      window.savedCookieNotice = document.getElementById('cookie-notice');
-      document.querySelector('footer').setAttribute('data-restored-footer', 'outdated');
-      window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true }));
-    });
-    await expect(restored.locator('footer[data-restored-footer]')).toHaveCount(0);
-    assert(await restored.evaluate(() => document.getElementById('cookie-notice') === window.savedCookieNotice));
+    await restored.evaluate(() => { window.savedCookieNotice = document.getElementById('cookie-notice'); });
+    for (let i = 0; i < 3; i++) {
+      await restored.evaluate(() => {
+        const oldHeader = document.createElement('header');
+        oldHeader.setAttribute('data-restored-header', 'outdated');
+        oldHeader.innerHTML = '<nav>Старая шапка</nav>';
+        document.querySelector('header').replaceWith(oldHeader);
+        document.querySelector('footer').setAttribute('data-restored-footer', 'outdated');
+        window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true }));
+      });
+      await expect(restored.locator('header[data-restored-header]')).toHaveCount(0);
+      await expect(restored.locator('footer[data-restored-footer]')).toHaveCount(0);
+      await restored.locator('#desktop-development-toggle').click();
+      await expect(restored.locator('#desktop-development-toggle')).toHaveAttribute('aria-expanded', 'true');
+      await restored.keyboard.press('Escape');
+      await expect(restored.locator('#desktop-development-toggle')).toHaveAttribute('aria-expanded', 'false');
+      assert(await restored.evaluate(() => document.getElementById('cookie-notice') === window.savedCookieNotice));
+    }
     await restored.locator('#cookie-notice-dismiss').click();
     await expect(restored.locator('#cookie-notice')).toBeHidden();
     await restored.close();
+
+    // A restored document must refresh main content, not only shared partials.
+    const outdated = await browser.newPage();
+    await outdated.route('**/*', route => new URL(route.request().url()).origin === base ? route.continue() : route.abort());
+    let documentRequests = 0;
+    await outdated.route(base + '/o-kompanii', async route => {
+      const response = await route.fetch();
+      let body = await response.text();
+      if (documentRequests++ === 0) body = body.replace(/name="nexcel-page-version" content="[^"]+"/, 'name="nexcel-page-version" content="old-document"').replaceAll('55/1', ['53', '1'].join('/'));
+      await route.fulfill({ response, body });
+    });
+    await outdated.goto(base + '/o-kompanii');
+    await expect(outdated.locator('meta[name="nexcel-page-version"]')).toHaveAttribute('content', 'old-document');
+    await outdated.evaluate(() => window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true })));
+    await outdated.waitForFunction(() => document.querySelector('meta[name="nexcel-page-version"]')?.content !== 'old-document');
+    assert(!(await outdated.locator('main').textContent()).includes(['53', '1'].join('/')));
+    assert(documentRequests >= 3, 'restored HTML was checked and reloaded');
+    await outdated.close();
 
     const page = await browser.newPage();
     await page.route('**/*', route => new URL(route.request().url()).origin === base ? route.continue() : route.abort());
