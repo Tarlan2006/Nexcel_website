@@ -17,8 +17,10 @@ const newServices = ['/telegram-boty', '/vnedrenie-ii'];
 const websiteService = '/sozdanie-saitov';
 const companyServices = ['/avtomatizaciya-excel', ...newServices, '/licensing', '/seo'];
 const services = [...companyServices, websiteService];
+const developmentPages = ['/analitika-dannyh', '/data-science', '/mashinnoe-obuchenie', '/kompyuternoe-zrenie', '/videoanalitika', '/razrabotka-igr'];
 const faqCounts = new Map([
   ['/', 5], ['/faq', 12], ['/o-kompanii', 3], ['/avtomatizaciya-excel', 6],
+  ...developmentPages.map(route => [route, 5]),
   ...newServices.map(route => [route, 4]), ['/licensing', 4], ['/seo', 7], [websiteService, 7]
 ]);
 const jargon = /оцифров[\p{L}]*|mini[\p{Pd}\s]erp|инспектор\s+направлений|доказательн[\p{L}]*\s+баз[\p{L}]*/iu;
@@ -182,6 +184,10 @@ async function run() {
       if (route === '/') assert.equal(title, 'Автоматизация бизнеса и лицензии ПО в Казахстане | Nexcel Solutions');
       assert.ok(!seenTitles.has(title), route + ': duplicate title');
       seenTitles.add(title);
+      if (developmentPages.includes(route)) {
+        assert.ok(title.length <= 60 && description.length <= 155, route + ': service metadata length');
+        assert.ok(entities.some(entity => entity['@type'] === 'Service'), route + ': Service schema');
+      }
       assert.ok(description && [...description].length >= 140 && [...description].length <= 160, route + ': description length (' + [...(description || '')].length + ')');
       assert.ok(!seenDescriptions.has(description), route + ': duplicate description');
       seenDescriptions.add(description);

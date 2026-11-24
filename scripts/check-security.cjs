@@ -11,7 +11,8 @@ const siteOrigin = new URL(base).origin;
 const metrikaTag = 'https://mc.yandex.ru/metrika/tag.js';
 const root = path.resolve(__dirname, '..');
 const serviceFaqCounts = new Map([
-  ['/avtomatizaciya-excel', 6], ['/telegram-boty', 4], ['/vnedrenie-ii', 4], ['/licensing', 4], ['/sozdanie-saitov', 7], ['/seo', 7]
+  ['/avtomatizaciya-excel', 6], ['/telegram-boty', 4], ['/vnedrenie-ii', 4], ['/licensing', 4], ['/sozdanie-saitov', 7], ['/seo', 7],
+  ['/analitika-dannyh', 5], ['/data-science', 5], ['/mashinnoe-obuchenie', 5], ['/kompyuternoe-zrenie', 5], ['/videoanalitika', 5], ['/razrabotka-igr', 5]
 ]);
 const navigationSource = require('../content/navigation.json');
 const { localHref, flattenLinks } = require('./lib/navigation.cjs');

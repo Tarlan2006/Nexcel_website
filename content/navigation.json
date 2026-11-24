@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-23T20:08:38Z",
+  "updatedAt": "2026-11-24T14:54:03.347Z",
   "logo": {
     "href": "https://nexcel.kz/",
     "src": "https://nexcel.kz/assets/logo.svg",
@@ -207,7 +207,7 @@
       "kk": ""
     },
     "logoRights": {
-      "ru": "Логотипы принадлежат их правообладателям.",
+      "ru": "Названия продуктов принадлежат их правообладателям.",
       "kk": ""
     }
   },
@@ -225,7 +225,8 @@
             "ru": "Автоматизация Excel и Google Sheets",
             "kk": ""
           },
-          "href": "https://nexcel.kz/avtomatizaciya-excel"
+          "href": "https://nexcel.kz/avtomatizaciya-excel",
+          "sectionTitle": "Автоматизация и сайты"
         },
         {
           "id": "telegram-boty",
@@ -258,6 +259,56 @@
             "kk": ""
           },
           "href": "https://nexcel.kz/seo"
+        },
+        {
+          "id": "analitika-dannyh",
+          "label": {
+            "ru": "Аналитика данных и дашборды",
+            "kk": ""
+          },
+          "href": "https://nexcel.kz/analitika-dannyh",
+          "sectionTitle": "Данные и ИИ"
+        },
+        {
+          "id": "data-science",
+          "label": {
+            "ru": "Data Science и инжиниринг данных",
+            "kk": ""
+          },
+          "href": "https://nexcel.kz/data-science"
+        },
+        {
+          "id": "mashinnoe-obuchenie",
+          "label": {
+            "ru": "Машинное обучение",
+            "kk": ""
+          },
+          "href": "https://nexcel.kz/mashinnoe-obuchenie"
+        },
+        {
+          "id": "kompyuternoe-zrenie",
+          "label": {
+            "ru": "Компьютерное зрение",
+            "kk": ""
+          },
+          "href": "https://nexcel.kz/kompyuternoe-zrenie"
+        },
+        {
+          "id": "videoanalitika",
+          "label": {
+            "ru": "Видеоаналитика",
+            "kk": ""
+          },
+          "href": "https://nexcel.kz/videoanalitika"
+        },
+        {
+          "id": "razrabotka-igr",
+          "label": {
+            "ru": "Разработка игр",
+            "kk": ""
+          },
+          "href": "https://nexcel.kz/razrabotka-igr",
+          "sectionTitle": "Игры"
         }
       ]
     },
@@ -271,7 +322,7 @@
         {
           "id": "licensing",
           "label": {
-            "ru": "Обзор лицензий",
+            "ru": "Список вендоров",
             "kk": ""
           },
           "href": "https://nexcel.kz/licensing"

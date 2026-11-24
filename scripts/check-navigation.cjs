@@ -18,6 +18,7 @@ async function checkStaticHeader(page) {
     await expect(containers).toHaveCount(2);
     for (const group of groups) {
       const box = page.locator('#' + mode + '-' + group.id);
+      assert.deepEqual(await box.locator('[data-section-title]').allTextContents(), group.links.filter(item => item.sectionTitle).map(item => item.sectionTitle));
       await expect(box.locator('button')).toHaveText(group.label.ru);
       assert.deepEqual(await box.locator('a').evaluateAll(els => els.map(e => e.getAttribute('href'))), group.links.map(item => localHref(item.href)));
     }
@@ -27,6 +28,7 @@ async function checkStaticHeader(page) {
   await expect(page.locator('header button').filter({ hasText: /^Услуги$/ })).toHaveCount(0);
   for (const group of groups) {
     const column = page.locator('footer nav[aria-label="' + group.label.ru + '"]');
+    assert.deepEqual(await column.locator('[data-section-title]').allTextContents(), group.links.filter(item => item.sectionTitle).map(item => item.sectionTitle));
     assert.deepEqual(await column.locator('a').evaluateAll(els => els.map(e => e.getAttribute('href'))), group.links.map(item => localHref(item.href)));
   }
   await expect(page.locator('footer nav[aria-label="Компания"] a[href="/bitrix24"]')).toHaveCount(0);
@@ -157,7 +159,7 @@ async function checkLinks(page, mobile) {
 }
 
 async function run() {
-  const browser = await chromium.launch({ channel: 'chrome' });
+  const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || 'chrome' });
   try {
     const desktop = await openPage(browser, 1280);
     await checkStaticHeader(desktop);

@@ -162,7 +162,13 @@ function renderArtifacts(source, root) {
       : 'group inline-flex items-center gap-1.5 rounded py-2 hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent';
     const listClass = mobile ? 'ml-3 mt-1 border-l border-gridBorder pl-2'
       : 'absolute left-0 top-full z-10 max-h-[calc(100dvh-4rem)] w-72 overflow-y-auto whitespace-normal rounded-lg border border-gridBorder bg-white p-1.5 shadow-lg';
-    const items = group.links.map(item => '<li' + (mobile ? '' : ' role="none"') + '>' + anchor(item, mobile ? mobileClass : desktopServiceClass, mobile ? '' : ' role="menuitem" tabindex="-1"') + '</li>').join('');
+    const items = group.links.map(item => {
+      const heading = item.sectionTitle
+        ? '<li role="presentation" data-section-title class="px-3 pt-3 pb-1 text-xs font-semibold uppercase tracking-wide text-textMuted">' + escapeHtml(item.sectionTitle) + '</li>'
+        : '';
+      const link = anchor(item, mobile ? mobileClass : desktopServiceClass, mobile ? '' : ' role="menuitem" tabindex="-1"');
+      return heading + '<li' + (mobile ? '' : ' role="none"') + '>' + link + '</li>';
+    }).join('');
     return '<div id="' + id + '" data-' + mode + '-group="' + group.id + '" class="relative">' +
       '<button type="button" id="' + id + '-toggle" aria-controls="' + id + '-menu" aria-expanded="false"' + (mobile ? '' : ' aria-haspopup="menu"') + ' class="' + buttonClass + '">' + escapeHtml(group.label.ru) + chevron + '</button>' +
       '<ul id="' + id + '-menu" hidden aria-labelledby="' + id + '-toggle"' + (mobile ? '' : ' role="menu"') + ' class="' + listClass + '">' + items + '</ul></div>';

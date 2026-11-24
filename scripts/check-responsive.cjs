@@ -88,12 +88,12 @@ async function checkAddressStates(page, width) {
 (async () => {
   const allRoutes = checkFooters().pages.map(({ page }) => page);
   await fs.mkdir('.review/responsive', { recursive: true });
-  const browser = await chromium.launch({ channel: 'chrome', headless: true });
+  const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || 'chrome', headless: true });
   const context = await browser.newContext({ reducedMotion: 'reduce' });
   const results = [];
   const failures = [];
   const widths = [320, 360, 390, 768, 1000, 1024, 1150, 1280, 1440, 1536, 1920];
-  const coreRoutes = ['/', '/bitrix24', '/veeam', '/licensing', '/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/sozdanie-saitov', '/seo', '/free', '/faq', '/o-kompanii'];
+  const coreRoutes = ['/', '/bitrix24', '/veeam', '/licensing', '/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/sozdanie-saitov', '/seo', '/analitika-dannyh', '/data-science', '/mashinnoe-obuchenie', '/kompyuternoe-zrenie', '/videoanalitika', '/razrabotka-igr', '/free', '/faq', '/o-kompanii'];
   const articleWidths = [320, 390, 768, 1024, 1440];
   try {
     for (const width of widths) {
@@ -199,6 +199,7 @@ async function checkAddressStates(page, width) {
             if (clipped) failures.push(`${width}px: inspector ${key} overflows`);
           }
           const nav = await openNavigation(page, width, 'development');
+          if ([360, 1440].includes(width)) await page.screenshot({ path: `.review/responsive/development-menu-${width}.png`, style: screenshotStyle });
           if (!await nav.evaluate(fitsViewport)) failures.push(`${width}px: services panel overflows`);
           await page.keyboard.press('Escape');
           if (width < desktopWidth) await page.keyboard.press('Escape');
