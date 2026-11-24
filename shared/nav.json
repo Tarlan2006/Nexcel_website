@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-24T14:54:03.347Z",
+  "updatedAt": "2026-11-24T15:13:24.921Z",
   "logo": {
     "href": "https://nexcel.kz/",
     "src": "https://nexcel.kz/assets/logo.svg",
@@ -86,7 +86,7 @@
     },
     {
       "label": {
-        "ru": "Список вендоров",
+        "ru": "Список вендоров и ПО",
         "kk": ""
       },
       "href": "https://nexcel.kz/licensing"
@@ -230,7 +230,7 @@
       "links": [
         {
           "label": {
-            "ru": "Список вендоров",
+            "ru": "Список вендоров и ПО",
             "kk": ""
           },
           "href": "https://nexcel.kz/licensing"
@@ -354,7 +354,7 @@
         "links": [
           {
             "label": {
-              "ru": "Список вендоров",
+              "ru": "Список вендоров и ПО",
               "kk": ""
             },
             "href": "https://nexcel.kz/licensing"
