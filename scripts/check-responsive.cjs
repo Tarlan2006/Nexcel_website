@@ -1,6 +1,7 @@
-const { chromium } = require('@playwright/test');
-const base = process.argv[2] || 'http://127.0.0.1:5500';
+const { chromium, expect } = require('@playwright/test');
+const base = process.argv[2] || 'http://127.0.0.1:8787';
 const fs = require('node:fs/promises');
+const { checkFooters } = require('./check-footers.cjs');
 
 const desktopWidth = 1024;
 const calculatorAnchor = '#calculator';
@@ -24,16 +25,79 @@ function fitsViewport(element) {
     document.documentElement.scrollWidth <= innerWidth;
 }
 
+function textOutsideViewport() {
+  const issues = [];
+  for (const element of document.querySelectorAll('main h1, main h2, main h3, main p, main li, main a, main button, footer a')) {
+    // Demo windows and moving logo strips intentionally contain clipped content.
+    if (element.closest('svg, [aria-hidden="true"], .sr-only, .inspector-panel, .clients-marquee, .partner-marquee')) continue;
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+    while (walker.nextNode()) {
+      const node = walker.currentNode;
+      const parent = node.parentElement;
+      const style = getComputedStyle(parent);
+      if (!node.textContent.trim() || parent.closest('.sr-only') || !parent.getClientRects().length || style.visibility === 'hidden' || style.display === 'none') continue;
+      const range = document.createRange();
+      range.selectNodeContents(node);
+      if ([...range.getClientRects()].some(rect => rect.width > 0 && (rect.left < -1 || rect.right > innerWidth + 1))) {
+        issues.push(node.textContent.trim().slice(0, 100));
+      }
+    }
+  }
+  return [...new Set(issues)];
+}
+
+function brokenTitleWords() {
+  const heading = document.querySelector('main h1');
+  const walker = document.createTreeWalker(heading, NodeFilter.SHOW_TEXT);
+  const issues = [];
+  while (walker.nextNode()) {
+    const node = walker.currentNode;
+    for (const match of node.textContent.matchAll(/[\p{L}\p{N}]+/gu)) {
+      const range = document.createRange();
+      range.setStart(node, match.index);
+      range.setEnd(node, match.index + match[0].length);
+      if (range.getClientRects().length > 1) issues.push(match[0]);
+    }
+  }
+  return issues;
+}
+
+async function checkAddressStates(page, width) {
+  const link = page.locator('footer a[href="https://go.2gis.com/cyGjq"]');
+  const colors = () => link.evaluate(element => {
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+    const values = [getComputedStyle(element.querySelector('svg')).color];
+    while (walker.nextNode()) {
+      if (walker.currentNode.textContent.trim()) values.push(getComputedStyle(walker.currentNode.parentElement).color);
+    }
+    return [...new Set(values)];
+  });
+  await link.scrollIntoViewIfNeeded();
+  await link.hover();
+  await expect.poll(colors).toHaveLength(1);
+  await page.mouse.move(width - 1, 0);
+  // Reach the address with Tab so :focus-visible is exercised, not just :focus.
+  await page.locator('footer nav[aria-label="Компания"] a').last().focus();
+  await page.keyboard.press('Tab');
+  await expect.poll(colors).toHaveLength(1);
+  const visibleFocus = await link.evaluate(element => document.activeElement === element && element.matches(':focus-visible') && getComputedStyle(element).outlineStyle !== 'none');
+  await link.evaluate(element => element.blur());
+  return visibleFocus;
+}
+
 (async () => {
+  const allRoutes = checkFooters().pages.map(({ page }) => page);
   await fs.mkdir('.review/responsive', { recursive: true });
   const browser = await chromium.launch({ channel: 'chrome', headless: true });
   const context = await browser.newContext({ reducedMotion: 'reduce' });
   const results = [];
   const failures = [];
   const widths = [320, 360, 390, 768, 1000, 1024, 1150, 1280, 1440, 1536, 1920];
+  const coreRoutes = ['/', '/bitrix24', '/veeam', '/licensing', '/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/sozdanie-saitov', '/seo', '/free', '/faq', '/o-kompanii'];
+  const articleWidths = [320, 390, 768, 1024, 1440];
   try {
     for (const width of widths) {
-      for (const route of ['/', '/bitrix24', '/veeam', '/licensing', '/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/sozdanie-saitov', '/seo', '/free', '/faq', '/o-kompanii']) {
+      for (const route of allRoutes.filter(route => coreRoutes.includes(route) || articleWidths.includes(width))) {
         const page = await context.newPage();
         await page.setViewportSize({ width, height: 900 });
         await page.goto(base + route);
@@ -69,8 +133,15 @@ function fitsViewport(element) {
           const office = footerGrid.querySelector('address');
           const footerColumns = getComputedStyle(footerGrid).gridTemplateColumns.split(' ').length;
           const addressLines = office.getBoundingClientRect().height / parseFloat(getComputedStyle(office).lineHeight);
+          const developmentBounds = footerGrid.querySelector('nav[aria-label="Разработка"]').getBoundingClientRect();
+          const licensingBounds = footerGrid.querySelector('nav[aria-label="Лицензии ПО и SaaS"]').getBoundingClientRect();
+          const companyBounds = footerGrid.querySelector('nav[aria-label="Компания"]').getBoundingClientRect();
+          const contactsBounds = office.closest('ul').parentElement.getBoundingClientRect();
+          const footerPairedRows = Math.abs(developmentBounds.top - licensingBounds.top) < 1 &&
+            Math.abs(companyBounds.top - contactsBounds.top) < 1 &&
+            companyBounds.left < contactsBounds.left && companyBounds.top > developmentBounds.top;
           return {
-            footerColumns, addressLines,
+            footerColumns, addressLines, footerPairedRows,
             width: innerWidth, scrollWidth: document.documentElement.scrollWidth,
             overlap, singleHeaderRow, correctHeaderControls,
             headerBottom: header.getBoundingClientRect().bottom,
@@ -79,7 +150,11 @@ function fitsViewport(element) {
             fonts: ['Inter', 'Manrope', ...(document.querySelector('.font-mono') ? ['JetBrains Mono'] : [])].every(name => [...document.fonts].some(face => face.family.replace(/"/g, '') === name && face.status === 'loaded'))
           };
         });
-        const name = route === '/' ? 'index' : route.slice(1);
+        result.textOverflow = await page.evaluate(textOutsideViewport);
+        result.brokenTitleWords = route.startsWith('/news/') ? await page.evaluate(brokenTitleWords) : [];
+        const socials = await page.locator('.footer-socials a').evaluateAll(elements => elements.map(element => element.getBoundingClientRect().toJSON()));
+        result.socialsOneRow = socials.length === 5 && socials.every(rect => Math.abs(rect.top - socials[0].top) < 1 && Math.abs(rect.width - rect.height) < 1 && rect.width >= 24);
+        const name = route === '/' ? 'index' : route.slice(1).replaceAll('/', '-');
         if ([360, 1440].includes(width) && ['/', '/licensing'].includes(route)) {
           await page.locator(route === '/' ? '#partners-teaser' : '#partners').evaluate(async element => {
             await Promise.all([...element.querySelectorAll('img')].map(image => {
@@ -107,13 +182,18 @@ function fitsViewport(element) {
         results.push({ route, ...result });
         console.log(`Checked ${route} at ${width}px; fonts loaded: ${result.fonts}`);
         if (result.scrollWidth > width || result.overlap.length || result.headingTop < result.headerBottom || result.overflowing.length) failures.push(`${route} at ${width}px: layout`);
+        if (result.textOverflow.length) failures.push(`${route} at ${width}px: text overflows (${result.textOverflow.join('; ')})`);
+        if (result.brokenTitleWords.length) failures.push(`${route} at ${width}px: article title splits words mid-letter (${result.brokenTitleWords.join('; ')})`);
+        if (!result.socialsOneRow) failures.push(`${route} at ${width}px: social buttons wrap or become too small`);
         if (width >= 1024 && (result.footerColumns !== 5 || result.addressLines > 3.05)) failures.push(`${route} at ${width}px: desktop footer grid/address wraps incorrectly`);
+        if (width < 1024 && (result.footerColumns !== 2 || !result.footerPairedRows)) failures.push(`${route} at ${width}px: footer sections must form two paired rows`);
         if (!result.singleHeaderRow || !result.correctHeaderControls) failures.push(`${route} at ${width}px: header controls do not fit on one row`);
         const needsMono = route === '/' || route === '/licensing';
         const fontsLoaded = await page.evaluate(needsMono => ['Inter', 'Manrope', ...(needsMono ? ['JetBrains Mono'] : [])].every(name => [...document.fonts].some(face => face.family.replace(/"/g, '') === name && face.status === 'loaded')), needsMono);
         if (!fontsLoaded) failures.push(`${route} at ${width}px: fonts unavailable`);
         if (route === '/') {
-          for (const key of ['tables', 'bots', 'ai', 'saas']) {
+          if (!await checkAddressStates(page, width)) failures.push(`${width}px: address hover/focus colors differ or keyboard focus is missing`);
+          for (const key of ['tables', 'bots', 'ai', 'web', 'saas']) {
             await page.locator('#pill-' + key).click();
             const clipped = await page.locator('#inspector-' + key).evaluate(panel => [...panel.querySelectorAll('*')].some(el => {const rect = el.getBoundingClientRect(); return rect.width > 0 && (rect.right > innerWidth + 1 || rect.left < -1);}));
             if (clipped) failures.push(`${width}px: inspector ${key} overflows`);
@@ -170,5 +250,5 @@ function fitsViewport(element) {
   } finally { await browser.close(); }
   await fs.writeFile('.review/responsive/layout.json', JSON.stringify(results, null, 2));
   if (failures.length) { console.error(failures.join('\n')); process.exitCode = 1; }
-  else console.log('PASS:', results.length, 'single-row header layouts,', widths.length * 4, 'inspector panels,', widths.length, 'calculator anchors,', widths.length, 'template section anchors,', results.length - widths.length, 'interpage links and 2 short-screen mobile menu checks.');
+  else console.log('PASS:', allRoutes.length, 'pages;', results.length, 'layouts and text-overflow checks,', widths.length * 5, 'inspector panels,', widths.length, 'address hover/focus checks,', widths.length, 'calculator anchors,', widths.length, 'template section anchors,', results.length - widths.length, 'interpage links and 2 short-screen mobile menu checks.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

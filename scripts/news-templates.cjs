@@ -143,7 +143,7 @@ function postPage(p) {
         <a href="/news" class="inline-flex items-center gap-1 text-sm font-semibold text-emeraldAccent hover:underline"><span aria-hidden="true">←</span> Все кейсы и статьи</a>
         <header class="space-y-3">
           <time datetime="${esc(p.date)}" class="block text-xs font-sans text-textMuted uppercase tracking-wider">${ruDate(p.date)}</time>
-          <h1 class="font-heading font-extrabold text-3xl sm:text-4xl text-darkBg">${esc(p.title)}</h1>
+          <h1 class="font-heading font-extrabold text-[26px] min-[375px]:text-3xl sm:text-4xl leading-tight text-darkBg">${esc(p.title)}</h1>
         </header>
         ${p.image ? `<img src="${esc(p.image)}" alt="${esc(p.title)}" width="${p.imageWidth}" height="${p.imageHeight}" class="w-full h-auto rounded-lg" />` : ''}
         <div class="space-y-3 sm:space-y-4">
