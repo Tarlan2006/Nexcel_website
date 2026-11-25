@@ -64,6 +64,8 @@ function brokenTitleWords() {
 
 async function checkAddressStates(page, width) {
   const link = page.locator('footer a[href="https://go.2gis.com/cyGjq"]');
+  const toggle = page.locator('button[aria-controls="footer-contacts"]');
+  if (width < 768) await toggle.click();
   const colors = () => link.evaluate(element => {
     const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
     const values = [getComputedStyle(element.querySelector('svg')).color];
@@ -77,11 +79,13 @@ async function checkAddressStates(page, width) {
   await expect.poll(colors).toHaveLength(1);
   await page.mouse.move(width - 1, 0);
   // Reach the address with Tab so :focus-visible is exercised, not just :focus.
-  await page.locator('footer nav[aria-label="Компания"] a').last().focus();
+  if (width < 768) await toggle.focus();
+  else await page.locator('footer nav[aria-label="Компания"] a').last().focus();
   await page.keyboard.press('Tab');
   await expect.poll(colors).toHaveLength(1);
   const visibleFocus = await link.evaluate(element => document.activeElement === element && element.matches(':focus-visible') && getComputedStyle(element).outlineStyle !== 'none');
   await link.evaluate(element => element.blur());
+  if (width < 768) await toggle.click();
   return visibleFocus;
 }
 
@@ -92,7 +96,7 @@ async function checkAddressStates(page, width) {
   const context = await browser.newContext({ reducedMotion: 'reduce' });
   const results = [];
   const failures = [];
-  const widths = [320, 360, 390, 768, 1000, 1024, 1150, 1280, 1440, 1536, 1920];
+  const widths = [320, 360, 375, 390, 768, 1000, 1024, 1150, 1280, 1440, 1536, 1920];
   const coreRoutes = ['/', '/bitrix24', '/veeam', '/licensing', '/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/sozdanie-saitov', '/seo', '/analitika-dannyh', '/ii-agenty', '/mashinnoe-obuchenie', '/kompyuternoe-zrenie', '/razrabotka-igr', '/free', '/faq', '/o-kompanii'];
   const articleWidths = [320, 390, 768, 1024, 1440];
   try {
@@ -130,18 +134,23 @@ async function checkAddressStates(page, width) {
             if (Math.min(a.right, b.right) - Math.max(a.left, b.left) > 1 && Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > 1) overlap.push([items[i].text, items[j].text]);
           }
           const footerGrid = document.querySelector('.site-footer-grid');
-          const office = footerGrid.querySelector('address');
-          const footerColumns = getComputedStyle(footerGrid).gridTemplateColumns.split(' ').length;
-          const addressLines = office.getBoundingClientRect().height / parseFloat(getComputedStyle(office).lineHeight);
-          const developmentBounds = footerGrid.querySelector('nav[aria-label="Разработка"]').getBoundingClientRect();
-          const licensingBounds = footerGrid.querySelector('nav[aria-label="Лицензии ПО и SaaS"]').getBoundingClientRect();
-          const companyBounds = footerGrid.querySelector('nav[aria-label="Компания"]').getBoundingClientRect();
-          const contactsBounds = office.closest('ul').parentElement.getBoundingClientRect();
-          const footerPairedRows = Math.abs(licensingBounds.top - companyBounds.top) < 1 &&
-            licensingBounds.left < companyBounds.left && licensingBounds.top >= developmentBounds.bottom &&
-            contactsBounds.top >= Math.max(licensingBounds.bottom, companyBounds.bottom);
+          const groups = [...footerGrid.querySelectorAll('.footer-group')];
+          const headings = groups.map(group => group.querySelector('h3'));
+          const firstLinks = groups.map(group => group.querySelector('li a'));
+          const aligned = elements => elements.every(el => visible(el) && Math.abs(el.getBoundingClientRect().top - elements[0].getBoundingClientRect().top) <= 1);
+          const widths = groups.map(group => group.getBoundingClientRect().width);
+          const brand = document.querySelector('.footer-brand');
+          const brandText = document.createRange();
+          brandText.selectNodeContents(brand.querySelector('span'));
+          const logo = brand.querySelector('img').getBoundingClientRect();
+          const brandRects = [...brandText.getClientRects()];
+          const description = document.querySelector('.footer-top p');
+          const descriptionLines = description.getBoundingClientRect().height / parseFloat(getComputedStyle(description).lineHeight);
+          const brandSingleLine = brandRects.every(rect => rect.left >= logo.right && rect.top < logo.bottom && rect.bottom > logo.top && Math.abs(rect.top - brandRects[0].top) <= 1);
           return {
-            footerColumns, addressLines, footerPairedRows,
+            brandSingleLine, descriptionLines, footerGroups: groups.length, footerAligned: aligned(headings) && aligned(firstLinks),
+            equalFooterWidths: Math.max(...widths) - Math.min(...widths) <= 1,
+            footerCollapsed: groups.every(group => visible(group.querySelector('button')) && !visible(group.querySelector('ul')) && group.querySelector('button').getAttribute('aria-expanded') === 'false'),
             width: innerWidth, scrollWidth: document.documentElement.scrollWidth,
             overlap, singleHeaderRow, correctHeaderControls,
             headerBottom: header.getBoundingClientRect().bottom,
@@ -185,8 +194,11 @@ async function checkAddressStates(page, width) {
         if (result.textOverflow.length) failures.push(`${route} at ${width}px: text overflows (${result.textOverflow.join('; ')})`);
         if (result.brokenTitleWords.length) failures.push(`${route} at ${width}px: article title splits words mid-letter (${result.brokenTitleWords.join('; ')})`);
         if (!result.socialsOneRow) failures.push(`${route} at ${width}px: social buttons wrap or become too small`);
-        if (width >= 1024 && (result.footerColumns !== 6 || result.addressLines > 3.05)) failures.push(`${route} at ${width}px: desktop footer grid/address wraps incorrectly`);
-        if (width < 1024 && (result.footerColumns !== 2 || !result.footerPairedRows)) failures.push(`${route} at ${width}px: footer sections must form two paired rows`);
+        if (!result.brandSingleLine || result.footerGroups !== 5) failures.push(route + ' at ' + width + 'px: footer brand or headings');
+        if (width >= 375 && result.descriptionLines > 2.05) failures.push(route + ' at ' + width + 'px: footer description exceeds two lines');
+        if (width >= 768 && !result.footerAligned) failures.push(route + ' at ' + width + 'px: footer headings or first links are misaligned');
+        if (width >= 1024 && !result.equalFooterWidths) failures.push(route + ' at ' + width + 'px: unequal footer column widths');
+        if (width < 768 && !result.footerCollapsed) failures.push(route + ' at ' + width + 'px: footer accordions should be collapsed');
         if (!result.singleHeaderRow || !result.correctHeaderControls) failures.push(`${route} at ${width}px: header controls do not fit on one row`);
         const needsMono = route === '/' || route === '/licensing';
         const fontsLoaded = await page.evaluate(needsMono => ['Inter', 'Manrope', ...(needsMono ? ['JetBrains Mono'] : [])].every(name => [...document.fonts].some(face => face.family.replace(/"/g, '') === name && face.status === 'loaded')), needsMono);

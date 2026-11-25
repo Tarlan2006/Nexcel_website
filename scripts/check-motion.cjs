@@ -114,7 +114,7 @@ async function checkClients(browser) {
       await page.goto('http://127.0.0.1:5500');
       const buttons = page.locator('footer [data-footer-toggle]');
       await buttons.first().waitFor();
-      assert.equal(await buttons.count(), 2);
+      assert.deepEqual(await buttons.allTextContents(), ['Автоматизация и сайты', 'ИИ', 'Лицензии ПО', 'Компания', 'Контакты']);
       for (const button of await buttons.all()) {
         const list = page.locator('#' + await button.getAttribute('aria-controls'));
         assert.equal(await list.isVisible(), false);

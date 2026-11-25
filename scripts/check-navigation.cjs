@@ -36,7 +36,8 @@ async function checkStaticHeader(page) {
   }
   await expect(page.locator('header button').filter({ hasText: /^Услуги$/ })).toHaveCount(0);
   for (const group of groups) {
-    const column = page.locator('footer nav[aria-label="' + group.label.ru + '"]');
+    const footerLabel = group.id === 'licensing' ? 'Лицензии ПО' : group.label.ru;
+    const column = page.locator('footer nav[aria-label="' + footerLabel + '"]');
     assert.deepEqual(await column.locator('[data-section-title]').allTextContents(), group.links.filter(item => item.sectionTitle).map(item => item.sectionTitle));
     assert.deepEqual(await column.locator('a').evaluateAll(els => els.map(e => e.getAttribute('href'))), group.links.map(item => localHref(item.href)));
   }
@@ -114,7 +115,9 @@ async function checkLinks(page, mobile) {
   await page.locator('#site-brand').click();
   await page.waitForURL(base + '/');
   await page.locator('#site-header-row').waitFor();
-  await page.locator('#site-footer nav[aria-label="Компания"] a[href="/o-kompanii"]').click();
+  const company = page.locator('footer nav[aria-label="Компания"]');
+  if (mobile) await company.getByRole('button', { name: 'Компания' }).click();
+  await company.locator('a[href="/o-kompanii"]').click();
   await page.waitForURL(base + '/o-kompanii');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('О компании Nexcel Solutions');
 

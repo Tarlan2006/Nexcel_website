@@ -314,21 +314,19 @@ body { padding-bottom: var(--cookie-notice-height, 0px); }
   }
 }
 
-/* Give the office address three complete lines on desktop widths. */
-@media (min-width: 1024px) {
-  footer .site-footer-grid { grid-template-columns: minmax(9.5rem, 1.15fr) repeat(2, minmax(0, 1.2fr)) repeat(2, minmax(0, 1fr)) minmax(18.5rem, 1.8fr); column-gap: clamp(.625rem, calc(4vw - 2rem), 1.5rem); }
+.site-footer-grid { @apply grid grid-cols-1 gap-y-1 md:gap-x-4 lg:grid-cols-5 lg:gap-x-8 xl:gap-x-12; }
+@media (min-width: 768px) and (max-width: 1023px) {
+  .site-footer-grid { grid-template-columns: 11.5rem repeat(4, minmax(0, 1fr)); }
 }
-
-.footer-development { grid-column: span 2; min-width: 0; }
-.footer-development-label { @apply border-b border-slate-700 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400; }
-.footer-development-groups { @apply grid gap-3 pt-3 md:grid-cols-2; }
-.footer-group-heading { @apply text-sm font-semibold text-white; }
+.footer-development { display: contents; }
+.footer-group-heading { @apply whitespace-nowrap text-sm font-bold text-white; }
 .footer-group-heading > span, .footer-group-heading button { align-items: center; gap: .5rem; }
 .footer-group-heading > span { display: flex; }
 .footer-group-heading button { display: none; width: 100%; text-align: left; }
 .footer-group-heading > span::before, .footer-group-heading button::before { content: ""; @apply h-1.5 w-1.5 shrink-0 rounded-full bg-emeraldAccent; }
 .footer-group ul { @apply mt-2 space-y-2 text-sm font-normal text-slate-300; }
-.footer-group a:hover { @apply text-white no-underline; }
+.footer-group a { @apply block w-fit max-w-full no-underline underline-offset-4; }
+.footer-group a:hover { @apply text-white underline; }
 .footer-group a:focus-visible, .footer-group button:focus-visible { @apply outline outline-2 outline-offset-2 outline-emeraldOnDark; }
 .nav-subitem { display: block; padding-left: 1rem; }
 header .nav-subitem { padding-left: 1.75rem; }
@@ -340,7 +338,4 @@ header .nav-subitem { padding-left: 1.75rem; }
   .footer-group-heading button::after { content: ""; width: .5rem; height: .5rem; margin-left: auto; border: solid currentColor; border-width: 0 1px 1px 0; transform: rotate(45deg); }
   .footer-group-heading button[aria-expanded="true"]::after { transform: rotate(225deg); }
   .footer-interactive .footer-group:has(button[aria-expanded="false"]) ul { display: none; }
-}
-@media (max-width: 1023px) {
-  .site-footer-grid > div:has(address) { grid-column: span 2; }
 }
