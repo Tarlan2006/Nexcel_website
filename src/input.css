@@ -334,8 +334,9 @@ body { padding-bottom: var(--cookie-notice-height, 0px); }
   max-height: calc(100dvh - 4rem);
 }
 .desktop-service-panel.has-sections:not([hidden]) {
-  @apply grid grid-cols-2 gap-4 p-4;
-  width: 35rem;
+  @apply grid gap-4 p-4;
+  grid-template-columns: minmax(320px, 1.2fr) minmax(260px, 1fr);
+  width: 40rem;
 }
 .desktop-section-title {
   @apply mb-2 px-3 text-[11px] font-semibold uppercase tracking-widest text-textMuted;

@@ -41,8 +41,7 @@ async function checkStaticHeader(page) {
   await expect(page.locator('#desktop-licensing-menu [data-section-title]')).toHaveCount(0);
   await expect(page.locator('header button').filter({ hasText: /^Услуги$/ })).toHaveCount(0);
   for (const group of groups) {
-    const footerLabel = group.id === 'licensing' ? 'Лицензии ПО' : group.label.ru;
-    const column = page.locator('footer nav[aria-label="' + footerLabel + '"]');
+    const column = page.locator('footer nav[aria-label="' + group.label.ru + '"]');
     assert.deepEqual(await column.locator('[data-section-title]').allTextContents(), group.links.filter(item => item.sectionTitle).map(item => item.sectionTitle));
     assert.deepEqual(await column.locator('a').evaluateAll(els => els.map(e => e.getAttribute('href'))), group.links.map(item => localHref(item.href)));
   }
@@ -59,11 +58,20 @@ async function checkDesktopDisclosure(page) {
     await page.mouse.move(1, 899); await expect(menu).toBeHidden();
     await toggle.click(); await expect(items.first()).toBeFocused();
     if (group.id === 'development') {
+      const { width } = page.viewportSize();
+      await page.evaluate(() => document.fonts.ready);
       const panel = await menu.boundingBox();
       const [left, right] = await menu.locator('p[data-section-title]').evaluateAll(els => els.map(el => el.getBoundingClientRect().toJSON()));
-      assert.equal(panel.width, 560);
+      assert(panel.x >= 0 && panel.x + panel.width <= width, width + 'px: panel fits viewport');
+      assert(left.width >= 320 && right.width >= 260 && left.width > right.width, width + 'px: desktop columns');
       assert.equal(left.top, right.top);
       assert(left.right < right.left);
+      const lines = await menu.locator('a[href="/avtomatizaciya-excel"]').evaluate(link => {
+        const range = document.createRange();
+        range.selectNodeContents(link.firstChild);
+        return range.getClientRects().length;
+      });
+      assert.equal(lines, 1, width + 'px: Excel and Google Sheets link wraps');
     }
     await toggle.click(); await expect(menu).toBeHidden();
     await toggle.click(); await expect(items.first()).toBeFocused();
@@ -202,11 +210,15 @@ async function checkLinks(page, mobile) {
 async function run() {
   const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || 'chrome' });
   try {
-    const desktop = await openPage(browser, 1280);
-    await checkStaticHeader(desktop);
-    await checkDesktopDisclosure(desktop);
-    await checkLinks(desktop, false);
-    await desktop.close();
+    for (const width of [1024, 1280, 1440]) {
+      const desktop = await openPage(browser, width);
+      await checkDesktopDisclosure(desktop);
+      if (width === 1280) {
+        await checkStaticHeader(desktop);
+        await checkLinks(desktop, false);
+      }
+      await desktop.close();
+    }
 
     const mobile = await openPage(browser, 360);
     await checkMobileAccordion(mobile);
