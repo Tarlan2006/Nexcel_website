@@ -181,7 +181,8 @@ body { padding-bottom: var(--cookie-notice-height, 0px); }
   animation: clients-scroll 40s linear infinite;
   will-change: transform;
 }
-.partner-marquee-track { animation-duration: 30s; }
+/* Eight logos per group: 40s keeps the scroll speed close to the earlier six-logo, 30s loop. */
+.partner-marquee-track { animation-duration: 40s; }
 .clients-group, .partner-marquee-group {
   display: flex;
   flex-shrink: 0;
@@ -215,7 +216,7 @@ body { padding-bottom: var(--cookie-notice-height, 0px); }
   .clients-group, .partner-marquee-group { gap: 4rem; padding-right: 4rem; }
 }
 @media (min-width: 1024px) {
-  /* The five partner slots and their gaps must fill the widest viewport. */
+  /* The partner slots and their gaps must fill the widest viewport. */
   .partner-marquee-group { gap: 5.5rem; padding-right: 5.5rem; }
 }
 @media (max-width: 639px) {

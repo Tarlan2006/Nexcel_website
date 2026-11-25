@@ -1,0 +1,111 @@
+{
+  "partnerLabel": "Партнёр",
+  "vendors": [
+    {
+      "id": "microsoft",
+      "name": "Microsoft",
+      "logo": { "src": "/assets/partners/microsoft.png", "width": 214, "height": 96, "alt": "Microsoft" },
+      "logoSource": "Microsoft Source: https://news.microsoft.com/microsoft-logo_rgb_c-gray-2/ — https://msftstories.thesourcemediaassets.com/2022/05/Microsoft-logo_rgb_c-gray.png",
+      "category": "Офис и облако",
+      "description": "Microsoft 365, Windows, серверное ПО и облако Azure для рабочих мест и инфраструктуры.",
+      "bullets": ["Подбор лицензий и тарифов под штат", "Договор в тенге, ЭСФ и АВР", "Подключение, миграция и поддержка"],
+      "siteUrl": "https://www.microsoft.com/ru-kz/",
+      "order": 10,
+      "showInCarousel": true,
+      "enabled": true
+    },
+    {
+      "id": "adobe",
+      "name": "Adobe",
+      "logo": { "src": "/assets/partners/adobe.svg", "width": 41, "height": 40, "alt": "Adobe", "imgClass": "!w-10 shrink-0", "caption": "Adobe" },
+      "logoSource": "Adobe Business: https://business.adobe.com/support/adobe-partners.html — https://business.adobe.com/assets/icons/products/creative-cloud/icon-adobe.svg",
+      "category": "Дизайн и документы",
+      "description": "Creative Cloud, Acrobat и другие подписки Adobe для дизайна, видео, документов и маркетинга.",
+      "bullets": ["Подбор подписок под команду", "Договор в тенге, ЭСФ и АВР", "Подключение и помощь с настройкой"],
+      "siteUrl": "https://www.adobe.com/",
+      "order": 20,
+      "showInCarousel": true,
+      "enabled": true
+    },
+    {
+      "id": "jivo",
+      "name": "Jivo",
+      "logo": { "src": "/assets/partners/jivo.png", "width": 133, "height": 96, "alt": "Jivo" },
+      "logoClass": "partner-logo--jivo",
+      "logoSource": "Логотип Jivo, файл assets/partners/jivo.png (источник в репозитории не зафиксирован)",
+      "category": "Чат и коммуникации",
+      "description": "Онлайн-чат, мессенджеры и звонки с сайта в одной платформе для работы с клиентами.",
+      "bullets": ["Подбор тарифа", "Договор в тенге, ЭСФ и АВР", "Подключение к сайту, CRM и ботам"],
+      "siteUrl": "https://www.jivo.ru/",
+      "order": 30,
+      "showInCarousel": true,
+      "enabled": true
+    },
+    {
+      "id": "think-cell",
+      "name": "think-cell",
+      "logo": { "src": "/assets/partners/think-cell.svg", "width": 808, "height": 128, "alt": "think-cell", "imgClass": "!w-36" },
+      "logoSource": "Пресс-кит: https://www.think-cell.com/en/press-kit — https://www.thinkcell.com/assets/thinkcell-press-kit.zip, 02_DIGITAL/thinkcell_logo_color_RGB.svg",
+      "category": "Презентации и диаграммы",
+      "description": "Надстройка для PowerPoint и Excel: диаграммы, каскады и диаграммы Ганта для деловых презентаций.",
+      "bullets": ["Подбор лицензий под количество пользователей", "Договор в тенге, ЭСФ и АВР", "Установка и помощь с внедрением"],
+      "siteUrl": "https://www.think-cell.com/",
+      "order": 40,
+      "showInCarousel": true,
+      "enabled": true
+    },
+    {
+      "id": "nakivo",
+      "name": "NAKIVO",
+      "logo": { "src": "/assets/partners/nakivo.svg", "width": 154, "height": 24, "alt": "NAKIVO" },
+      "logoSource": "Логотип из шапки сайта NAKIVO: https://www.nakivo.com/",
+      "category": "Резервное копирование",
+      "description": "Резервное копирование и восстановление виртуальных, физических и облачных сред.",
+      "bullets": ["Подбор лицензии под инфраструктуру", "Договор в тенге, ЭСФ и АВР", "Внедрение и поддержка"],
+      "siteUrl": "https://www.nakivo.com/",
+      "order": 50,
+      "showInCarousel": true,
+      "enabled": true
+    },
+    {
+      "id": "sqlmanager",
+      "name": "SQLmanager.net",
+      "logo": { "src": "/assets/partners/sqlmanager.svg", "width": 230, "height": 47, "alt": "SQLmanager.net" },
+      "logoSource": "Фирменный логотип EMS из шапки SQLmanager.net: https://www.sqlmanager.net/sites/default/files/sqlmanager.svg",
+      "category": "Базы данных",
+      "description": "Инструменты EMS для разработки, администрирования и резервного копирования баз данных: PostgreSQL, SQL Server, MySQL.",
+      "bullets": ["Помощь с выбором инструментов под вашу СУБД", "Расчёт стоимости лицензий", "Договор в тенге, ЭСФ и АВР"],
+      "siteUrl": "https://www.sqlmanager.net/",
+      "order": 60,
+      "showInCarousel": true,
+      "enabled": true
+    },
+    {
+      "id": "bitrix24",
+      "name": "Битрикс24",
+      "logo": { "src": "/assets/partners/1c-bitrix-logo.svg", "width": 344, "height": 67, "alt": "Битрикс24" },
+      "logoSource": "Логотип Битрикс24, файл assets/partners/1c-bitrix-logo.svg (источник в репозитории не зафиксирован)",
+      "category": "CRM и продажи",
+      "description": "Единая платформа для продаж, задач и общения с клиентами.",
+      "bullets": ["Подбор тарифа", "Настройка CRM", "Обучение команды"],
+      "pageUrl": "/bitrix24",
+      "order": 70,
+      "showInCarousel": true,
+      "enabled": true
+    },
+    {
+      "id": "veeam",
+      "name": "Veeam",
+      "logo": { "src": "/assets/partners/veeam.svg", "width": 158, "height": 48, "alt": "Veeam" },
+      "logoSource": "Официальный логотип из шапки veeam.com (встроенный SVG «Veeam logo»), загружен 2026-11-25 с https://www.veeam.com/ без изменений формы и цветов",
+      "category": "Резервное копирование и защита данных",
+      "description": "Резервное копирование, аварийное восстановление и защита данных от киберугроз.",
+      "bullets": ["Подбор решения под инфраструктуру", "Поставка и продление лицензий", "Договор в тенге, ЭСФ и АВР"],
+      "siteUrl": "https://www.veeam.com/",
+      "pageUrl": "/veeam",
+      "order": 80,
+      "showInCarousel": true,
+      "enabled": true
+    }
+  ]
+}

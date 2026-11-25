@@ -33,6 +33,10 @@ JSON и шапка генерируются и коммитятся вместе
 
 `npm run check:footers` проверяет все собранные HTML, включая 404 и новости: одинаковые шапку и футер из `partials/header.html` и `partials/footer.html`, отсутствие старых адресов и терминов в навигации. Исходные страницы должны использовать общие placeholders и присутствовать в dist; версии страницы и общего JS также обязательны. Проверка обязательна в `npm run build` и `check:http`. Для таблицы хешей используйте `npm run check:footers -- --table`, для JSON — `npm run check:footers -- --json`.
 
+## Вендоры («С какими продуктами работаем»)
+
+Карточки на `/licensing` и лента на главной генерируются из `content/vendors.json` при `npm run build`. Чтобы добавить вендора, см. [docs/vendors.md](docs/vendors.md).
+
 ## Публичный адрес
 
 [https://nexcel.kz/shared/nav.json](https://nexcel.kz/shared/nav.json)

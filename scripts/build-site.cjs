@@ -55,6 +55,9 @@ if (process.argv.includes('--inline-partials')) {
   return;
 }
 
+// Vendor cards and the marquee are generated from content/vendors.json into the source pages.
+require('./lib/vendors.cjs').syncSources();
+
 const publicFiles = new Set([...files, '.assetsignore']);
 function collectAssets(relative) {
   for (const entry of fs.readdirSync(path.join(root, relative), { withFileTypes: true })) {

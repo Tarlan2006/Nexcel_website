@@ -106,6 +106,40 @@ async function checkClients(browser) {
   }
 }
 
+async function checkPartners(browser) {
+  const { loadRegistry } = require('./lib/vendors.cjs');
+  const logos = loadRegistry().vendors.filter(vendor => vendor.showInCarousel).length;
+  for (const width of [360, 390, 768, 1024, 1440, 1920]) {
+    const page = await browser.newPage({ viewport: { width, height: 900 }, reducedMotion: 'no-preference' });
+    await page.route('https://fonts.googleapis.com/**', route => route.abort());
+    await page.goto('http://127.0.0.1:5500');
+    const section = page.locator('#partners-teaser');
+    const track = section.locator('.partner-marquee-track');
+    await section.scrollIntoViewIfNeeded();
+    assert.equal(await section.locator('.partner-marquee-group:not([aria-hidden]) .partner-logo').count(), logos);
+    assert.equal(await section.locator('.partner-marquee-group[aria-hidden="true"] .partner-logo').count(), logos);
+    await section.locator('img').evaluateAll(images => Promise.all(images.map(image => { image.loading = 'eager'; return image.decode(); })));
+    const initial = await track.evaluate(el => getComputedStyle(el).transform);
+    await page.waitForTimeout(150);
+    assert.notEqual(await track.evaluate(el => getComputedStyle(el).transform), initial, 'partner marquee moves');
+    const geometry = await track.evaluate(el => {
+      const group = el.children[0].getBoundingClientRect().width;
+      return { group, half: el.getBoundingClientRect().width / 2, seconds: parseFloat(getComputedStyle(el).animationDuration) };
+    });
+    assert.ok(geometry.group >= width, `partner group (${geometry.group}px) must fill ${width}px`);
+    assert.ok(Math.abs(geometry.group - geometry.half) < 0.5, 'partner groups are equal, the loop is seamless');
+    const speed = geometry.group / geometry.seconds;
+    assert.ok(speed >= 40 && speed <= 140, `partner marquee speed ${Math.round(speed)}px/s`);
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    assert.equal(await track.evaluate(el => getComputedStyle(el).animationName), 'none');
+    assert.equal(await section.locator('.partner-marquee-group[aria-hidden="true"]').evaluate(el => getComputedStyle(el).display), 'none');
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+    await page.close();
+    console.log(`PASS partners ${width}px: ${logos} logos, group ${Math.round(geometry.group)}px, ${Math.round(speed)}px/s, seamless loop, reduced motion, no overflow.`);
+  }
+}
+
 (async () => {
   const browser = await chromium.launch({ channel: 'chrome' });
   try {
@@ -114,7 +148,7 @@ async function checkClients(browser) {
       await page.goto('http://127.0.0.1:5500');
       const buttons = page.locator('footer [data-footer-toggle]');
       await buttons.first().waitFor();
-      assert.deepEqual(await buttons.allTextContents(), ['Автоматизация и сайты', 'ИИ', 'Лицензии ПО', 'Компания', 'Контакты']);
+      assert.deepEqual(await buttons.allTextContents(), ['Автоматизация и сайты', 'ИИ', 'Лицензии ПО и SaaS', 'Компания', 'Контакты']);
       for (const button of await buttons.all()) {
         const list = page.locator('#' + await button.getAttribute('aria-controls'));
         assert.equal(await list.isVisible(), false);
@@ -126,6 +160,7 @@ async function checkClients(browser) {
       await page.close();
     }
     await checkClients(browser);
+    await checkPartners(browser);
     for (const width of [390, 1440]) {
       const context = await browser.newContext({ viewport: { width, height: 900 }, reducedMotion: 'no-preference' });
       // Motion behaviour is independent of remote font availability.
