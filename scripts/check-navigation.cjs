@@ -185,7 +185,11 @@ async function checkLinks(page, mobile) {
   await page.waitForURL(base + '/bitrix24');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Продажа лицензий и внедрение Битрикс24 для вашего бизнеса');
   await expect(page.locator('footer a[href="/bitrix24"]')).toHaveCount(1);
-  for (const route of ['/', '/licensing']) {
+  // The home page shows vendors only as marquee logos; the Veeam card lives on /licensing.
+  await page.goto(base + '/');
+  await expect(page.locator('#partner-veeam')).toHaveCount(0);
+  await expect(page.locator('#partners-teaser .partner-marquee-group:not([aria-hidden]) [data-vendor="veeam"] img')).toHaveAttribute('src', '/assets/partners/veeam.svg');
+  for (const route of ['/licensing']) {
     await page.goto(base + route);
     await expect(page.locator('#partner-veeam')).toContainText('Veeam');
     await page.locator('#partner-veeam a[href="/veeam"]').click();
