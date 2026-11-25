@@ -179,7 +179,7 @@ async function checkLinks(page, mobile) {
   await expect(nav.locator('a[href="/#calculator"]')).toHaveCount(0);
   await expect(nav.locator('a[href^="https://photo.nexcel.kz/"]')).toHaveCount(0);
   await page.goto(base + '/licensing');
-  await expect(page.locator('#partner-bitrix24 img')).toHaveAttribute('src', '/assets/partners/1c-bitrix-logo.svg');
+  await expect(page.locator('#partner-bitrix24 img')).toHaveAttribute('src', '/assets/partners/bitrix24.svg');
   await expect(page.locator('main a[href="/bitrix24"]')).toHaveCount(1);
   await page.locator('#partner-bitrix24 a[href="/bitrix24"]').click();
   await page.waitForURL(base + '/bitrix24');

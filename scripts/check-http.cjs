@@ -63,7 +63,7 @@ async function run() {
   assert.deepEqual(nav, JSON.parse(await fs.readFile(path.join(root, 'shared/nav.json'), 'utf8')));
   checks++;
   const servicePages = serviceRoutes.map(route => [route, `${route.slice(1)}.html`]);
-  for (const [route, file] of [['/partials/header.html', 'partials/header.html'], ['/partials/footer.html', 'partials/footer.html'], ['/assets/include-partials.js', 'assets/include-partials.js'], ['/assets/cookie-notice.js', 'assets/cookie-notice.js'], ['/', 'index.html'], ['/licensing', 'licensing.html'], ...servicePages, ['/free', 'free.html'], ['/faq', 'faq.html'], ['/o-kompanii', 'o-kompanii.html'], ['/privacy', 'privacy.html'], ['/assets/faq.js', 'assets/faq.js'], ['/assets/styles.css', 'assets/styles.css'], ['/assets/partners/1c-bitrix-logo.svg', 'assets/partners/1c-bitrix-logo.svg'], ['/robots.txt', 'robots.txt'], ['/sitemap.xml', 'sitemap.xml'], ['/llms.txt', 'llms.txt']]) {
+  for (const [route, file] of [['/partials/header.html', 'partials/header.html'], ['/partials/footer.html', 'partials/footer.html'], ['/assets/include-partials.js', 'assets/include-partials.js'], ['/assets/cookie-notice.js', 'assets/cookie-notice.js'], ['/', 'index.html'], ['/licensing', 'licensing.html'], ...servicePages, ['/free', 'free.html'], ['/faq', 'faq.html'], ['/o-kompanii', 'o-kompanii.html'], ['/privacy', 'privacy.html'], ['/assets/faq.js', 'assets/faq.js'], ['/assets/styles.css', 'assets/styles.css'], ['/assets/partners/bitrix24.svg', 'assets/partners/bitrix24.svg'], ['/robots.txt', 'robots.txt'], ['/sitemap.xml', 'sitemap.xml'], ['/llms.txt', 'llms.txt']]) {
     const response = await request(route, cloudflare && route.startsWith('/partials/') ? { redirect: 'follow' } : {});
     assert.equal(response.status, 200, route);
     assert.equal(await response.text(), await fs.readFile(path.join(root, cloudflare ? 'dist' : '.', file), 'utf8'), `${route}: body`);
@@ -98,7 +98,7 @@ async function run() {
   const veeam = await fs.readFile(path.join(root, 'dist', 'veeam.html'), 'utf8');
   assert.doesNotMatch(veeam, /\d[\d\s.,]*\s*(?:₸|тенге|KZT)|(?:официальн[\p{L}]*|авторизованн[\p{L}]*)\s+партн[её]р|Partner\s*ID|n\.abenov@nexcel\.kz/iu, 'Veeam page has no prices, unconfirmed partner claims or private contacts');
   assert.doesNotMatch(veeam, /<(?:form|input|textarea|select)\b/i, 'Veeam page has no data-entry form');
-  assert.ok(veeam.includes('<!-- после подтверждения статуса: «Veeam ProPartner Registered Reseller» -->'), 'Veeam status comment is preserved');
+  assert.match(veeam, /<img src="\/assets\/partners\/veeam\.svg" alt="Veeam" width="158" height="48"/, 'Veeam official logo');
   assert.match(veeam, /href="https:\/\/www\.veeam\.com\/" target="_blank" rel="noopener noreferrer"/, 'Veeam external technology link');
   const veeamSchema = JSON.parse(veeam.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])['@graph'];
   const veeamService = veeamSchema.find(item => item['@type'] === 'Service');
