@@ -144,7 +144,7 @@ async function checkClients(browser) {
       await page.goto('http://127.0.0.1:5500');
       const cards = page.locator('[data-card-reveal]');
       const cardCount = await cards.count();
-      assert.equal(cardCount, 16);
+      assert.equal(cardCount, 17);
       assert.equal(await page.evaluate(() => revealCalls.length), 0);
       await page.locator('#direction-tables').evaluate(el => { document.documentElement.style.scrollBehavior = 'auto'; window.scrollTo(0, el.offsetTop - 100); });
       await page.waitForFunction(() => document.querySelector('#direction-tables').getAnimations().length > 0);
