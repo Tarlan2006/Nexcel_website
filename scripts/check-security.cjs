@@ -12,7 +12,7 @@ const metrikaTag = 'https://mc.yandex.ru/metrika/tag.js';
 const root = path.resolve(__dirname, '..');
 const serviceFaqCounts = new Map([
   ['/avtomatizaciya-excel', 6], ['/telegram-boty', 4], ['/vnedrenie-ii', 4], ['/licensing', 4], ['/sozdanie-saitov', 7], ['/seo', 7],
-  ['/analitika-dannyh', 5], ['/data-science', 5], ['/mashinnoe-obuchenie', 5], ['/kompyuternoe-zrenie', 5], ['/videoanalitika', 5], ['/razrabotka-igr', 5]
+  ['/analitika-dannyh', 5], ['/mashinnoe-obuchenie', 5], ['/kompyuternoe-zrenie', 10], ['/razrabotka-igr', 5]
 ]);
 const navigationSource = require('../content/navigation.json');
 const { localHref, flattenLinks } = require('./lib/navigation.cjs');
@@ -110,7 +110,7 @@ async function run() {
 
   const articles = (await fs.readdir(path.join(root, 'dist', 'news')))
     .filter(file => file.endsWith('.html')).map(file => '/news/' + file.slice(0, -5));
-  const routes = ['/', '/bitrix24', '/veeam', ...serviceFaqCounts.keys(), '/free', '/faq', '/o-kompanii', '/privacy', '/news', ...articles];
+  const routes = ['/', '/bitrix24', '/veeam', ...serviceFaqCounts.keys(), '/ii-agenty', '/free', '/faq', '/o-kompanii', '/privacy', '/news', ...articles];
   const browser = await chromium.launch({
     headless: true,
     ...(process.env.BROWSER_CHANNEL ? { channel: process.env.BROWSER_CHANNEL } : {})

@@ -1,6 +1,9 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { createHash } = require('node:crypto');
+const assert = require('node:assert/strict');
+const navigation = require('../content/navigation.json');
+const { localHref } = require('./lib/navigation.cjs');
 const normalize = html => html.replace(/\r\n/g, '\n');
 const digest = html => createHash('sha256').update(html).digest('hex');
 const legacyAddress = /53\s*\/\s*1|Бект[ұу]ров|кв\.\s*15|010000/iu;
@@ -42,6 +45,12 @@ function checkFooters(root = path.resolve(__dirname, '..')) {
     checkText(html, file);
     return [tag, { html, markup: extract(html, tag, file) }];
   }));
+  const development = navigation.serviceGroups.find(group => group.id === 'development');
+  const menu = references.footer.markup.match(/<nav\b[^>]*aria-label="Разработка"[^>]*>([\s\S]*?)<\/nav>/u)?.[1] || '';
+  const headings = [...menu.matchAll(/<span data-section-title>([^<]+)<\/span>/gu)].map(match => match[1]);
+  const links = [...menu.matchAll(/<a\b[^>]*\bhref="([^"]+)"/gu)].map(match => match[1]);
+  assert.deepEqual(headings, development.links.filter(link => link.sectionTitle).map(link => link.sectionTitle), 'footer development headings differ from navigation');
+  assert.deepEqual(links, development.links.map(link => localHref(link.href)), 'footer development links differ from navigation');
   const headerHash = digest(references.header.markup), footerHash = digest(references.footer.markup);
   const pages = [];
   const includeScript = path.join(output, 'assets/include-partials.js');

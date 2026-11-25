@@ -8,10 +8,9 @@ const pages = new Map([
   ['/', 'index.html'], ['/bitrix24', 'bitrix24.html'], ['/veeam', 'veeam.html'], ['/licensing', 'licensing.html'], ['/avtomatizaciya-excel', 'avtomatizaciya-excel.html'],
   ['/telegram-boty', 'telegram-boty.html'], ['/vnedrenie-ii', 'vnedrenie-ii.html'], ['/sozdanie-saitov', 'sozdanie-saitov.html'], ['/seo', 'seo.html'],
   ['/analitika-dannyh', 'analitika-dannyh.html'],
-  ['/data-science', 'data-science.html'],
+  ['/ii-agenty', 'ii-agenty.html'],
   ['/mashinnoe-obuchenie', 'mashinnoe-obuchenie.html'],
   ['/kompyuternoe-zrenie', 'kompyuternoe-zrenie.html'],
-  ['/videoanalitika', 'videoanalitika.html'],
   ['/razrabotka-igr', 'razrabotka-igr.html'],
   ['/free', 'free.html'], ['/faq', 'faq.html'], ['/o-kompanii', 'o-kompanii.html'], ['/privacy', 'privacy.html']
 ]);

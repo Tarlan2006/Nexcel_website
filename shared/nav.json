@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-24T15:13:24.921Z",
+  "updatedAt": "2026-11-25T09:26:15.403Z",
   "logo": {
     "href": "https://nexcel.kz/",
     "src": "https://nexcel.kz/assets/logo.svg",
@@ -16,17 +16,10 @@
     },
     {
       "label": {
-        "ru": "Telegram-боты",
+        "ru": "Аналитика и дашборды",
         "kk": ""
       },
-      "href": "https://nexcel.kz/telegram-boty"
-    },
-    {
-      "label": {
-        "ru": "Внедрение ИИ",
-        "kk": ""
-      },
-      "href": "https://nexcel.kz/vnedrenie-ii"
+      "href": "https://nexcel.kz/analitika-dannyh"
     },
     {
       "label": {
@@ -44,17 +37,31 @@
     },
     {
       "label": {
-        "ru": "Аналитика данных и дашборды",
+        "ru": "Разработка игр",
         "kk": ""
       },
-      "href": "https://nexcel.kz/analitika-dannyh"
+      "href": "https://nexcel.kz/razrabotka-igr"
     },
     {
       "label": {
-        "ru": "Data Science и инжиниринг данных",
+        "ru": "ИИ-агенты",
         "kk": ""
       },
-      "href": "https://nexcel.kz/data-science"
+      "href": "https://nexcel.kz/ii-agenty"
+    },
+    {
+      "label": {
+        "ru": "Чат-боты и Telegram-боты",
+        "kk": ""
+      },
+      "href": "https://nexcel.kz/telegram-boty"
+    },
+    {
+      "label": {
+        "ru": "Внедрение ИИ в процессы",
+        "kk": ""
+      },
+      "href": "https://nexcel.kz/vnedrenie-ii"
     },
     {
       "label": {
@@ -65,24 +72,10 @@
     },
     {
       "label": {
-        "ru": "Компьютерное зрение",
+        "ru": "Компьютерное зрение и видеоаналитика",
         "kk": ""
       },
       "href": "https://nexcel.kz/kompyuternoe-zrenie"
-    },
-    {
-      "label": {
-        "ru": "Видеоаналитика",
-        "kk": ""
-      },
-      "href": "https://nexcel.kz/videoanalitika"
-    },
-    {
-      "label": {
-        "ru": "Разработка игр",
-        "kk": ""
-      },
-      "href": "https://nexcel.kz/razrabotka-igr"
     },
     {
       "label": {
@@ -151,17 +144,10 @@
         },
         {
           "label": {
-            "ru": "Telegram-боты",
+            "ru": "Аналитика и дашборды",
             "kk": ""
           },
-          "href": "https://nexcel.kz/telegram-boty"
-        },
-        {
-          "label": {
-            "ru": "Внедрение ИИ",
-            "kk": ""
-          },
-          "href": "https://nexcel.kz/vnedrenie-ii"
+          "href": "https://nexcel.kz/analitika-dannyh"
         },
         {
           "label": {
@@ -179,17 +165,31 @@
         },
         {
           "label": {
-            "ru": "Аналитика данных и дашборды",
+            "ru": "Разработка игр",
             "kk": ""
           },
-          "href": "https://nexcel.kz/analitika-dannyh"
+          "href": "https://nexcel.kz/razrabotka-igr"
         },
         {
           "label": {
-            "ru": "Data Science и инжиниринг данных",
+            "ru": "ИИ-агенты",
             "kk": ""
           },
-          "href": "https://nexcel.kz/data-science"
+          "href": "https://nexcel.kz/ii-agenty"
+        },
+        {
+          "label": {
+            "ru": "Чат-боты и Telegram-боты",
+            "kk": ""
+          },
+          "href": "https://nexcel.kz/telegram-boty"
+        },
+        {
+          "label": {
+            "ru": "Внедрение ИИ в процессы",
+            "kk": ""
+          },
+          "href": "https://nexcel.kz/vnedrenie-ii"
         },
         {
           "label": {
@@ -200,24 +200,10 @@
         },
         {
           "label": {
-            "ru": "Компьютерное зрение",
+            "ru": "Компьютерное зрение и видеоаналитика",
             "kk": ""
           },
           "href": "https://nexcel.kz/kompyuternoe-zrenie"
-        },
-        {
-          "label": {
-            "ru": "Видеоаналитика",
-            "kk": ""
-          },
-          "href": "https://nexcel.kz/videoanalitika"
-        },
-        {
-          "label": {
-            "ru": "Разработка игр",
-            "kk": ""
-          },
-          "href": "https://nexcel.kz/razrabotka-igr"
         }
       ]
     },
@@ -276,17 +262,10 @@
           },
           {
             "label": {
-              "ru": "Telegram-боты",
+              "ru": "Аналитика и дашборды",
               "kk": ""
             },
-            "href": "https://nexcel.kz/telegram-boty"
-          },
-          {
-            "label": {
-              "ru": "Внедрение ИИ",
-              "kk": ""
-            },
-            "href": "https://nexcel.kz/vnedrenie-ii"
+            "href": "https://nexcel.kz/analitika-dannyh"
           },
           {
             "label": {
@@ -304,17 +283,31 @@
           },
           {
             "label": {
-              "ru": "Аналитика данных и дашборды",
+              "ru": "Разработка игр",
               "kk": ""
             },
-            "href": "https://nexcel.kz/analitika-dannyh"
+            "href": "https://nexcel.kz/razrabotka-igr"
           },
           {
             "label": {
-              "ru": "Data Science и инжиниринг данных",
+              "ru": "ИИ-агенты",
               "kk": ""
             },
-            "href": "https://nexcel.kz/data-science"
+            "href": "https://nexcel.kz/ii-agenty"
+          },
+          {
+            "label": {
+              "ru": "Чат-боты и Telegram-боты",
+              "kk": ""
+            },
+            "href": "https://nexcel.kz/telegram-boty"
+          },
+          {
+            "label": {
+              "ru": "Внедрение ИИ в процессы",
+              "kk": ""
+            },
+            "href": "https://nexcel.kz/vnedrenie-ii"
           },
           {
             "label": {
@@ -325,24 +318,10 @@
           },
           {
             "label": {
-              "ru": "Компьютерное зрение",
+              "ru": "Компьютерное зрение и видеоаналитика",
               "kk": ""
             },
             "href": "https://nexcel.kz/kompyuternoe-zrenie"
-          },
-          {
-            "label": {
-              "ru": "Видеоаналитика",
-              "kk": ""
-            },
-            "href": "https://nexcel.kz/videoanalitika"
-          },
-          {
-            "label": {
-              "ru": "Разработка игр",
-              "kk": ""
-            },
-            "href": "https://nexcel.kz/razrabotka-igr"
           }
         ]
       },

@@ -151,6 +151,12 @@
     updateCurrent(); listen(window, 'hashchange', updateCurrent);
     return () => { events.abort(); menuAnimation?.cancel(); };
   }
+  // Delegate once so refreshed footer partials retain their controls.
+  document.documentElement.classList.add('footer-interactive');
+  document.addEventListener('click', event => {
+    const button = event.target.closest?.('#site-footer [data-footer-toggle]');
+    if (button) button.setAttribute('aria-expanded', String(button.getAttribute('aria-expanded') !== 'true'));
+  });
   let headerCleanup = null;
   let renderedHeader = document.querySelector('#site-header header');
   let headerMarkup = renderedHeader?.outerHTML || '';

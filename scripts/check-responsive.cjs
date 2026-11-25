@@ -93,7 +93,7 @@ async function checkAddressStates(page, width) {
   const results = [];
   const failures = [];
   const widths = [320, 360, 390, 768, 1000, 1024, 1150, 1280, 1440, 1536, 1920];
-  const coreRoutes = ['/', '/bitrix24', '/veeam', '/licensing', '/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/sozdanie-saitov', '/seo', '/analitika-dannyh', '/data-science', '/mashinnoe-obuchenie', '/kompyuternoe-zrenie', '/videoanalitika', '/razrabotka-igr', '/free', '/faq', '/o-kompanii'];
+  const coreRoutes = ['/', '/bitrix24', '/veeam', '/licensing', '/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/sozdanie-saitov', '/seo', '/analitika-dannyh', '/ii-agenty', '/mashinnoe-obuchenie', '/kompyuternoe-zrenie', '/razrabotka-igr', '/free', '/faq', '/o-kompanii'];
   const articleWidths = [320, 390, 768, 1024, 1440];
   try {
     for (const width of widths) {
@@ -137,9 +137,9 @@ async function checkAddressStates(page, width) {
           const licensingBounds = footerGrid.querySelector('nav[aria-label="Лицензии ПО и SaaS"]').getBoundingClientRect();
           const companyBounds = footerGrid.querySelector('nav[aria-label="Компания"]').getBoundingClientRect();
           const contactsBounds = office.closest('ul').parentElement.getBoundingClientRect();
-          const footerPairedRows = Math.abs(developmentBounds.top - licensingBounds.top) < 1 &&
-            Math.abs(companyBounds.top - contactsBounds.top) < 1 &&
-            companyBounds.left < contactsBounds.left && companyBounds.top > developmentBounds.top;
+          const footerPairedRows = Math.abs(licensingBounds.top - companyBounds.top) < 1 &&
+            licensingBounds.left < companyBounds.left && licensingBounds.top >= developmentBounds.bottom &&
+            contactsBounds.top >= Math.max(licensingBounds.bottom, companyBounds.bottom);
           return {
             footerColumns, addressLines, footerPairedRows,
             width: innerWidth, scrollWidth: document.documentElement.scrollWidth,
@@ -185,7 +185,7 @@ async function checkAddressStates(page, width) {
         if (result.textOverflow.length) failures.push(`${route} at ${width}px: text overflows (${result.textOverflow.join('; ')})`);
         if (result.brokenTitleWords.length) failures.push(`${route} at ${width}px: article title splits words mid-letter (${result.brokenTitleWords.join('; ')})`);
         if (!result.socialsOneRow) failures.push(`${route} at ${width}px: social buttons wrap or become too small`);
-        if (width >= 1024 && (result.footerColumns !== 5 || result.addressLines > 3.05)) failures.push(`${route} at ${width}px: desktop footer grid/address wraps incorrectly`);
+        if (width >= 1024 && (result.footerColumns !== 6 || result.addressLines > 3.05)) failures.push(`${route} at ${width}px: desktop footer grid/address wraps incorrectly`);
         if (width < 1024 && (result.footerColumns !== 2 || !result.footerPairedRows)) failures.push(`${route} at ${width}px: footer sections must form two paired rows`);
         if (!result.singleHeaderRow || !result.correctHeaderControls) failures.push(`${route} at ${width}px: header controls do not fit on one row`);
         const needsMono = route === '/' || route === '/licensing';

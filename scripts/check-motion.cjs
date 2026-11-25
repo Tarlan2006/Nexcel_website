@@ -109,6 +109,22 @@ async function checkClients(browser) {
 (async () => {
   const browser = await chromium.launch({ channel: 'chrome' });
   try {
+    for (const reducedMotion of ['reduce', 'no-preference']) {
+      const page = await browser.newPage({ viewport: { width: 375, height: 812 }, reducedMotion });
+      await page.goto('http://127.0.0.1:5500');
+      const buttons = page.locator('footer [data-footer-toggle]');
+      await buttons.first().waitFor();
+      assert.equal(await buttons.count(), 2);
+      for (const button of await buttons.all()) {
+        const list = page.locator('#' + await button.getAttribute('aria-controls'));
+        assert.equal(await list.isVisible(), false);
+        await button.press('Enter');
+        assert.equal(await list.isVisible(), true);
+        await button.press('Space');
+        assert.equal(await list.isVisible(), false);
+      }
+      await page.close();
+    }
     await checkClients(browser);
     for (const width of [390, 1440]) {
       const context = await browser.newContext({ viewport: { width, height: 900 }, reducedMotion: 'no-preference' });
@@ -128,7 +144,7 @@ async function checkClients(browser) {
       await page.goto('http://127.0.0.1:5500');
       const cards = page.locator('[data-card-reveal]');
       const cardCount = await cards.count();
-      assert.equal(cardCount, 15);
+      assert.equal(cardCount, 16);
       assert.equal(await page.evaluate(() => revealCalls.length), 0);
       await page.locator('#direction-tables').evaluate(el => { document.documentElement.style.scrollBehavior = 'auto'; window.scrollTo(0, el.offsetTop - 100); });
       await page.waitForFunction(() => document.querySelector('#direction-tables').getAnimations().length > 0);

@@ -151,7 +151,7 @@ const mobileClass = 'block rounded px-3 py-2.5 hover:bg-white hover:text-emerald
 
 function renderArtifacts(source, root) {
   const nav = validateNavigation(navigationFromSource(source));
-  const anchor = (item, className, attributes = '') => `<a${attributes} href="${escapeHtml(localHref(item.href))}" class="${className}">${escapeHtml(item.label.ru)}</a>`;
+  const anchor = (item, className, attributes = '') => `<a${attributes} href="${escapeHtml(localHref(item.href))}" class="${className}">${item.parent ? '<span aria-hidden="true">↳ </span>' : ''}${escapeHtml(item.label.ru)}</a>`;
   const primary = source.headerPages.map(id => source.pages[id]);
   const chevron = '<svg aria-hidden="true" class="h-4 w-4 shrink-0 transition-transform group-aria-expanded:rotate-180 motion-reduce:transition-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>';
   function groupMarkup(group, mobile) {
@@ -166,7 +166,8 @@ function renderArtifacts(source, root) {
       const heading = item.sectionTitle
         ? '<li role="presentation" data-section-title class="px-3 pt-3 pb-1 text-xs font-semibold uppercase tracking-wide text-textMuted">' + escapeHtml(item.sectionTitle) + '</li>'
         : '';
-      const link = anchor(item, mobile ? mobileClass : desktopServiceClass, mobile ? '' : ' role="menuitem" tabindex="-1"');
+      const linkClass = (mobile ? mobileClass : desktopServiceClass) + (item.parent ? ' nav-subitem' : '');
+      const link = anchor(item, linkClass, mobile ? '' : ' role="menuitem" tabindex="-1"');
       return heading + '<li' + (mobile ? '' : ' role="none"') + '>' + link + '</li>';
     }).join('');
     return '<div id="' + id + '" data-' + mode + '-group="' + group.id + '" class="relative">' +

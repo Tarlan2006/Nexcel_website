@@ -17,10 +17,10 @@ const newServices = ['/telegram-boty', '/vnedrenie-ii'];
 const websiteService = '/sozdanie-saitov';
 const companyServices = ['/avtomatizaciya-excel', ...newServices, '/licensing', '/seo'];
 const services = [...companyServices, websiteService];
-const developmentPages = ['/analitika-dannyh', '/data-science', '/mashinnoe-obuchenie', '/kompyuternoe-zrenie', '/videoanalitika', '/razrabotka-igr'];
+const developmentPages = ['/analitika-dannyh', '/mashinnoe-obuchenie', '/kompyuternoe-zrenie', '/razrabotka-igr'];
 const faqCounts = new Map([
   ['/', 5], ['/faq', 12], ['/o-kompanii', 3], ['/avtomatizaciya-excel', 6],
-  ...developmentPages.map(route => [route, 5]),
+  ...developmentPages.map(route => [route, route === '/kompyuternoe-zrenie' ? 10 : 5]),
   ...newServices.map(route => [route, 4]), ['/licensing', 4], ['/seo', 7], [websiteService, 7]
 ]);
 const jargon = /оцифров[\p{L}]*|mini[\p{Pd}\s]erp|инспектор\s+направлений|доказательн[\p{L}]*\s+баз[\p{L}]*/iu;
@@ -131,7 +131,7 @@ async function run() {
       if (new Set(entries.map(([loc]) => loc)).size !== entries.length) throw new Error('Duplicate sitemap URL');
       return entries;
     }, xml));
-    assert.deepEqual([...sitemap.keys()].sort(), files.map(routeFor).filter(route => route !== '/404').map(route => site + route).sort(), 'sitemap covers the indexable pages');
+    assert.deepEqual([...sitemap.keys()].sort(), files.map(routeFor).filter(route => !['/404', '/ii-agenty'].includes(route)).map(route => site + route).sort(), 'sitemap covers the indexable pages');
     assert.doesNotMatch(llms, jargon, 'llms.txt: jargon');
     assert.ok(llms.includes('[О компании Nexcel Solutions](' + site + '/o-kompanii)'), 'llms.txt: company page link');
     const pagesByRoute = new Map();
@@ -179,7 +179,13 @@ async function run() {
       assert.equal(data.descriptions.length, 1, route + ': description count');
       const [title] = data.titles;
       const [description] = data.descriptions;
-      assert.match(title, /^[^|]+ \| Nexcel Solutions$/, route + ': title format');
+      const exactTitle = { '/telegram-boty': 'Чат-боты и Telegram-боты', '/kompyuternoe-zrenie': 'Компьютерное зрение и видеоаналитика' }[route];
+      if (exactTitle) {
+        assert.equal(title, exactTitle);
+        assert.equal(description, exactTitle);
+      } else {
+        assert.match(title, /^[^|]+ \| Nexcel Solutions$/, route + ': title format');
+      }
       assert.doesNotMatch(title, /^(?:главная|home|добро пожаловать)(?:[\s:|]|$)/iu, route + ': title introduction');
       if (route === '/') assert.equal(title, 'Автоматизация бизнеса и лицензии ПО в Казахстане | Nexcel Solutions');
       assert.ok(!seenTitles.has(title), route + ': duplicate title');
@@ -188,7 +194,7 @@ async function run() {
         assert.ok(title.length <= 60 && description.length <= 155, route + ': service metadata length');
         assert.ok(entities.some(entity => entity['@type'] === 'Service'), route + ': Service schema');
       }
-      assert.ok(description && [...description].length >= 140 && [...description].length <= 160, route + ': description length (' + [...(description || '')].length + ')');
+      if (!exactTitle) assert.ok(description && [...description].length >= 140 && [...description].length <= 160, route + ': description length (' + [...(description || '')].length + ')');
       assert.ok(!seenDescriptions.has(description), route + ': duplicate description');
       seenDescriptions.add(description);
       assert.deepEqual(data.ogTitles, [title], route + ': Open Graph title');
@@ -203,16 +209,16 @@ async function run() {
       assert.doesNotMatch(html, /⚠|\bTODO\b|lorem\s+ipsum|example\.invalid/i, route + ': unpublished notes');
       assert.ok(!data.links.some(link => /^(?:#|javascript:.*)?$/i.test(link.trim())), route + ': empty or placeholder links');
       assert.deepEqual(data.canonicals, [site + route], route + ': canonical');
-      if (route === '/404') assert.deepEqual(data.robots, ['noindex'], route + ': noindex');
+      if (['/404', '/ii-agenty'].includes(route)) assert.deepEqual(data.robots, ['noindex'], route + ': noindex');
       assert.ok(!data.links.some(link => ['/#direction-bots', '/#direction-ai', '/sozdanie-sajtov'].includes(link)), route + ': stale or unconfirmed links');
 
-      if (route !== '/404') {
-        if (route !== '/') {
-          const crumb = entities.find(entity => entity['@type'] === 'BreadcrumbList');
-          assert.ok(crumb, route + ': BreadcrumbList');
-          assert.equal(crumb.itemListElement[0].item, site + '/');
-          assert.equal(crumb.itemListElement.at(-1).item, site + route);
-        }
+      if (route !== '/404' && route !== '/') {
+        const crumb = entities.find(entity => entity['@type'] === 'BreadcrumbList');
+        assert.ok(crumb, route + ': BreadcrumbList');
+        assert.equal(crumb.itemListElement[0].item, site + '/');
+        assert.equal(crumb.itemListElement.at(-1).item, site + route);
+      }
+      if (!['/404', '/ii-agenty'].includes(route)) {
         const post = posts.get(route);
         const lastmod = post ? post.updated || post.date : route === '/news' ? latestPostDate : pageDates[file];
         assert.match(lastmod, /^\d{4}-\d{2}-\d{2}$/, route + ': lastmod format');

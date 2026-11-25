@@ -6,7 +6,7 @@ const path = require('node:path');
 const base = process.argv[2] || 'http://127.0.0.1:5500';
 const cloudflare = process.argv.includes('--cloudflare');
 const root = path.resolve(__dirname, '..');
-const serviceRoutes = ['/bitrix24', '/veeam', '/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/sozdanie-saitov', '/seo', '/analitika-dannyh', '/data-science', '/mashinnoe-obuchenie', '/kompyuternoe-zrenie', '/videoanalitika', '/razrabotka-igr'];
+const serviceRoutes = ['/bitrix24', '/veeam', '/avtomatizaciya-excel', '/telegram-boty', '/vnedrenie-ii', '/sozdanie-saitov', '/seo', '/analitika-dannyh', '/ii-agenty', '/mashinnoe-obuchenie', '/kompyuternoe-zrenie', '/razrabotka-igr'];
 let checks = 0;
 
 async function request(route, options = {}) {
@@ -65,14 +65,21 @@ async function run() {
     }
     checks++;
   }
-  for (const route of ['/templates', '/templates.html', '/templates/', '/templates?source=check', '/templates.html?source=check']) {
-    const response = await request(route);
-    assert.equal(response.status, 301, route + ': permanent redirect');
-    const location = new URL(response.headers.get('location'), base);
-    assert.equal(location.pathname, '/free', route + ': destination');
-    assert.equal(location.search, new URL(route, base).search, route + ': preserve query');
-    checks++;
+  for (const [from, to] of [['/templates', '/free'], ['/data-science', '/analitika-dannyh'], ['/videoanalitika', '/kompyuternoe-zrenie']]) {
+    for (const suffix of ['', '.html', '/', '?source=check', '.html?source=check']) {
+      const route = from + suffix;
+      const response = await request(route);
+      assert.equal(response.status, 301, route + ': permanent redirect');
+      const location = new URL(response.headers.get('location'), base);
+      assert.equal(location.pathname, to, route + ': destination');
+      assert.equal(location.search, new URL(route, base).search, route + ': preserve query');
+      checks++;
+    }
   }
+  const agent = await (await request('/ii-agenty')).text();
+  assert.match(agent, /<meta name="robots" content="noindex"/);
+  assert.doesNotMatch(await (await request('/sitemap.xml')).text(), /\/(?:ii-agenty|videoanalitika|data-science)<\/loc>/);
+  assert.match(await (await request('/llms.txt')).text(), /https:\/\/nexcel\.kz\/ii-agenty\)/);
   const bitrix = await fs.readFile(path.join(root, 'dist', 'bitrix24.html'), 'utf8');
   assert.doesNotMatch(bitrix, /Битрикс[\s-]+24|Bitrix\s+24|\d[\d\s.,]*\s*(?:₸|тенге)/iu, 'Bitrix page brand and pricing');
   assert.doesNotMatch(bitrix, /<(?:form|input|textarea|select)\b/i, 'Bitrix page has no data-entry form');

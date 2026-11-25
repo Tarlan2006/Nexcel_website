@@ -25,6 +25,15 @@ async function checkStaticHeader(page) {
     const all = await containers.locator('a').evaluateAll(els => els.map(e => e.getAttribute('href')));
     assert.equal(new Set(all).size, all.length);
   }
+  const names = ['Автоматизация и сайты', 'ИИ'];
+  for (const selector of ['#desktop-development-menu', '#mobile-development-menu', 'footer .footer-development']) {
+    const menu = page.locator(selector);
+    assert.deepEqual(await menu.locator('[data-section-title]').allTextContents(), names);
+    const child = menu.locator('a.nav-subitem');
+    await expect(child).toHaveAttribute('href', '/kompyuternoe-zrenie');
+    await expect(child.locator('[aria-hidden]')).toHaveText('↳');
+    assert.equal(await child.evaluate(link => link.closest('li').previousElementSibling.querySelector('a').pathname), '/mashinnoe-obuchenie');
+  }
   await expect(page.locator('header button').filter({ hasText: /^Услуги$/ })).toHaveCount(0);
   for (const group of groups) {
     const column = page.locator('footer nav[aria-label="' + group.label.ru + '"]');

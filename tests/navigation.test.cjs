@@ -76,7 +76,7 @@ test('generated artifacts are deterministic and committed copies are current', (
 
 test('development and licensing are separate complete groups without duplicate or unsafe links', () => {
   const nav = navigation();
-  assert.deepEqual(nav.groups.map(group => [group.id, group.links.length]), [['development', 11], ['licensing', 3]]);
+  assert.deepEqual(nav.groups.map(group => [group.id, group.links.length]), [['development', 10], ['licensing', 3]]);
   assert.deepEqual(nav.groups[1].links.map(item => new URL(item.href).pathname), ['/licensing', '/bitrix24', '/veeam']);
   assert.deepEqual(nav.footer.columns.map(item => item.title.ru), ['Разработка', 'Лицензии ПО и SaaS', 'Компания']);
   for (const mutate of [

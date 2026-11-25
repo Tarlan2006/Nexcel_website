@@ -12,7 +12,7 @@ function fixture(t) {
     fs.rmSync(directory, { recursive: true, force: true });
   });
   const header = '<header><nav><a>Разработка</a><a>Лицензии ПО и SaaS</a></nav></header>';
-  const footer = '<footer><address>Астана, просп. Мангилик Ел, 55/1</address></footer>';
+  const footer = fs.readFileSync(path.join(__dirname, '../partials/footer.html'), 'utf8').trim();
   fs.mkdirSync(path.join(directory, 'partials'));
   fs.mkdirSync(path.join(directory, 'dist/news'), { recursive: true });
   fs.mkdirSync(path.join(directory, 'dist/partials'));
@@ -42,6 +42,18 @@ test('a different, missing or duplicate footer fails verification', t => {
   for (const html of ['<footer>Другой футер</footer>', '<main>Нет футера</main>', footer + footer]) {
     fs.writeFileSync(target, page.replace(footer, html));
     assert.throws(() => checkFooters(directory), /footer differs|expected exactly one footer/);
+  }
+});
+
+test('the canonical footer must include both development groups and their links', t => {
+  const { directory, footer } = fixture(t);
+  const target = path.join(directory, 'partials/footer.html');
+  for (const change of [
+    footer.replace('data-section-title>ИИ<', 'data-section-title>Другое<'),
+    footer.replace('href="/ii-agenty"', 'href="/free"'),
+  ]) {
+    fs.writeFileSync(target, change);
+    assert.throws(() => checkFooters(directory), /footer development (headings|links) differ/);
   }
 });
 
