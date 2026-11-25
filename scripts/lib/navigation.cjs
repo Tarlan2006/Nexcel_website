@@ -145,13 +145,12 @@ function validateNavigation(nav) {
   return nav;
 }
 
-const desktopServiceClass = 'block rounded px-3 py-2 hover:bg-paperSecondary hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent';
 const desktopPageClass = 'rounded py-2 hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent';
 const mobileClass = 'block rounded px-3 py-2.5 hover:bg-white hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent';
 
 function renderArtifacts(source, root) {
   const nav = validateNavigation(navigationFromSource(source));
-  const anchor = (item, className, attributes = '') => `<a${attributes} href="${escapeHtml(localHref(item.href))}" class="${className}">${item.parent ? '<span aria-hidden="true">↳ </span>' : ''}${escapeHtml(item.label.ru)}</a>`;
+  const anchor = (item, className, attributes = '', suffix = '') => `<a${attributes} href="${escapeHtml(localHref(item.href))}" class="${className}">${escapeHtml(item.label.ru)}${suffix}</a>`;
   const primary = source.headerPages.map(id => source.pages[id]);
   const chevron = '<svg aria-hidden="true" class="h-4 w-4 shrink-0 transition-transform group-aria-expanded:rotate-180 motion-reduce:transition-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>';
   function groupMarkup(group, mobile) {
@@ -160,19 +159,37 @@ function renderArtifacts(source, root) {
     const buttonClass = mobile
       ? 'group flex w-full items-center justify-between gap-2 rounded px-3 py-2.5 text-left hover:bg-white hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent'
       : 'group inline-flex items-center gap-1.5 rounded py-2 hover:text-emeraldAccent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emeraldAccent';
-    const listClass = mobile ? 'ml-3 mt-1 border-l border-gridBorder pl-2'
-      : 'absolute left-0 top-full z-10 max-h-[calc(100dvh-4rem)] w-72 overflow-y-auto whitespace-normal rounded-lg border border-gridBorder bg-white p-1.5 shadow-lg';
-    const items = group.links.map(item => {
-      const heading = item.sectionTitle
-        ? '<li role="presentation" data-section-title class="px-3 pt-3 pb-1 text-xs font-semibold uppercase tracking-wide text-textMuted">' + escapeHtml(item.sectionTitle) + '</li>'
-        : '';
-      const linkClass = (mobile ? mobileClass : desktopServiceClass) + (item.parent ? ' nav-subitem' : '');
-      const link = anchor(item, linkClass, mobile ? '' : ' role="menuitem" tabindex="-1"');
-      return heading + '<li' + (mobile ? '' : ' role="none"') + '>' + link + '</li>';
-    }).join('');
-    return '<div id="' + id + '" data-' + mode + '-group="' + group.id + '" class="relative">' +
-      '<button type="button" id="' + id + '-toggle" aria-controls="' + id + '-menu" aria-expanded="false"' + (mobile ? '' : ' aria-haspopup="menu"') + ' class="' + buttonClass + '">' + escapeHtml(group.label.ru) + chevron + '</button>' +
-      '<ul id="' + id + '-menu" hidden aria-labelledby="' + id + '-toggle"' + (mobile ? '' : ' role="menu"') + ' class="' + listClass + '">' + items + '</ul></div>';
+    const sections = [];
+    for (const link of group.links) {
+      if (link.sectionTitle || !sections.length) sections.push({ title: link.sectionTitle, links: [] });
+      sections.at(-1).links.push(link);
+    }
+    const grouped = sections.some(section => section.title);
+    const items = sections.map((section, index) => {
+      const sectionId = `${id}-section-${index}`;
+      const rows = section.links.map(item => {
+        const classes = 'header-service-link' + (item.parent ? ' nav-subitem' : '');
+        const attrs = mobile ? '' : ' role="menuitem" tabindex="-1"';
+        const arrow = '<span class="header-link-arrow" aria-hidden="true">→</span>';
+        return `<li${mobile ? '' : ' role="none"'}>${anchor(item, classes, attrs, arrow)}</li>`;
+      }).join('');
+      if (!section.title) return grouped ? `<ul${mobile ? '' : ' role="none"'}>${rows}</ul>` : rows;
+      const title = escapeHtml(section.title);
+      if (mobile) return `<div class="mobile-service-section">
+        <button type="button" class="mobile-section-toggle" aria-expanded="false" aria-controls="${sectionId}-links"><span data-section-title>${title}</span><span class="section-chevron" aria-hidden="true">›</span></button>
+        <ul id="${sectionId}-links" hidden>${rows}</ul>
+      </div>`;
+      return `<div role="group" aria-labelledby="${sectionId}-title">
+        <p id="${sectionId}-title" class="desktop-section-title" data-section-title>${title}</p>
+        <ul role="none">${rows}</ul>
+      </div>`;
+    }).join('\n');
+    const tag = grouped ? 'div' : 'ul';
+    const panelClass = mobile ? 'mobile-service-panel' : 'desktop-service-panel' + (grouped ? ' has-sections' : '');
+    return `<div id="${id}" data-${mode}-group="${group.id}" class="relative">
+      <button type="button" id="${id}-toggle" aria-controls="${id}-menu" aria-expanded="false"${mobile ? '' : ' aria-haspopup="menu"'} class="${buttonClass}">${escapeHtml(group.label.ru)}${chevron}</button>
+      <${tag} id="${id}-menu" hidden aria-labelledby="${id}-toggle"${mobile ? '' : ' role="menu"'} class="${panelClass}">${items}</${tag}>
+    </div>`;
   }
   const brand = source.logo.alt.split(' ');
   const values = {

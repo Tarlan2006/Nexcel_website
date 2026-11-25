@@ -59,9 +59,15 @@ async function checkHeader(page, response, width, route) {
     assert.equal(await menu.locator('a[aria-current="page"]').getAttribute('href'), route);
   }
   const firstLink = menu.locator('a[href]').first();
+  const subsection = menu.locator('.mobile-section-toggle').first();
+  if (mobile && await subsection.count()) await subsection.press('Enter');
   if (mobile) await firstLink.focus();
   assert.equal(await firstLink.evaluate(link => document.activeElement === link), true);
   await page.keyboard.press('Escape');
+  if (mobile && await subsection.count()) {
+    assert.equal(await subsection.getAttribute('aria-expanded'), 'false');
+    await page.keyboard.press('Escape');
+  }
   await menu.waitFor({ state: 'hidden' });
   assert.equal(await toggle.getAttribute('aria-expanded'), 'false');
   assert.equal(await toggle.evaluate(button => document.activeElement === button), true, `${route}: Escape restores focus`);

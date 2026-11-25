@@ -19,7 +19,7 @@ async function checkStaticHeader(page) {
     for (const group of groups) {
       const box = page.locator('#' + mode + '-' + group.id);
       assert.deepEqual(await box.locator('[data-section-title]').allTextContents(), group.links.filter(item => item.sectionTitle).map(item => item.sectionTitle));
-      await expect(box.locator('button')).toHaveText(group.label.ru);
+      await expect(box.locator(':scope > button')).toHaveText(group.label.ru);
       assert.deepEqual(await box.locator('a').evaluateAll(els => els.map(e => e.getAttribute('href'))), group.links.map(item => localHref(item.href)));
     }
     const all = await containers.locator('a').evaluateAll(els => els.map(e => e.getAttribute('href')));
@@ -31,9 +31,14 @@ async function checkStaticHeader(page) {
     assert.deepEqual(await menu.locator('[data-section-title]').allTextContents(), names);
     const child = menu.locator('a.nav-subitem');
     await expect(child).toHaveAttribute('href', '/kompyuternoe-zrenie');
-    await expect(child.locator('[aria-hidden]')).toHaveText('↳');
+    if (selector.startsWith('footer')) await expect(child.locator('[aria-hidden]')).toHaveText('↳');
+    else await expect(child).not.toContainText('↳');
     assert.equal(await child.evaluate(link => link.closest('li').previousElementSibling.querySelector('a').pathname), '/mashinnoe-obuchenie');
   }
+  const titles = page.locator('#desktop-development-menu p[data-section-title]');
+  assert.deepEqual(await titles.allTextContents(), names);
+  assert(await titles.evaluateAll(els => els.every(el => el.tabIndex < 0 && !el.closest('a,button'))));
+  await expect(page.locator('#desktop-licensing-menu [data-section-title]')).toHaveCount(0);
   await expect(page.locator('header button').filter({ hasText: /^Услуги$/ })).toHaveCount(0);
   for (const group of groups) {
     const footerLabel = group.id === 'licensing' ? 'Лицензии ПО' : group.label.ru;
@@ -53,6 +58,15 @@ async function checkDesktopDisclosure(page) {
     await toggle.hover(); await expect(menu).toBeVisible();
     await page.mouse.move(1, 899); await expect(menu).toBeHidden();
     await toggle.click(); await expect(items.first()).toBeFocused();
+    if (group.id === 'development') {
+      const panel = await menu.boundingBox();
+      const [left, right] = await menu.locator('p[data-section-title]').evaluateAll(els => els.map(el => el.getBoundingClientRect().toJSON()));
+      assert.equal(panel.width, 560);
+      assert.equal(left.top, right.top);
+      assert(left.right < right.left);
+    }
+    await toggle.click(); await expect(menu).toBeHidden();
+    await toggle.click(); await expect(items.first()).toBeFocused();
     await page.mouse.move(1, 899); await expect(menu).toBeVisible();
     await page.mouse.click(1, 899); await expect(menu).toBeHidden();
     await toggle.press('Enter'); await expect(items.first()).toBeFocused();
@@ -67,7 +81,7 @@ async function checkDesktopDisclosure(page) {
     await expect(menu).toBeHidden();
     await page.setViewportSize({ width: 1024, height: 270 });
     await toggle.press('ArrowUp'); await expect(items.last()).toBeFocused();
-    assert(await items.last().evaluate(item => { const r=item.getBoundingClientRect(), p=item.closest('ul').getBoundingClientRect(); return r.top>=p.top && r.bottom<=p.bottom && p.bottom<=innerHeight; }));
+    assert(await items.last().evaluate(item => { const r=item.getBoundingClientRect(), p=item.closest('[role="menu"]').getBoundingClientRect(); return r.top>=p.top && r.bottom<=p.bottom && p.bottom<=innerHeight; }));
     await page.keyboard.press('Escape'); await page.setViewportSize({ width: 1280, height: 900 });
   }
 }
@@ -77,7 +91,18 @@ async function checkMobileAccordion(page) {
   for (const group of groups) {
     const toggle = page.locator('#mobile-' + group.id + '-toggle'), list = page.locator('#mobile-' + group.id + '-menu');
     await toggle.press('Enter'); await expect(list).toBeVisible();
-    await page.keyboard.press('Tab'); await expect(list.locator('a').first()).toBeFocused();
+    if (group.id === 'development') {
+      for (const section of await list.locator('.mobile-section-toggle').all()) {
+        const links = page.locator('#' + await section.getAttribute('aria-controls'));
+        await expect(links).toBeHidden();
+        await page.keyboard.press('Tab'); await expect(section).toBeFocused();
+        await section.press('Space'); await expect(links).toBeVisible();
+        await page.keyboard.press('Tab'); await expect(links.locator('a').first()).toBeFocused();
+        await page.keyboard.press('Escape'); await expect(links).toBeHidden(); await expect(section).toBeFocused();
+      }
+    } else {
+      await page.keyboard.press('Tab'); await expect(list.locator('a').first()).toBeFocused();
+    }
     await page.keyboard.press('Escape'); await expect(list).toBeHidden(); await expect(toggle).toBeFocused();
   }
   await page.locator('#mobile-development-toggle').click(); await page.locator('#mobile-licensing-toggle').click();
@@ -95,6 +120,10 @@ async function checkLinks(page, mobile) {
     if (mobile) await page.locator('#mobile-menu-toggle').click();
     const group = groups.find(group => group.links.some(item => localHref(item.href) === target));
     if (group) await page.locator('#'+mode+'-'+group.id+'-toggle').click();
+    if (mobile && group?.id === 'development') {
+      const section = nav.locator('.mobile-service-section').filter({ has: page.locator('a[href="'+target+'"]') });
+      await section.getByRole('button').click();
+    }
     await nav.locator('a[href="'+target+'"]').click(); await page.waitForURL(base+target);
     await expect(nav.locator('a[href="'+target+'"]')).toHaveAttribute('aria-current', target.includes('#')?'location':'page');
     await expect(nav.locator('a[aria-current]')).toHaveCount(1);
