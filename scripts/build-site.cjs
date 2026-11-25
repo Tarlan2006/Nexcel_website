@@ -44,6 +44,13 @@ if (process.argv.includes('--inline-partials')) {
     }
   }
   inlinePartials(output);
+  const images = require('./lib/published-images.cjs').referencedImages(output);
+  const assets = path.join(output, 'assets');
+  for (const file of fs.readdirSync(assets, { recursive: true })) {
+    if (/\.png$/i.test(file) && !images.has('/assets/' + file.split(path.sep).join('/'))) {
+      fs.unlinkSync(path.join(assets, file));
+    }
+  }
   console.log(`Shared partials inlined in ${changed} page(s)`);
   return;
 }

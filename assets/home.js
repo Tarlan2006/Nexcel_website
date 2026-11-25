@@ -1,6 +1,3 @@
-// Icons are pre-rendered as inline <svg> at build time (see scripts/inline-icons.js) —
-// no icon-library JS runtime is loaded or needed here.
-
 // ---------- Hero interactive inspector ----------
 const heroContent = {
   tables: { label: 'Таблицы и отчёты', topic: 'анализ данных и учет в Google Таблицах' },

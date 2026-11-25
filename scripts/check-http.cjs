@@ -41,6 +41,16 @@ function checkSecurityHeaders(response) {
 
 async function run() {
   const integrity = require('./check-footers.cjs').checkFooters(root);
+  const dist = path.join(root, 'dist');
+  const images = require('./lib/published-images.cjs').referencedImages(dist);
+  for (const image of images) {
+    const response = await request(image);
+    assert.equal(response.status, 200, image);
+    assert.match(response.headers.get('content-type') || '', /^image\//, image);
+    assert.deepEqual(Buffer.from(await response.arrayBuffer()), await fs.readFile(path.join(dist, image)), image);
+    checks++;
+  }
+  console.log('PASS: ' + images.size + ' referenced images returned 200.');
   console.log('PASS header/footer integrity: ' + integrity.pages.length + ' built pages');
   console.table(integrity.pages.map(({ page, headerHash, footerHash }) => ({ page, header: headerHash.slice(0, 16), footer: footerHash.slice(0, 16) })));
   assert(await fs.readFile(path.join(root, 'dist/free.html'), 'utf8').then(html => html.includes('id="tools"') && html.includes('href="/#calculator"')), '/free#tools must contain the calculator card');
@@ -79,7 +89,7 @@ async function run() {
   const agent = await (await request('/ii-agenty')).text();
   assert.match(agent, /<meta name="robots" content="noindex"/);
   assert.doesNotMatch(await (await request('/sitemap.xml')).text(), /\/(?:ii-agenty|videoanalitika|data-science)<\/loc>/);
-  assert.match(await (await request('/llms.txt')).text(), /https:\/\/nexcel\.kz\/ii-agenty\)/);
+  assert.doesNotMatch(await (await request('/llms.txt')).text(), /https:\/\/nexcel\.kz\/ii-agenty\)/);
   const bitrix = await fs.readFile(path.join(root, 'dist', 'bitrix24.html'), 'utf8');
   assert.doesNotMatch(bitrix, /Битрикс[\s-]+24|Bitrix\s+24|\d[\d\s.,]*\s*(?:₸|тенге)/iu, 'Bitrix page brand and pricing');
   assert.doesNotMatch(bitrix, /<(?:form|input|textarea|select)\b/i, 'Bitrix page has no data-entry form');

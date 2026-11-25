@@ -329,7 +329,42 @@ body { padding-bottom: var(--cookie-notice-height, 0px); }
 .footer-group a:hover { @apply text-white underline; }
 .footer-group a:focus-visible, .footer-group button:focus-visible { @apply outline outline-2 outline-offset-2 outline-emeraldOnDark; }
 .nav-subitem { display: block; padding-left: 1rem; }
-header .nav-subitem { padding-left: 1.75rem; }
+.desktop-service-panel {
+  @apply absolute left-0 top-full z-10 w-72 overflow-y-auto overscroll-contain whitespace-normal rounded-lg border border-gridBorder bg-white p-2 shadow-lg;
+  max-height: calc(100dvh - 4rem);
+}
+.desktop-service-panel.has-sections:not([hidden]) {
+  @apply grid grid-cols-2 gap-4 p-4;
+  width: 35rem;
+}
+.desktop-section-title {
+  @apply mb-2 px-3 text-[11px] font-semibold uppercase tracking-widest text-textMuted;
+}
+.desktop-section-title::after {
+  content: "";
+  @apply mt-2 block h-px w-6 bg-emeraldAccent;
+}
+.header-service-link {
+  @apply flex items-center justify-between gap-2 rounded px-3 py-2 text-sm font-normal;
+}
+.header-service-link:hover, .header-service-link:focus-visible {
+  @apply bg-emeraldLight text-emeraldAccent;
+}
+.header-service-link:focus-visible, .mobile-section-toggle:focus-visible {
+  @apply outline outline-2 -outline-offset-2 outline-emeraldAccent;
+}
+.header-link-arrow { @apply shrink-0 opacity-0; }
+.header-service-link:hover .header-link-arrow, .header-service-link:focus-visible .header-link-arrow { opacity: 1; }
+header .header-service-link.nav-subitem {
+  @apply ml-3 flex rounded-l-none border-l border-gridBorder pl-3 text-[13px];
+}
+.mobile-service-panel { @apply ml-3 mt-1 space-y-1; }
+.mobile-section-toggle {
+  @apply flex w-full items-center justify-between gap-2 rounded bg-paperSecondary px-3 py-2.5 text-left text-sm font-semibold;
+}
+.section-chevron { @apply text-lg leading-none; }
+.mobile-section-toggle[aria-expanded="true"] .section-chevron { transform: rotate(90deg); }
+.mobile-service-section ul { @apply ml-3 my-1; }
 .footer-group .nav-subitem { position: relative; padding-left: 1.5rem; }
 .footer-group .nav-subitem > span { position: absolute; left: .5rem; }
 @media (max-width: 767px) {

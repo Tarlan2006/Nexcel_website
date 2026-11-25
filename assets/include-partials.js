@@ -5,8 +5,12 @@
     const listen = (target, type, handler) => target.addEventListener(type, handler, { signal: events.signal });
     const menuMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const desktopViewport = window.matchMedia('(min-width: 1024px)');
+    function disclosure(toggle) {
+      return { toggle, list: document.getElementById(toggle.getAttribute('aria-controls')) };
+    }
     const readGroups = (mode) => [...document.querySelectorAll('[data-' + mode + '-group]')].map(container => ({
-      container, toggle: container.querySelector('button'), list: container.querySelector('ul'),
+      container, ...disclosure(container.querySelector('button')),
+      sections: [...container.querySelectorAll('.mobile-section-toggle')].map(disclosure),
       links: [...container.querySelectorAll('a')], pinned: false
     }));
     const desktopGroups = readGroups('desktop');
@@ -66,6 +70,7 @@
     }
     function setMobileGroup(group, open, restoreFocus = false) {
       if (!open && restoreFocus) group.toggle.focus();
+      if (!open) group.sections?.forEach(section => setMobileGroup(section, false));
       group.toggle.setAttribute('aria-expanded', String(open));
       group.list.hidden = !open;
     }
@@ -102,7 +107,11 @@
     }
     const isMobileMenuOpen = () => mobileToggle.getAttribute('aria-expanded') === 'true';
     listen(mobileToggle, 'click', () => setMobileMenu(!isMobileMenuOpen()));
-    mobileGroups.forEach(group => listen(group.toggle, 'click', () => setMobileGroup(group, group.list.hidden)));
+    for (const group of mobileGroups) {
+      for (const entry of [group, ...group.sections]) {
+        listen(entry.toggle, 'click', () => setMobileGroup(entry, entry.list.hidden));
+      }
+    }
     mobileMenu.querySelectorAll('a').forEach(link => listen(link, 'click', () => setMobileMenu(false)));
     listen(menuMotion, 'change', () => { if (menuMotion.matches) setMobileMenu(isMobileMenuOpen(), true); });
     listen(desktopViewport, 'change', () => {
@@ -126,7 +135,10 @@
       const desktop = desktopGroups.find(group => !group.list.hidden);
       const opened = mobileGroups.filter(group => !group.list.hidden);
       const mobile = opened.find(group => group.container.contains(document.activeElement)) || opened.at(-1);
+      const section = mobile?.sections.find(entry => !entry.list.hidden &&
+        (entry.toggle === document.activeElement || entry.list.contains(document.activeElement)));
       if (desktop) setDesktopGroup(desktop, false, true);
+      else if (section) setMobileGroup(section, false, true);
       else if (mobile) setMobileGroup(mobile, false, true);
       else if (isMobileMenuOpen()) setMobileMenu(false);
       else return;
