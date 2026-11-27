@@ -218,10 +218,19 @@ async function run() {
       assert.ok(!data.links.some(link => ['/#direction-bots', '/#direction-ai', '/sozdanie-sajtov'].includes(link)), route + ': stale or unconfirmed links');
 
       if (route !== '/404' && route !== '/') {
-        const crumb = entities.find(entity => entity['@type'] === 'BreadcrumbList');
-        assert.ok(crumb, route + ': BreadcrumbList');
-        assert.equal(crumb.itemListElement[0].item, site + '/');
-        assert.equal(crumb.itemListElement.at(-1).item, site + route);
+        const crumbs = entities.filter(entity => entity['@type'] === 'BreadcrumbList');
+        assert.equal(crumbs.length, 1, route + ': BreadcrumbList');
+        for (const crumb of crumbs) {
+          const list = crumb.itemListElement;
+          assert.equal(list[0].item, site + '/');
+          assert.equal(list.at(-1).item, site + route);
+          list.forEach((entry, index) => {
+            assert.equal(entry.position, index + 1, route + ': breadcrumb positions must run 1..N');
+            assert.ok(typeof entry.name === 'string' && entry.name.trim(), route + ': breadcrumb name');
+            // Only the last entry may omit item; here every entry carries one.
+            if (index < list.length - 1) assert.ok(typeof entry.item === 'string' && entry.item.trim(), route + ': breadcrumb item is required for all but the last entry');
+          });
+        }
       }
       if (!['/404', '/ii-agenty'].includes(route)) {
         const post = posts.get(route);

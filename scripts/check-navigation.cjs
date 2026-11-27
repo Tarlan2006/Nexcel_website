@@ -141,11 +141,26 @@ async function checkLinks(page, mobile) {
     }
     if (group && target!=='/licensing') {
       const crumb=page.locator('nav[aria-label="Хлебные крошки"]');
-      await expect(crumb).toContainText(group.label.ru);
-      const middle=await page.locator('script[type="application/ld+json"]').evaluateAll(els=>els.map(e=>JSON.parse(e.textContent)).flatMap(s=>s['@graph']||[s]).find(e=>e['@type']==='BreadcrumbList').itemListElement[1]);
-      assert.equal(middle.name, group.label.ru);
-      if (group.id==='development') { assert.equal(middle.item, undefined); await expect(crumb.locator('a')).toHaveCount(1); }
-      else { assert.equal(middle.item,'https://nexcel.kz/licensing'); await expect(crumb.locator('a[href="/licensing"]')).toHaveCount(1); }
+      const items=await page.locator('script[type="application/ld+json"]').evaluateAll(els=>els.map(e=>JSON.parse(e.textContent)).flatMap(s=>s['@graph']||[s]).find(e=>e['@type']==='BreadcrumbList').itemListElement);
+      // Structured data never contains an item without a URL, except optionally the last one.
+      assert.ok(items.slice(0,-1).every(entry=>entry.item), target+': breadcrumb items without item');
+      assert.deepEqual(items.map(entry=>entry.position), items.map((_,index)=>index+1), target+': breadcrumb positions');
+      if (group.id==='development') {
+        // The visible group is the menu section of the page; it is plain text and absent from JSON-LD.
+        let sectionTitle;
+        for (const link of group.links) { sectionTitle=link.sectionTitle||sectionTitle; if (localHref(link.href)===target) break; }
+        assert.ok(sectionTitle, target+': menu section');
+        await expect(crumb.locator('li').nth(2)).toHaveText(sectionTitle);
+        await expect(crumb.locator('li').nth(2).locator('a')).toHaveCount(0);
+        await expect(crumb.locator('a')).toHaveCount(1);
+        assert.deepEqual(items.map(entry=>entry.name), ['Главная', items.at(-1).name]);
+        assert.equal(items.length, 2);
+      } else {
+        await expect(crumb).toContainText(group.label.ru);
+        assert.equal(items[1].name, group.label.ru);
+        assert.equal(items[1].item,'https://nexcel.kz/licensing');
+        await expect(crumb.locator('a[href="/licensing"]')).toHaveCount(1);
+      }
     }
     if (group) await expect(page.locator('#'+mode+'-'+group.id+'-toggle')).toHaveAttribute('aria-expanded','false');
   }
